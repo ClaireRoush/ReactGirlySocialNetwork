@@ -5,7 +5,7 @@ export default function UserProfile() {
     const [username, setUsername] = useState("")
 
     useEffect(() => {
-        fetch(`http://localhost:6969/userProfile/${userId}`)
+        fetch(`https://reactgirlysocialnetwork-backend-dzs8.onrender.com/${userId}`)
         .then(response => response.json())
         .then(data => {
                 setUsername(data.username);

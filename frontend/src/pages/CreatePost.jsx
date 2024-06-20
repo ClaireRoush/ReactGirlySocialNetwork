@@ -33,7 +33,7 @@ export default function CreatePost() {
       /*data.set('file', files[0]); */
       ev.preventDefault();
 
-      const response = await fetch('http://localhost:6969/post', {
+      const response = await fetch('https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post', {
         method: "POST",
         body: data,
         credentials: 'include',

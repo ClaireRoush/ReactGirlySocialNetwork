@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export default function Header() {
     const {setUserInfo, userInfo} = useContext(UserContext);
     useEffect(() => {
-        fetch('http://localhost:6969/profile', {
+        fetch('https://reactgirlysocialnetwork-backend-dzs8.onrender.com/profile', {
             credentials: "include",
         }).then(response => {
              response.json().then(userInfo => {
@@ -16,7 +16,7 @@ export default function Header() {
     }, []);
 
     function logout() {
-        fetch('http://localhost:6969/logout', {
+        fetch('https://reactgirlysocialnetwork-backend-dzs8.onrender.com/logout', {
             credentials: "include",
             method: 'POST',
         })

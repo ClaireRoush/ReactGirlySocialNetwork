@@ -8,7 +8,7 @@ export default function IndexPage() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:6969/post').then(response => {
+        fetch('https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post').then(response => {
             response.json().then(posts => {
                 setPosts(posts);
             });

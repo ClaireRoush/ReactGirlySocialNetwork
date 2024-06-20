@@ -12,7 +12,7 @@ const {setUserInfo} = useContext(UserContext)
 
 async function login(ev) {
   ev.preventDefault();
-  const response = await fetch("http://localhost:6969/login", {
+  const response = await fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/login", {
     method: "Post",
     body: JSON.stringify({username, password}),
     headers: {"Content-Type":"application/json"},
