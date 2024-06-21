@@ -19,7 +19,7 @@ const fs = require('fs');
 
 app.use(cors({
     credentials:true, 
-    origin: "https://reactgirlysocialnetwork-backend-dzs8.onrender.com",
+    origin: "https://reactgirlysocialnetwork.onrender.com",
 }));
 app.use(express.json())
 app.use(cookieParser()); 
@@ -126,13 +126,13 @@ app.get("/userProfile/:username", async (req, res) => {
 })
 
 app.get("/userProfile/posts/:User", async (req, res) => {
-    const userId = req.params.User
-
-    const posts = await Post.find({ User: userId});
-    if (!posts) {
-        return res.status(404).json({message: "Не правильно!!!"})
-    }  
-    res.json(posts);
+    const username = req.params.User;
+    const user = await User.findOne({username: username});
+    res.json(
+        await Post.find({author: user._id})
+        .populate('author', 'username')
+        .sort(({createdAt: -1}))
+    )
 })
 
 

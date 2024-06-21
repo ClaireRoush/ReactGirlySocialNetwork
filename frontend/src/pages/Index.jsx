@@ -22,7 +22,7 @@ export default function IndexPage() {
         <Header/>
         </div>
         {posts.length > 0 && posts.map(post => (
-            <Post {...post}/>
+            <Post {...post} />
         ))}
       </div>
     )

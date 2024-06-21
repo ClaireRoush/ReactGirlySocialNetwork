@@ -10,9 +10,7 @@ return (
             <img src={image} alt=""></img>
         </div>
         <div className={Styles.info}>
-            <div className={Styles.title}><Link to={`/fullPost/${_id}`}>{title}</Link></div>
-            <div className="summery">{summary}</div>
-            {/* <div className='content'>{content}</div> */}
+            <div dangerouslySetInnerHTML={{__html:content}}></div> 
             <div className="author">
                 <Link to={`/userProfile/${author.username}`}>
                     {author.username}

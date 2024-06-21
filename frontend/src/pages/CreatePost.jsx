@@ -19,15 +19,11 @@ const modules = {
 
 
 export default function CreatePost() {
-    const [title, setTitle] = useState('');
-    const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState('');
     const [redirect, setRedirect] = useState(false)
     async function createNewPost(ev) {
       const data = new FormData();
-      data.set('title', title);
-      data.set('summary', summary);
       data.set('content', content);
       data.set('image', image);
       /*data.set('file', files[0]); */
@@ -50,20 +46,6 @@ export default function CreatePost() {
         <div>
             <div>
                 <form onSubmit={createNewPost}>
-                    <input 
-                    type="title" 
-                    placeholder="Title" 
-                    value={title} 
-                    onChange={ev => setTitle(ev.target.value)} 
-                    />
-
-                    <input
-                    type="summary"
-                    placeholder="Summary"
-                    value={summary}
-                    onChange={ev => setSummary(ev.target.value)} 
-                    />
- 
                     <input 
                     type="background"
                     placeholder='image url'
