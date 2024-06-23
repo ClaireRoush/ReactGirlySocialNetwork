@@ -1,2 +1,10 @@
-.UserProfile {
+.fullProfile {
+  display: flex;
+  flex-direction: column;
+}
+
+.userProfile {
+  border-radius: 9000px;
+  width: 200px;
+  height: 200px;
 }

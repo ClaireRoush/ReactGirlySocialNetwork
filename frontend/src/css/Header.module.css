@@ -1,0 +1,52 @@
+/* НАСРАНО */
+
+.header {
+  top: 0;
+  left: 0;
+  color: #cdd6f4;
+  position: absolute;
+  width: 100%;
+  height: 80px;
+  background-color: #181825;
+}
+
+.meow {
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.meow a {
+  text-decoration: none;
+  color: #cdd6f4;
+  border-radius: 10px;
+}
+
+.meow:nth-child(1) {
+  margin: 13px 15px 0px 15px;
+}
+
+.meow a:hover {
+  transition: 0.9s;
+  color: #181825;
+  background-color: #b4befe;
+}
+
+.logout {
+  cursor: pointer;
+  padding: 0;
+  margin-right: 10px;
+  width: 120px;
+  height: 80px;
+  text-decoration: none;
+  color: #cdd6f4;
+  border-radius: 10px;
+  height: auto;
+}
+
+.logout:hover {
+  transition: 0.6s;
+  color: #181825;
+  background-color: #b4befe;
+}
