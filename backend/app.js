@@ -49,54 +49,51 @@ app.post("/login", async (req, res) => {
   const userDoc = await User.findOne({ username });
   const passOk = bcrypt.compareSync(password, userDoc.password);
   if (passOk) {
-    if (!passOk) {
-      return res.status(400).json({ error: "Invalid password" });
-    } else
-      jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-        if (err) throw err;
-        res.cookie("token", token).json({
-          id: userDoc._id,
-          username,
-        });
+    jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
+      if (err) throw err;
+      res.json({
+        id: userDoc._id,
+        username,
+        token, // Send the token in the response body
       });
+    });
   } else {
     res.status(400).json("Wrong!!!");
   }
 });
 
-app.get("/profile", (req, res) => {
-  const { token } = req.cookies;
-  jwt.verify(token, secret, {}, (err, info) => {
-    if (err) {
-      return res.json(err);
-    }
-    res.json(info);
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, secret, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
   });
+};
+
+app.get("/profile", authenticateToken, (req, res) => {
+  res.json(req.user);
 });
 
 app.post("/logout", (req, res) => {
-  res.cookie("token", "").json("ok");
+  // Clear the client-side token instead of server-side
+  res.json("ok");
 });
 
-app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
-  /*     const {originalname,path} = req.file;
-  const parts = originalname.split('.');
-  const ext = parts[parts.length -1];
-  const newPath = path+'.'+ext;
-  fs.renameSync(path, newPath)  */
-
-  const { token } = req.cookies;
-  jwt.verify(token, secret, {}, async (err, info) => {
-    const { title, summary, content, image } = req.body;
-    const postDoc = await Post.create({
-      title,
-      summary,
-      content,
-      image,
-      author: info.id,
-    });
-    res.json({ postDoc });
+app.post("/post", uploadMiddleware.single("file"), authenticateToken, async (req, res) => {
+  const { title, summary, content, image } = req.body;
+  const postDoc = await Post.create({
+    title,
+    summary,
+    content,
+    image,
+    author: req.user.id,
   });
+  res.json({ postDoc });
 });
 
 app.get("/post", async (req, res) => {
@@ -110,7 +107,6 @@ app.get("/post", async (req, res) => {
 
 app.get("/post/:id", async (req, res) => {
   id = req.params.id;
-
   const postId = await Post.findById(id);
   res.json(postId);
 });
@@ -133,23 +129,16 @@ app.get("/userProfile/posts/:User", async (req, res) => {
   );
 });
 
-app.get("/changeInfo", async (req, res) => {
-  const { token } = req.cookies;
-  const decoded = jwt.verify(token, secret);
-  const userId = decoded.username;
-
+app.get("/changeInfo", authenticateToken, async (req, res) => {
+  const userId = req.user.id;
   const user = await User.findOne({ _id: userId });
   res.json(user);
 });
 
-app.post("/settings", async (req, res) => {
-  const { token } = req.cookies;
+app.post("/settings", authenticateToken, async (req, res) => {
   const userAvatar = req.body;
-  const decoded = jwt.verify(token, secret);
-  const userId = decoded.username;
-  const user = await User.findOneAndUpdate({ username: userId }, userAvatar, {
-    new: true,
-  });
+  const userId = req.user.id;
+  const user = await User.findOneAndUpdate({ _id: userId }, userAvatar, { new: true });
   res.json(user);
 });
 

@@ -12,7 +12,7 @@ const modules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
+    ["link"],
     ["clean"],
   ],
 };
@@ -27,12 +27,16 @@ export default function CreatePost() {
     data.set("image", image);
     /*data.set('file', files[0]); */
     ev.preventDefault();
+    const token = localStorage.getItem('token');
 
     const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post",
+      "http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post",
       {
         method: "POST",
         body: data,
+        headers: {
+          'Authorization': `Bearer ${token}` 
+        },
         credentials: "include",
       }
     );

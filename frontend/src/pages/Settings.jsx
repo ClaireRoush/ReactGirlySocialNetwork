@@ -8,12 +8,16 @@ export default function Settings() {
 
   async function changeInfo(ev) {
     ev.preventDefault();
+    const token = localStorage.getItem('token');
     const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/settings",
+      "http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/settings",
       {
         method: "Post",
         body: JSON.stringify({ userAvatar }),
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
+        },
         credentials: "include",
       }
     );
