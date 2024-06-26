@@ -11,7 +11,7 @@ export default function Login() {
   async function login(ev) {
     ev.preventDefault();
     const response = await fetch(
-      "http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/login",
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/login",
       {
         method: "Post",
         body: JSON.stringify({ username, password }),

@@ -7,7 +7,7 @@ export default function Registration() {
   async function register(ev) {
     ev.preventDefault();
     const response = await fetch(
-      "http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/register",
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/register",
       {
         method: "Post",
         body: JSON.stringify({ username, password }),

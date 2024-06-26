@@ -30,7 +30,7 @@ export default function CreatePost() {
     const token = localStorage.getItem('token');
 
     const response = await fetch(
-      "http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post",
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post",
       {
         method: "POST",
         body: data,

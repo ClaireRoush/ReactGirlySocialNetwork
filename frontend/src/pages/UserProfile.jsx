@@ -10,7 +10,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     fetch(
-      `http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -21,7 +21,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     fetch(
-      `http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
     ).then((response) => {
       response.json().then((posts) => {
         setPosts(posts);
