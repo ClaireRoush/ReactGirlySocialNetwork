@@ -18,13 +18,16 @@ export default function Post({
 
   useEffect(() => {
     const checkIsAuthor = async () => {
-      const response = await fetch(`http://localhost:6969/isMyPost/${_id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/isMyPost/${_id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setIsAuthor(data);
@@ -34,13 +37,16 @@ export default function Post({
   }, [_id, token]);
 
   const deletePost = async () => {
-    const response = await fetch(`http://localhost:6969/deletePost/${_id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/deletePost/${_id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
     if (response.ok) {
       setIsDeleted(true);
     }

@@ -9,12 +9,15 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
-      fetch("http://localhost:6969/profile", {
-        credentials: "include",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      fetch(
+        "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/profile",
+        {
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -32,14 +35,14 @@ export default function Header() {
   }, [userInfo, setUserInfo]);
 
   function logout() {
-    fetch("http://localhost:6969/logout", {
+    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/logout", {
       credentials: "include",
       method: "POST",
     })
       .then(() => {
         localStorage.removeItem("token");
-        localStorage.removeItem("userInfo")
-        setUserInfo(null); 
+        localStorage.removeItem("userInfo");
+        setUserInfo(null);
       })
       .catch((error) => {
         console.error("Failed to logout:", error);

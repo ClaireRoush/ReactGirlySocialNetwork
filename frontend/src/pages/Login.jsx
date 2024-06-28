@@ -11,7 +11,7 @@ export default function Login() {
   async function login(ev) {
     ev.preventDefault();
     const response = await fetch(
-      "http://localhost:6969/login",
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/login",
       {
         method: "Post",
         body: JSON.stringify({ username, password }),
@@ -22,7 +22,7 @@ export default function Login() {
 
     if (response.ok) {
       response.json().then((userInfo) => {
-        localStorage.setItem('token', userInfo.token);
+        localStorage.setItem("token", userInfo.token);
         setUserInfo(userInfo);
         setRedirect(true);
       });

@@ -9,7 +9,9 @@ export default function UserProfile() {
   const [userAvatar, setUserAvatar] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:6969/userProfile/${userId}`)
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.username);
@@ -18,13 +20,13 @@ export default function UserProfile() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:6969/userProfile/posts/${userId}`).then(
-      (response) => {
-        response.json().then((posts) => {
-          setPosts(posts);
-        });
-      }
-    );
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
+    ).then((response) => {
+      response.json().then((posts) => {
+        setPosts(posts);
+      });
+    });
   }, []);
 
   return (

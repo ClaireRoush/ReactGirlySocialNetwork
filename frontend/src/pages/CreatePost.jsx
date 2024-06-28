@@ -27,15 +27,15 @@ export default function CreatePost() {
     data.set("image", image);
     /*data.set('file', files[0]); */
     ev.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     const response = await fetch(
-      "http://localhost:6969/post",
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post",
       {
         method: "POST",
         body: data,
         headers: {
-          'Authorization': `Bearer ${token}` 
+          Authorization: `Bearer ${token}`,
         },
         credentials: "include",
       }
