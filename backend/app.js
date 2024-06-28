@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 const User = require("./models/User");
 const Post = require("./models/Post");
-const UserParams = require("./models/UserParams");
+const Comments = require("./models/Comments");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -18,7 +18,7 @@ const fs = require("fs");
 app.use(
   cors({
     credentials: true,
-    origin: "https://reactgirlysocialnetwork.onrender.com",
+    origin: "http://localhost:3000",
   })
 );
 app.use(express.json());
@@ -54,7 +54,7 @@ app.post("/login", async (req, res) => {
       res.json({
         id: userDoc._id,
         username,
-        token, // Send the token in the response body
+        token,
       });
     });
   } else {
@@ -63,8 +63,8 @@ app.post("/login", async (req, res) => {
 });
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (token == null) return res.sendStatus(401);
 
@@ -80,21 +80,25 @@ app.get("/profile", authenticateToken, (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  // Clear the client-side token instead of server-side
   res.json("ok");
 });
 
-app.post("/post", uploadMiddleware.single("file"), authenticateToken, async (req, res) => {
-  const { title, summary, content, image } = req.body;
-  const postDoc = await Post.create({
-    title,
-    summary,
-    content,
-    image,
-    author: req.user.id,
-  });
-  res.json({ postDoc });
-});
+app.post(
+  "/post",
+  uploadMiddleware.single("file"),
+  authenticateToken,
+  async (req, res) => {
+    const { title, summary, content, image } = req.body;
+    const postDoc = await Post.create({
+      title,
+      summary,
+      content,
+      image,
+      author: req.user.id,
+    });
+    res.json({ postDoc });
+  }
+);
 
 app.get("/post", async (req, res) => {
   res.json(
@@ -129,6 +133,23 @@ app.get("/userProfile/posts/:User", async (req, res) => {
   );
 });
 
+app.post("/post/comments/:id", async (req, res) => {
+  const commentedOn = req.params.id;
+  const { user, text } = req.body;
+  postDoc = await Comments.create({
+    user,
+    text,
+    commentedOn,
+  });
+  res.json(postDoc);
+});
+
+app.get("/post/comments/:id", async (req, res) => {
+  const mainPostId = req.params.id;
+  meowComments = await Comments.find({ commentedOn: mainPostId });
+  res.json(meowComments);
+});
+
 app.get("/changeInfo", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const user = await User.findOne({ _id: userId });
@@ -138,8 +159,38 @@ app.get("/changeInfo", authenticateToken, async (req, res) => {
 app.post("/settings", authenticateToken, async (req, res) => {
   const userAvatar = req.body;
   const userId = req.user.id;
-  const user = await User.findOneAndUpdate({ _id: userId }, userAvatar, { new: true });
+  const user = await User.findOneAndUpdate({ _id: userId }, userAvatar, {
+    new: true,
+  });
   res.json(user);
+});
+
+app.post("/isMyPost/:id", authenticateToken, async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+  const postDoc = await Post.findOne({ _id: postId }).populate(
+    "author",
+    "username"
+  );
+  const authorCheck = postDoc.author._id.toString() === userId;
+  if (authorCheck) {
+    res.json(authorCheck);
+  } else {
+    res.status(404).json({ message: "You are so silly!!!!" });
+  }
+});
+
+app.post("/deletePost/:id", authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const postId = req.params.id;
+  const postDoc = await Post.findOneAndDelete({ _id: postId });
+  const authorCheck = postDoc.author._id.toString() === userId;
+
+  if (authorCheck) {
+    res.json(authorCheck);
+  } else {
+    res.status(404).json({ message: "You are so silly!!!!" });
+  }
 });
 
 app.listen(process.env.PORT, () => {

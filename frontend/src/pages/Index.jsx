@@ -8,7 +8,7 @@ export default function IndexPage() {
 
   useEffect(() => {
     fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post"
+      "http://localhost:6969/post"
     ).then((response) => {
       response.json().then((posts) => {
         setPosts(posts);

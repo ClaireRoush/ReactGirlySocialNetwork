@@ -10,7 +10,7 @@ export default function Settings() {
     ev.preventDefault();
     const token = localStorage.getItem('token');
     const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/settings",
+      "http://localhost:6969/settings",
       {
         method: "Post",
         body: JSON.stringify({ userAvatar }),

@@ -20,7 +20,7 @@ function App() {
           <Route path={"register"} element={<Registration />} />
           <Route path={"create"} element={<CreatePost />} />
           <Route path={"settings"} element={<Settings />} />
-          <Route path={"fullPost/:id"} element={<FullPost />} />
+          <Route path={"post/:id"} element={<FullPost />} />
           <Route path={"changelog"} element={<ChangeLog />} />
           <Route path={"userProfile/:userId"} element={<UserProfile />} />
         </Routes>

@@ -1,9 +1,7 @@
-/* import React from 'react'
+import React from 'react'
 
 export default function () {
-    fetch("http:")
   return (
-    <div></div>
+    <div>мееев</div>
   )
-}
- */
+};

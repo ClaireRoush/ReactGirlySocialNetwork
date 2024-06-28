@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Styles from "../css/Registration.module.css"
+import MadokaImg from "../images/MadokaRegister.jpg"
 
 export default function Registration() {
   const [username, setUsername] = useState("");
@@ -7,7 +9,7 @@ export default function Registration() {
   async function register(ev) {
     ev.preventDefault();
     const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/register",
+      "http://localhost:6969/register",
       {
         method: "Post",
         body: JSON.stringify({ username, password }),
@@ -22,7 +24,8 @@ export default function Registration() {
   }
 
   return (
-    <div className="Wrapper">
+    <div className={Styles.Wrapper}>
+      <img src={MadokaImg}></img>
       <h1>Register</h1>
 
       <form onSubmit={register}>

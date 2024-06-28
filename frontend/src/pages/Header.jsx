@@ -9,7 +9,7 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
-      fetch("http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/profile", {
+      fetch("http://localhost:6969/profile", {
         credentials: "include",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,12 +32,13 @@ export default function Header() {
   }, [userInfo, setUserInfo]);
 
   function logout() {
-    fetch("http://https://reactgirlysocialnetwork-backend-dzs8.onrender.com/logout", {
+    fetch("http://localhost:6969/logout", {
       credentials: "include",
       method: "POST",
     })
       .then(() => {
         localStorage.removeItem("token");
+        localStorage.removeItem("userInfo")
         setUserInfo(null); 
       })
       .catch((error) => {

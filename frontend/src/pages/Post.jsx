@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "../css/meow.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Post({
   title,
@@ -12,6 +12,44 @@ export default function Post({
   author,
   _id,
 }) {
+  const [isAuthor, setIsAuthor] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const checkIsAuthor = async () => {
+      const response = await fetch(`http://localhost:6969/isMyPost/${_id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setIsAuthor(data);
+      }
+    };
+    checkIsAuthor();
+  }, [_id, token]);
+
+  const deletePost = async () => {
+    const response = await fetch(`http://localhost:6969/deletePost/${_id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
+    if (response.ok) {
+      setIsDeleted(true);
+    }
+  };
+
+  if (isDeleted) {
+    return null;
+  }
+
   return (
     <div className={Styles.post}>
       <div className={Styles.info}>
@@ -26,6 +64,11 @@ export default function Post({
       <div className={Styles.image}>
         <img src={image} alt=""></img>
       </div>
+      {isAuthor && (
+        <>
+          <button onClick={deletePost}>Delete Post</button>
+        </>
+      )}
     </div>
   );
 }

@@ -6,12 +6,10 @@ export default function UserProfile() {
   const { userId } = useParams();
   const [posts, setPosts] = useState([]);
   const [username, setUsername] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");http://localhost:3000/
+  const [userAvatar, setUserAvatar] = useState("");
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
-    )
+    fetch(`http://localhost:6969/userProfile/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.username);
@@ -20,13 +18,13 @@ export default function UserProfile() {
   }, []);
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      });
-    });
+    fetch(`http://localhost:6969/userProfile/posts/${userId}`).then(
+      (response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      }
+    );
   }, []);
 
   return (
