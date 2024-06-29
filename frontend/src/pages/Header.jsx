@@ -63,7 +63,7 @@ export default function Header() {
           </div>
           <div classname={Styles.logout}>
             <Link to="/create">
-              <a>Post some shit</a>
+              <a>Post some frogs</a>
             </Link>
           </div>
           <div className={Styles.logout} onClick={logout}>
