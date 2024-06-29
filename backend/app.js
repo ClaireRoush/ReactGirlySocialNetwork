@@ -18,7 +18,7 @@ const fs = require("fs");
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: "https://reactgirlysocialnetwork.onrender.com",
   })
 );
 app.use(express.json());
