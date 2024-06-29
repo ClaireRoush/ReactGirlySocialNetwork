@@ -21,6 +21,7 @@
 
 .userProfile {
   border-radius: 9000px;
+  border: solid 2px #a6da95;
   width: 200px;
   height: 200px;
 }
