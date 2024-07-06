@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Styles from "../css/Header.module.css";
 import { UserContext } from "../usercontext";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
-
+  const [userAvatar, setUserAvatar] = useState([]);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
@@ -50,18 +50,36 @@ export default function Header() {
   }
 
   const username = userInfo?.username;
+  useEffect(() => {
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${username}`
+    ).then((response) => {
+      response.json().then((userAvatar) => {
+        setUserAvatar(userAvatar);
+      });
+    });
+  }, []);
 
   return (
     /* НАСРАНО */
     <div className={Styles.header}>
+      <div className={Styles.ifNotLoggedIn}>
+        {!username && (
+          <div className={Styles.headerContainer}>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </div>
+        )}
+      </div>
       {username && (
-        <div className={Styles.meow}>
-          <div className={Styles.logout}>
+        <div className={Styles.headerContainer}>
+          <div className={Styles.userProfile}>
+            <img src={userAvatar}></img>
             <Link to={`/userProfile/${userInfo.username}`}>
-              {userInfo.username}
+              <a>{userInfo.username}</a>
             </Link>
           </div>
-          <div classname={Styles.logout}>
+          <div className={Styles.postSomeShit}>
             <Link to="/create">
               <a>Post some shit</a>
             </Link>
@@ -70,13 +88,6 @@ export default function Header() {
             <a>Logout</a>
           </div>
         </div>
-      )}
-
-      {!username && (
-        <>
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
-        </>
       )}
     </div>
   );

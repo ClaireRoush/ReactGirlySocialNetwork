@@ -2,12 +2,21 @@
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.upperProfileContainer {
+  height: 250px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.upperProfile {
+  display: flex;
+  width: 950px;
+  height: 100%;
   box-sizing: border-box;
-  margin-top: 500px;
 }
 
 .profile {
@@ -19,8 +28,37 @@
   height: 100%;
 }
 
-.userProfile {
+.profileInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profileImg {
   border-radius: 9000px;
   width: 200px;
   height: 200px;
+}
+
+.links {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.desc {
+  margin-left: 20px;
+}
+
+.desc textarea {
+  width: 400px;
+  height: 60px;
+  background: none;
+  outline: NONE;
+  border: none;
+  color: #cdd6f4;
+  font-size: 20px;
 }

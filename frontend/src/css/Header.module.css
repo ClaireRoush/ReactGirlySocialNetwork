@@ -1,52 +1,54 @@
-/* НАСРАНО */
-
-.header {
+/* thx my gf for this styles */
+.headerContainer {
   top: 0;
+  background-color: #11111b;
+  border-bottom: #a6e3a1 2px solid;
   left: 0;
   color: #cdd6f4;
   position: absolute;
   width: 100%;
-  height: 80px;
-  background-color: #181825;
-}
-
-.meow {
-  font-size: 40px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  height: 80px;
+  font-size: 40px;
+  background-color: #11111b;
+  box-sizing: border-box;
 }
 
-.meow a {
+.userProfile {
+  display: flex;
+  width: 33%;
+  display: flex;
+  margin-left: 10px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.userProfile a {
+  margin: 5px;
   text-decoration: none;
   color: #cdd6f4;
-  border-radius: 10px;
 }
 
-.meow:nth-child(1) {
-  margin: 13px 15px 0px 15px;
+.userProfile img {
+  height: 60px;
+  width: 60px;
 }
 
-.meow a:hover {
-  transition: 0.9s;
-  color: #181825;
-  background-color: #b4befe;
+.postSomeShit {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postSomeShit a {
+  color: #cdd6f4;
+  text-decoration: none;
 }
 
 .logout {
-  cursor: pointer;
-  padding: 0;
-  margin-right: 10px;
-  width: 120px;
-  height: 80px;
-  text-decoration: none;
-  color: #cdd6f4;
-  border-radius: 10px;
-  height: auto;
-}
-
-.logout:hover {
-  transition: 0.6s;
-  color: #181825;
-  background-color: #b4befe;
+  width: 33%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

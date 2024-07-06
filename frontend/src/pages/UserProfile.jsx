@@ -30,18 +30,25 @@ export default function UserProfile() {
   }, []);
 
   return (
+    /* НАСРАНО */
     <div className={Styles.fullProfile}>
-      <Link to={"/"}>
-        <a>Back</a>
-      </Link>
-
-      <Link to={"/settings"}>
-        <a>Settings</a>
-      </Link>
-      <img className={Styles.userProfile} src={userAvatar}></img>
-      <div>
-        Post by cutie: {username}
-        {posts.length > 0 && posts.map((post) => <Post {...post} />)}
+      <div className={Styles.upperProfileContainer}>
+        <div className={Styles.upperProfile}>
+          <img className={Styles.profileImg} src={userAvatar} />
+          <div className={Styles.desc}>
+            <h1>{username}</h1>
+            <textarea></textarea>
+          </div>
+        </div>
+      </div>
+      <div className={Styles.profileInfo}>
+        <div className={Styles.profilePosts}>
+          {posts.length > 0 && posts.map((post) => <Post {...post} />)}
+        </div>
+      </div>
+      <div className={Styles.links}>
+        <Link to="/">Back</Link>
+        <Link to="/settings">Settings</Link>
       </div>
     </div>
   );

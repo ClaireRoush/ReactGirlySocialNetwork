@@ -18,7 +18,7 @@ const fs = require("fs");
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: "https://reactgirlysocialnetwork.onrender.com",
   })
 );
 app.use(express.json());
@@ -133,9 +133,10 @@ app.get("/userProfile/posts/:User", async (req, res) => {
   );
 });
 
-app.post("/post/comments/:id", async (req, res) => {
+app.post("/post/comments/:id", authenticateToken, async (req, res) => {
   const commentedOn = req.params.id;
-  const { user, text } = req.body;
+  const user = req.user.username;
+  const { text } = req.body;
   postDoc = await Comments.create({
     user,
     text,
@@ -195,4 +196,14 @@ app.post("/deletePost/:id", authenticateToken, async (req, res) => {
 
 app.listen(process.env.PORT, () => {
   console.log("Meeeeow");
+});
+
+app.get("/findUserAvatar/:User", async (req, res) => {
+  const user = req.params.User;
+  const postDoc = await User.findOne({ username: user });
+  try {
+    res.json(postDoc.userAvatar);
+  } catch (error) {
+    res.status(404).json({ message: "Avatar not find!!!" });
+  }
 });
