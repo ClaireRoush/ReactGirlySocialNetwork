@@ -10,10 +10,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 999;
 }
 
 .upperProfile {
   display: flex;
+  z-index: 999;
   width: 950px;
   height: 100%;
   box-sizing: border-box;
@@ -24,6 +26,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
+
   width: 100%;
   height: 100%;
 }
@@ -35,6 +39,10 @@
   align-items: center;
 }
 
+.profilePosts {
+  z-index: 999;
+}
+
 .profileImg {
   border-radius: 9000px;
   width: 200px;
@@ -43,6 +51,7 @@
 
 .links {
   position: absolute;
+  z-index: 999;
   top: 0;
   left: 0;
   display: flex;
@@ -54,6 +63,7 @@
 }
 
 .desc textarea {
+  resize: none;
   width: 400px;
   height: 60px;
   background: none;

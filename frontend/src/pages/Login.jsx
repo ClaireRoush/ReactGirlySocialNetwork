@@ -1,6 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../usercontext";
+import Styles from "../css/Login.module.css";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -36,7 +37,7 @@ export default function Login() {
   }
 
   return (
-    <div className="Wrapper">
+    <div className={Styles.wrapper}>
       <h1>Login</h1>
 
       <form onSubmit={login}>

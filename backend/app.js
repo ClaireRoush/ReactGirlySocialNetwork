@@ -79,6 +79,19 @@ app.get("/profile", authenticateToken, (req, res) => {
   res.json(req.user);
 });
 
+app.get("/me", authenticateToken, async (req, res) => {
+  userId = req.user.id;
+  const getUserInfo = await User.findById(userId);
+  const data = {
+    username: getUserInfo.username,
+    userAvatar: getUserInfo.userAvatar,
+    userDesc: getUserInfo.userDesc,
+    pronouns: getUserInfo.pronouns,
+    profileHashColor: getUserInfo.profileHashColor,
+  };
+  res.json(data);
+});
+
 app.post("/logout", (req, res) => {
   res.json("ok");
 });
@@ -120,7 +133,13 @@ app.get("/userProfile/:username", async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "Ты дурашка та ещё!!!" });
   }
-  res.json({ username: user.username, userAvatar: user.userAvatar });
+  res.json({
+    username: user.username,
+    userAvatar: user.userAvatar,
+    userDesc: user.userDesc,
+    pronouns: user.pronouns,
+    profileHashColor: user.profileHashColor,
+  });
 });
 
 app.get("/userProfile/posts/:User", async (req, res) => {
@@ -135,8 +154,11 @@ app.get("/userProfile/posts/:User", async (req, res) => {
 
 app.post("/post/comments/:id", authenticateToken, async (req, res) => {
   const commentedOn = req.params.id;
-  const user = req.user.username;
+  const username = req.user.username;
   const { text } = req.body;
+
+  const user = await User.findOne({ username: username });
+
   postDoc = await Comments.create({
     user,
     text,
@@ -147,7 +169,10 @@ app.post("/post/comments/:id", authenticateToken, async (req, res) => {
 
 app.get("/post/comments/:id", async (req, res) => {
   const mainPostId = req.params.id;
-  meowComments = await Comments.find({ commentedOn: mainPostId });
+  meowComments = await Comments.find({ commentedOn: mainPostId }).populate(
+    "user",
+    "username"
+  );
   res.json(meowComments);
 });
 
@@ -159,10 +184,35 @@ app.get("/changeInfo", authenticateToken, async (req, res) => {
 
 app.post("/settings", authenticateToken, async (req, res) => {
   const userAvatar = req.body;
+  const userDesc = req.body;
+  const username = req.body;
+  const pronouns = req.body;
+  const profileHashColor = req.body;
+
   const userId = req.user.id;
-  const user = await User.findOneAndUpdate({ _id: userId }, userAvatar, {
-    new: true,
-  });
+  const user = await User.findOneAndUpdate(
+    { _id: userId },
+    userAvatar,
+    {
+      new: true,
+    },
+    userDesc,
+    {
+      new: true,
+    },
+    username,
+    {
+      new: true,
+    },
+    pronouns,
+    {
+      new: true,
+    },
+    profileHashColor,
+    {
+      new: true,
+    }
+  );
   res.json(user);
 });
 

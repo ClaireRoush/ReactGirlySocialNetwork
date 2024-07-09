@@ -75,7 +75,7 @@ export default function Header() {
         <div className={Styles.headerContainer}>
           <div className={Styles.userProfile}>
             <img src={userAvatar}></img>
-            <Link to={`/userProfile/${userInfo.username}`}>
+            <Link to={`/me`}>
               <a>{userInfo.username}</a>
             </Link>
           </div>

@@ -1,0 +1,35 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+}
+
+.textAreas {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.textAreas form {
+  display: flex;
+  flex-direction: column;
+}
+
+.colorPicker {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inputBlock {
+  background-color: bisque;
+  width: 75px;
+  height: 75px;
+}

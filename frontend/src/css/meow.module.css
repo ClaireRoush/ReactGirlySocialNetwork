@@ -2,11 +2,11 @@
 .post {
   display: flex;
   flex-direction: column;
-  border: 4px solid #a6e3a1;
   background-color: #181825;
   border-radius: 10px;
   width: 900px;
   height: auto;
+  z-index: 15;
   margin: 10px 10px 15px 10px;
   padding: 20px;
 }
@@ -23,6 +23,16 @@
   max-width: 900px;
 }
 
+.author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.author img {
+  width: 60px;
+  border-radius: 10px;
+  height: 60px;
+}
 .author a {
   color: #cdd6f4;
   font-size: 32px;

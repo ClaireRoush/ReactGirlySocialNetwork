@@ -1,0 +1,41 @@
+body {
+  min-height: 100vh;
+  background-color: #1e1e2e;
+  color: aliceblue;
+}
+
+.UserProfile {
+  height: 600px;
+}
+
+.container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.froggies {
+  position: relative;
+  z-index: 5;
+  display: flex;
+}
+
+.froggies img {
+  position: relative;
+  width: calc(1000px / var(--i));
+  height: calc(1000px / var(--i));
+  margin: 0 20px;
+  opacity: calc(5 / var(--i));
+  animation: animate 15s linear infinite;
+  animation-duration: calc(240s / var(--i));
+}
+@keyframes animate {
+  0% {
+    transform: translateY(100vh) scale(1);
+  }
+  100% {
+    transform: translateY(-10vh) scale(1);
+  }
+}

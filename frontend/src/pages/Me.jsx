@@ -1,29 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Styles from "../css/UserProfile.module.css";
+import { Link } from "react-router-dom";
 import Post from "./Post";
-import { useParams, Link } from "react-router-dom";
-export default function UserProfile() {
-  const { userId } = useParams();
-  const [posts, setPosts] = useState([]);
+
+export default function Me() {
+  const token = localStorage.getItem("token");
   const [username, setUsername] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
+  const [userDesc, setUserDesc] = useState("");
+  const [posts, setPosts] = useState([]);
   const [pronouns, setPronouns] = useState("");
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
-  const [userDesc, setUserDesc] = useState("");
+
+  const userId = username;
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setUsername(data.username);
-        setUserAvatar(data.userAvatar);
-        setUserDesc(data.userDesc);
-        setPronouns(data.pronouns);
-        setprofileHashColor(data.profileHashColor);
-      });
-  }, []);
+    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      if (response.ok) {
+        return response.json().then((info) => {
+          setUsername(info.username);
+          setUserAvatar(info.userAvatar);
+          setUserDesc(info.userDesc);
+          setPronouns(info.pronouns);
+          setprofileHashColor(info.profileHashColor);
+        });
+      }
+    });
+  }, [token]);
 
   useEffect(() => {
     fetch(
@@ -33,10 +40,9 @@ export default function UserProfile() {
         setPosts(posts);
       });
     });
-  }, []);
+  }, [username]);
 
   return (
-    /* НАСРАНО */
     <div className={Styles.fullProfile}>
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
@@ -53,6 +59,10 @@ export default function UserProfile() {
           {posts.length > 0 &&
             posts.map((post) => <Post {...post} color={profileHashColor} />)}
         </div>
+      </div>
+      <div className={Styles.links}>
+        <Link to="/">Back</Link>
+        <Link to="/settings">Settings</Link>
       </div>
     </div>
   );

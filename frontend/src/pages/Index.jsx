@@ -35,13 +35,15 @@ export default function IndexPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const mainColor = "#a6e3a1";
+
   return (
     <div className={Styles.UserProfile}>
       <Header />
       {posts.length > 0 &&
         posts
           .slice(0, visiblePosts)
-          .map((post) => <Post key={post.id} {...post} />)}
+          .map((post) => <Post key={post.id} {...post} color={mainColor} />)}
     </div>
   );
 }

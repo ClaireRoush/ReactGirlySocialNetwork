@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Navigate } from "react-router-dom";
+import Styles from "../css/CreatePost.module.css";
 const modules = {
   toolbar: [
     [{ header: [1, 2, false] }],
@@ -50,7 +51,7 @@ export default function CreatePost() {
   }
   return (
     <div>
-      <div>
+      <div className={Styles.wrapper}>
         <form onSubmit={createNewPost}>
           <input
             type="background"

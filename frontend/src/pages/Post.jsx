@@ -7,16 +7,17 @@ import chromiumSvg from "../svg/chromium.svg";
 
 import Comments from "../pages/Comments";
 export default function Post({
-  title,
+  /*   title,
   summary,
-  userAvatar,
-  createdAt,
+  createdAt, */
   image,
   content,
   author,
   _id,
+  color,
 }) {
   const [isAuthor, setIsAuthor] = useState(false);
+  const [userAvatar, setUserAvatar] = useState("");
   const [isDeleted, setIsDeleted] = useState(false);
   const token = localStorage.getItem("token");
   const commentsContainerRef = useRef(null);
@@ -43,6 +44,20 @@ export default function Post({
     };
     checkIsAuthor();
   }, [_id, token]);
+
+  useEffect(() => {
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${author.username}`
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then((userAvatar) => {
+        setUserAvatar(userAvatar);
+      });
+  }, [author.username, setUserAvatar]);
 
   useEffect(() => {
     fetch(
@@ -110,9 +125,10 @@ export default function Post({
 
   const likes = 0;
   return (
-    <div className={Styles.post}>
+    <div className={Styles.post} style={{ border: `4px solid ${color}` }}>
       <div className={Styles.info}>
         <div className={Styles.author}>
+          <img src={userAvatar}></img>
           <Link to={`/userProfile/${author.username}`}>
             <a>{author.username}</a>
           </Link>
@@ -165,8 +181,12 @@ export default function Post({
             ></input>
             <button>Post!!!</button>
           </form>
-          {comments.map((comments) => (
-            <Comments {...comments} />
+          {comments.map((comment) => (
+            <Comments
+              key={comment._id}
+              user={comment.user}
+              text={comment.text}
+            />
           ))}
         </div>
       </section>
