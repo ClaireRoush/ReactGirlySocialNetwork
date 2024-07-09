@@ -1,0 +1,5 @@
+MONGO_URL=mongodb+srv://ClaireRoush:k175ssC666k1ugce@meowukalkas.5lbgdkf.mongodb.net/?retryWrites=true&w=majority&appName=meowukalkas
+JWT_SECRET=memewmewmewmewm
+PORT=6969
+CLIENT_URL=http://localhost:3000
+ORIGIN_SECRET=localhost:3000

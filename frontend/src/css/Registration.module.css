@@ -1,0 +1,29 @@
+.Wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #cdd6f4;
+}
+
+.Wrapper img {
+    margin-top: 100px;
+    width: 400px;
+}
+
+.Wrapper form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.Wrapper input {
+    width: 300px;
+    margin: 10px;
+    height: 40px;
+}

@@ -1,0 +1,54 @@
+/* thx my gf for this styles */
+.headerContainer {
+  top: 0;
+  background-color: #11111b;
+  border-bottom: #a6e3a1 2px solid;
+  left: 0;
+  color: #cdd6f4;
+  position: absolute;
+  width: 100%;
+  display: flex;
+  height: 80px;
+  font-size: 40px;
+  background-color: #11111b;
+  box-sizing: border-box;
+}
+
+.userProfile {
+  display: flex;
+  width: 33%;
+  display: flex;
+  margin-left: 10px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.userProfile a {
+  margin: 5px;
+  text-decoration: none;
+  color: #cdd6f4;
+}
+
+.userProfile img {
+  height: 60px;
+  width: 60px;
+}
+
+.postSomeShit {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.postSomeShit a {
+  color: #cdd6f4;
+  text-decoration: none;
+}
+
+.logout {
+  width: 33%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
