@@ -3,6 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Navigate } from "react-router-dom";
 import Styles from "../css/CreatePost.module.css";
+import Header from "../pages/Header.jsx";
 const modules = {
   toolbar: [
     [{ header: [1, 2, false] }],
@@ -51,6 +52,7 @@ export default function CreatePost() {
   }
   return (
     <div>
+      <Header />
       <div className={Styles.wrapper}>
         <form onSubmit={createNewPost}>
           <input

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Styles from "../css/UserProfile.module.css";
+import { UserContext } from "../usercontext";
 import Post from "./Post";
 import { useParams, Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 export default function UserProfile() {
   const { userId } = useParams();
   const [posts, setPosts] = useState([]);
@@ -10,6 +12,8 @@ export default function UserProfile() {
   const [pronouns, setPronouns] = useState("");
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const [userDesc, setUserDesc] = useState("");
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -23,7 +27,7 @@ export default function UserProfile() {
         setPronouns(data.pronouns);
         setprofileHashColor(data.profileHashColor);
       });
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     fetch(
@@ -33,7 +37,17 @@ export default function UserProfile() {
         setPosts(posts);
       });
     });
-  }, []);
+  }, [userId]);
+
+  useEffect(() => {
+    if (username === userInfo?.username) {
+      setRedirect(true);
+    }
+  }, [username, userInfo]);
+
+  if (redirect) {
+    return <Navigate to={"/me"} />;
+  }
 
   return (
     /* НАСРАНО */

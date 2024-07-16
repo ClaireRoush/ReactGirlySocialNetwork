@@ -3,6 +3,7 @@
   height: 100%;
   position: absolute;
   display: flex;
+  z-index: 999;
 }
 
 .textAreas {

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Styles from "../css/Header.module.css";
 import { UserContext } from "../usercontext";
 import { Link, useParams } from "react-router-dom";
+import Frog from "../svg/svFROG.svg";
 
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
@@ -42,7 +43,7 @@ export default function Header() {
       .then(() => {
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
-        setUserInfo(null);
+        setUserInfo("");
       })
       .catch((error) => {
         console.error("Failed to logout:", error);
@@ -63,12 +64,42 @@ export default function Header() {
   return (
     /* НАСРАНО */
     <div className={Styles.header}>
-      <div className={Styles.ifNotLoggedIn}>
+      <div className={Styles.headerContainer}>
+        <div className={Styles.logo}>
+          <img src={Frog} alt="RGSN"></img>
+        </div>
+        <div className={Styles.leftistElements}>
+          <Link className={Styles.links} to="/">
+            <a>Home</a>
+          </Link>
+          <>
+            <Link className={Styles.links} to="/create">
+              <a>Create Post</a>
+            </Link>
+            <Link className={Styles.links} to="/about">
+              <a>About us</a>
+            </Link>
+            <Link className={Styles.links} to="/">
+              <a onClick={logout}>Logout</a>
+            </Link>
+          </>
+          {!username && (
+            <div className={Styles.headerContainer}>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </div>
+          )}
+        </div>
+        <div className={Styles.rightistElements}>
+          <Link to={`/me`}>
+            <a>{userInfo.username}</a>
+          </Link>
+          <img src={userAvatar}></img>
+        </div>
+      </div>
+
+      {/* <div className={Styles.ifNotLoggedIn}>
         {!username && (
-          <div className={Styles.headerContainer}>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </div>
         )}
       </div>
       {username && (
@@ -88,7 +119,7 @@ export default function Header() {
             <a>Logout</a>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

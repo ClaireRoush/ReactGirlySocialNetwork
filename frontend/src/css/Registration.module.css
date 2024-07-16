@@ -1,4 +1,4 @@
-.Wrapper {
+.wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -11,19 +11,29 @@
   color: #cdd6f4;
 }
 
-.Wrapper img {
+.wrapper h1 {
+  font-size: 35px;
+}
+
+.wrapper a {
+  font-size: 20px;
+  color: #cdd6f4;
+  margin-top: 10px;
+}
+
+.wrapper img {
   margin-top: 100px;
   width: 400px;
 }
 
-.Wrapper form {
+.wrapper form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.Wrapper input {
+.wrapper input {
   width: 300px;
   margin: 10px;
   height: 40px;

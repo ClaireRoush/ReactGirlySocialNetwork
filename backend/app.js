@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 const User = require("./models/User");
 const Post = require("./models/Post");
+const Likes = require("./models/Likes");
 const Comments = require("./models/Comments");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -15,12 +16,19 @@ const secret = process.env.JWT_SECRET;
 const salt = bcrypt.genSaltSync(10);
 const fs = require("fs");
 
+/* 
+Я обещаю, что перепишу всё на более читабельный вид
+без 1000+ запросов за один пост... 
+наверное...
+*/
+
 app.use(
   cors({
     credentials: true,
     origin: "https://reactgirlysocialnetwork.onrender.com",
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
@@ -152,6 +160,36 @@ app.get("/userProfile/posts/:User", async (req, res) => {
   );
 });
 
+app.post("/post/likes/:id", authenticateToken, async (req, res) => {
+  const username = req.user.username;
+  const likedPostId = req.params.id;
+  const user = await User.findOne({ username: username });
+  const post = await Post.findById(likedPostId);
+
+  const existingLike = await Likes.findOne({
+    user: user._id,
+    likedPost: post._id,
+  });
+
+  if (existingLike) {
+    await Likes.deleteOne({ _id: existingLike._id });
+  } else {
+    await Likes.create({
+      user: user,
+      likedPost: post,
+    });
+  }
+
+  const likeCount = await Likes.countDocuments({ likedPost: post._id });
+  res.json({ likeCount });
+});
+
+app.get("/post/likes/:id", async (req, res) => {
+  const likedPost = req.params.id;
+  const likeCount = await Likes.countDocuments({ likedPost: likedPost });
+  res.json({ likeCount });
+});
+
 app.post("/post/comments/:id", authenticateToken, async (req, res) => {
   const commentedOn = req.params.id;
   const username = req.user.username;
@@ -171,7 +209,7 @@ app.get("/post/comments/:id", async (req, res) => {
   const mainPostId = req.params.id;
   meowComments = await Comments.find({ commentedOn: mainPostId }).populate(
     "user",
-    "username"
+    "username userAvatar"
   );
   res.json(meowComments);
 });
@@ -256,4 +294,17 @@ app.get("/findUserAvatar/:User", async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: "Avatar not find!!!" });
   }
+});
+
+app.get("/checkIfLiked/:Id", authenticateToken, async (req, res) => {
+  const postId = req.params.Id;
+  const userId = req.user.id;
+  const existingLike = await Likes.findOne({
+    user: userId,
+    likedPost: postId,
+  });
+  if (existingLike) {
+    return res.json(true);
+  }
+  return res.json(false);
 });

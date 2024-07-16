@@ -1,6 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "../usercontext";
+import MadokaImg from "../images/MadokaRegister.jpg";
 import Styles from "../css/Login.module.css";
 
 export default function Login() {
@@ -38,7 +39,9 @@ export default function Login() {
 
   return (
     <div className={Styles.wrapper}>
-      <h1>Login</h1>
+      <img src={MadokaImg}></img>
+
+      <h1>Login!!</h1>
 
       <form onSubmit={login}>
         <input

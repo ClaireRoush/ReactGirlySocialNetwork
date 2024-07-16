@@ -3,6 +3,8 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Styles from "../css/Settings.module.css";
+import Header from "../pages/Header.jsx";
+<Header />;
 
 export default function Settings() {
   const [userAvatar, setUserAvatar] = useState("");
@@ -67,8 +69,8 @@ export default function Settings() {
 
   return (
     <div className={Styles.wrapper}>
+      <Header />
       <div className={Styles.textAreas}>
-        <Link to={"/"}>back</Link>
         <form onSubmit={changeInfo}>
           <input
             type="text"

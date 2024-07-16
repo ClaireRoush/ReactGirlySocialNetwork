@@ -4,6 +4,7 @@
   background-color: #11111b;
   border-bottom: #a6e3a1 2px solid;
   left: 0;
+  z-index: 99999;
   color: #cdd6f4;
   position: absolute;
   width: 100%;
@@ -12,44 +13,58 @@
   font-size: 40px;
   background-color: #11111b;
   box-sizing: border-box;
-}
-
-.userProfile {
-  display: flex;
-  width: 33%;
-  display: flex;
-  margin-left: 10px;
-  justify-content: flex-start;
   align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-.userProfile a {
+.logo {
+  cursor: pointer;
+}
+
+.leftistElements {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-bottom: 5px;
+  margin-left: 20px;
+  color: #a6e3a1;
+  font-size: 32px;
+  padding: 2px; /* Я дизайнерша и я так решила!!! */
+  border-radius: 15px;
+}
+
+.leftistElements a:hover {
+  border-radius: 7px;
+  background-color: #a6e3a1;
+  color: #11111b;
+  transition: 0.5s;
+}
+
+.rightistElements {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 50%;
+  font-size: 32px;
+}
+.rightistElements a {
   margin: 5px;
   text-decoration: none;
-  color: #cdd6f4;
+  color: #a6e3a1;
 }
 
-.userProfile img {
+.rightistElements img {
   height: 60px;
   width: 60px;
   border-radius: 10px;
-}
-
-.postSomeShit {
-  width: 33%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.postSomeShit a {
-  color: #cdd6f4;
-  text-decoration: none;
-}
-
-.logout {
-  width: 33%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
 }

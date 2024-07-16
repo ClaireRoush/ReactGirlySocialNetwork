@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
-import Header from "./Header";
 import Styles from "../css/Index.module.css";
+import Header from "../pages/Header.jsx";
 
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
@@ -33,17 +33,24 @@ export default function IndexPage() {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  });
 
   const mainColor = "#a6e3a1";
 
   return (
-    <div className={Styles.UserProfile}>
+    <div className="">
       <Header />
-      {posts.length > 0 &&
-        posts
-          .slice(0, visiblePosts)
-          .map((post) => <Post key={post.id} {...post} color={mainColor} />)}
+
+      <div className={Styles.UserProfile}>
+        <div className={Styles.post}>
+          {posts.length > 0 &&
+            posts
+              .slice(0, visiblePosts)
+              .map((post) => (
+                <Post key={post.id} {...post} color={mainColor} />
+              ))}
+        </div>
+      </div>
     </div>
   );
 }

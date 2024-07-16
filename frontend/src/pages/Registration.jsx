@@ -24,9 +24,9 @@ export default function Registration() {
   }
 
   return (
-    <div className={Styles.Wrapper}>
+    <div className={Styles.wrapper}>
       <img src={MadokaImg}></img>
-      <h1>Register</h1>
+      <h1>Registration!!</h1>
 
       <form onSubmit={register}>
         <input
@@ -42,9 +42,12 @@ export default function Registration() {
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}
         />
+
         <button>Sign up</button>
       </form>
-      <Link to="/login"> Already have account?</Link>
+      <Link to="/login">
+        <a>Already have an account? </a>{" "}
+      </Link>
     </div>
   );
 }

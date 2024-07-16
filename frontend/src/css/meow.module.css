@@ -11,6 +11,10 @@
   padding: 20px;
 }
 
+.post:first-child {
+  margin-top: 100px;
+}
+
 .image {
   display: flex;
   flex-direction: column;
@@ -39,54 +43,47 @@
   text-decoration: none;
 }
 
-.postActions {
+.actionsContainer {
   width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.postActions img {
-  width: 40px;
-  cursor: pointer;
-  height: 40px;
-}
-
-.postActions img:nth-child(2) {
-  margin-top: 10px;
-  width: 40px;
-  cursor: pointer;
-  height: 40px;
-}
-
-.commentContainer {
-  display: none;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-}
-
-.postBtn {
-  font-size: 33px;
-  font-family: Arial, Helvetica, sans-serif;
-  gap: 4px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.chromium {
-  position: static;
-  margin-left: 730px;
-}
-
-.likes {
+.iHateMyselfContainer {
   display: flex;
-  justify-content: stretch;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
 
-.postInput {
-  width: 500px;
+.likes,
+.comment {
+  font-size: 30px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.likes img,
+.comment img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.chromium {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.chromiumContainer {
+  margin-left: auto;
+  display: flex;
+}
+
+.commentContainer {
+  flex-direction: column;
 }

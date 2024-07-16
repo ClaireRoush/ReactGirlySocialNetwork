@@ -9,6 +9,7 @@ import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile";
 import ChangeLog from "./pages/ChangeLog.jsx";
 import FullPost from "./pages/FullPost.jsx";
+import AboutUs from "./pages/AboutUs";
 import Settings from "./pages/Settings.jsx";
 import Me from "./pages/Me.jsx";
 
@@ -49,7 +50,8 @@ function App() {
           <Route path={"post/:id"} element={<FullPost />} />
           <Route path={"changelog"} element={<ChangeLog />} />
           <Route path={"me"} element={<Me />} />
-          <Route path={"userProfile/:userId"} element={<UserProfile />} />
+          <Route path={"/user/:userId"} element={<UserProfile />} />
+          <Route path={"about"} element={<AboutUs />} />
         </Routes>
       </BrowserRouter>
     </div>
