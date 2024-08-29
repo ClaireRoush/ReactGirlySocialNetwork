@@ -19,7 +19,9 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io(`http://localhost:7272`);
+    const newSocket = io(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com`
+    );
     setSocket(newSocket);
 
     newSocket.on("chat message", (msg) => {
@@ -69,7 +71,7 @@ export default function Chat() {
 
     const roomName = hash
       .sha256()
-      .update([contact, username, SECRET_KEY].sort().join("_"))
+      .update([contact.username, username, SECRET_KEY].sort().join("_"))
       .digest("hex");
 
     const data = await fetchMessages.json();

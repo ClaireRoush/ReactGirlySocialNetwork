@@ -11,6 +11,7 @@ const Messages = require("./models/Messages");
 const Notifications = require("./models/Notifications");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 const uploadMiddleware = multer({ dest: "uploads/" });
@@ -19,7 +20,10 @@ const salt = bcrypt.genSaltSync(10);
 const fs = require("fs");
 const router = express.Router();
 
-const io = require("socket.io")(7272, {
+const http = require("http");
+const server = http.createServer(app);
+
+const io = socketIo(server, {
   cors: {
     origin: ["https://reactgirlysocialnetwork.onrender.com"],
   },
@@ -217,12 +221,11 @@ app.post("/post/likes/:id", authenticateToken, async (req, res) => {
 });
 
 app.post("/messages/:forWho", authenticateToken, async (req, res) => {
-  const username = req.user.username; // текущий пользователь
-  const forWhoRecieve = req.params.forWho; // пользователь, которому отправляется сообщение
-  const message = req.body.message; // текст сообщения
+  const username = req.user.username;
+  const forWhoRecieve = req.params.forWho;
+  const message = req.body.message;
 
   try {
-    // Получаем документы пользователей
     const user = await User.findOne({ username: username });
     const forWho = await User.findOne({ username: forWhoRecieve });
 
@@ -253,7 +256,6 @@ app.get("/messages/:user", authenticateToken, async (req, res) => {
   const currentUsername = req.user.username;
   const targetUsername = req.params.user;
 
-  // Получаем документы пользователей
   const currentUserDoc = await User.findOne({ username: currentUsername });
   const targetUserDoc = await User.findOne({ username: targetUsername });
 
@@ -264,16 +266,15 @@ app.get("/messages/:user", authenticateToken, async (req, res) => {
   const currentUserId = currentUserDoc._id;
   const targetUserId = targetUserDoc._id;
 
-  // Находим сообщения, где текущий пользователь отправитель или получатель
   const messages = await Messages.find({
     $or: [
-      { user: currentUserId, forWho: targetUserId }, // Сообщения отправленные текущим пользователем
-      { user: targetUserId, forWho: currentUserId }, // Сообщения отправленные targetUser-ом
+      { user: currentUserId, forWho: targetUserId },
+      { user: targetUserId, forWho: currentUserId },
     ],
   })
-    .populate("user", "username") // Подставляем username отправителя
-    .populate("forWho", "username") // Подставляем username получателя
-    .sort({ createdAt: 1 }); // Сортировка по дате создания, по возрастанию
+    .populate("user", "username")
+    .populate("forWho", "username")
+    .sort({ createdAt: 1 });
 
   res.json(messages);
 });
@@ -508,6 +509,6 @@ app.get("/checkIfLiked/:Id", authenticateToken, async (req, res) => {
 
 io.on;
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log("Meeeeow");
 });
