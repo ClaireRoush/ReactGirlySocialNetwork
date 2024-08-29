@@ -31,14 +31,17 @@ export default function CreatePost() {
     ev.preventDefault();
     const token = localStorage.getItem("token");
 
-    const response = await fetch("http://localhost:6969/post", {
-      method: "POST",
-      body: data,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post",
+      {
+        method: "POST",
+        body: data,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
     if (response.ok) {
       setRedirect(true);
     }

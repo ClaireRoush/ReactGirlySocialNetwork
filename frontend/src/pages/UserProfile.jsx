@@ -18,7 +18,9 @@ export default function UserProfile() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:6969/userProfile/${userId}`)
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.username);
@@ -33,7 +35,7 @@ export default function UserProfile() {
     ev.preventDefault();
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `http://localhost:6969/addToContacts/${userId}`,
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/addToContacts/${userId}`,
       {
         method: "POST",
         headers: {
@@ -45,13 +47,13 @@ export default function UserProfile() {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:6969/userProfile/posts/${userId}`).then(
-      (response) => {
-        response.json().then((posts) => {
-          setPosts(posts);
-        });
-      }
-    );
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
+    ).then((response) => {
+      response.json().then((posts) => {
+        setPosts(posts);
+      });
+    });
   }, [userId]);
 
   useEffect(() => {

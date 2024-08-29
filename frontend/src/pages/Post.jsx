@@ -25,7 +25,7 @@ export default function Post({ image, content, author, _id, color }) {
   const checkLikes = async () => {
     try {
       const response = await fetch(
-        `http://localhost:6969/checkIfLiked/${_id}`,
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/checkIfLiked/${_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +47,9 @@ export default function Post({ image, content, author, _id, color }) {
 
   useEffect(() => {
     const getLikes = async () => {
-      const response = await fetch(`http://localhost:6969/post/likes/${_id}`);
+      const response = await fetch(
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/likes/${_id}`
+      );
       if (response.ok) {
         const likesData = await response.json();
         setLikes(likesData.likeCount);
@@ -58,13 +60,16 @@ export default function Post({ image, content, author, _id, color }) {
 
   useEffect(() => {
     const checkIsAuthor = async () => {
-      const response = await fetch(`http://localhost:6969/isMyPost/${_id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      });
+      const response = await fetch(
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/isMyPost/${_id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setIsAuthor(data);
@@ -74,7 +79,9 @@ export default function Post({ image, content, author, _id, color }) {
   }, [_id, token]);
 
   useEffect(() => {
-    fetch(`http://localhost:6969/findUserAvatar/${author.username}`)
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${author.username}`
+    )
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -87,12 +94,15 @@ export default function Post({ image, content, author, _id, color }) {
 
   async function postLike(ev) {
     ev.preventDefault();
-    const response = await fetch(`http://localhost:6969/post/likes/${_id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/likes/${_id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const likesData = await response.json();
       setLikes(likesData.likeCount);
@@ -101,7 +111,9 @@ export default function Post({ image, content, author, _id, color }) {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:6969/post/comments/${_id}`)
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/comments/${_id}`
+    )
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -116,14 +128,17 @@ export default function Post({ image, content, author, _id, color }) {
 
   async function postComment(ev) {
     ev.preventDefault();
-    const response = await fetch(`http://localhost:6969/post/comments/${_id}`, {
-      method: "POST",
-      body: JSON.stringify({ text }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/comments/${_id}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ text }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.ok) {
       const newComment = await response.json();
       setComments([...comments, newComment]);
@@ -131,13 +146,16 @@ export default function Post({ image, content, author, _id, color }) {
   }
 
   const deletePost = async () => {
-    const response = await fetch(`http://localhost:6969/deletePost/${_id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/deletePost/${_id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
     if (response.ok) {
       setIsDeleted(true);
     }

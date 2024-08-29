@@ -8,11 +8,14 @@ export default function Registration() {
   const [password, setPassword] = useState("");
   async function register(ev) {
     ev.preventDefault();
-    const response = await fetch("http://localhost:6969/register", {
-      method: "Post",
-      body: JSON.stringify({ username, password }),
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/register",
+      {
+        method: "Post",
+        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     if (response.status === 200) {
       alert("Success!!!11!!");
     } else {

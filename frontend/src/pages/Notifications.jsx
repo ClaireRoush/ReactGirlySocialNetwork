@@ -8,13 +8,16 @@ function Notifications() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://localhost:6969/notifications", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    }).then((response) => {
+    fetch(
+      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/notifications",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    ).then((response) => {
       response.json().then((notifications) => {
         setNotifications(notifications);
       });

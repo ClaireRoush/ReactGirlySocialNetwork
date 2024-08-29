@@ -34,11 +34,14 @@ export default function Chat() {
   useEffect(() => {
     const fetchContacts = async () => {
       if (!token) return;
-      const response = await fetch("http://localhost:6969/getContacts", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/getContacts",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -54,7 +57,7 @@ export default function Chat() {
       socket.emit("leave room", room);
     }
     const fetchMessages = await fetch(
-      `http://localhost:6969/messages/${contact.username}`,
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/messages/${contact.username}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -89,7 +92,7 @@ export default function Chat() {
 
     if (selectedContact && message.trim()) {
       const response = await fetch(
-        `http://localhost:6969/messages/${selectedContact.username}`,
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/messages/${selectedContact.username}`,
         {
           method: "POST",
           body: JSON.stringify({ message }),

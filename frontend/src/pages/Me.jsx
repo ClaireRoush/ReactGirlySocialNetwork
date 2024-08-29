@@ -15,7 +15,7 @@ export default function Me() {
   const userId = username;
 
   useEffect(() => {
-    fetch("http://localhost:6969/me", {
+    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,13 +33,13 @@ export default function Me() {
   }, [token]);
 
   useEffect(() => {
-    fetch(`http://localhost:6969/userProfile/posts/${userId}`).then(
-      (response) => {
-        response.json().then((posts) => {
-          setPosts(posts);
-        });
-      }
-    );
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
+    ).then((response) => {
+      response.json().then((posts) => {
+        setPosts(posts);
+      });
+    });
   }, [username]);
 
   return (

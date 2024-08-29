@@ -20,7 +20,7 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
   }, [navOpen]);
 
   function logout() {
-    fetch("http://localhost:6969/logout", {
+    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/logout", {
       credentials: "include",
       method: "POST",
     })

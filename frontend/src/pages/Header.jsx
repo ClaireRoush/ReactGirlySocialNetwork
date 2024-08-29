@@ -31,12 +31,15 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
-      fetch("http://localhost:6969/profile", {
-        credentials: "include",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      fetch(
+        "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/profile",
+        {
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -56,13 +59,13 @@ export default function Header() {
   const username = userInfo?.username;
   useEffect(() => {
     if (username) {
-      fetch(`http://localhost:6969/findUserAvatar/${username}`).then(
-        (response) => {
-          response.json().then((userAvatar) => {
-            setUserAvatar(userAvatar);
-          });
-        }
-      );
+      fetch(
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${username}`
+      ).then((response) => {
+        response.json().then((userAvatar) => {
+          setUserAvatar(userAvatar);
+        });
+      });
     }
   }, [username]);
 

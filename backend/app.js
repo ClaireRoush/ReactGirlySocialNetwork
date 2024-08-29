@@ -21,7 +21,7 @@ const router = express.Router();
 
 const io = require("socket.io")(7272, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["https://reactgirlysocialnetwork.onrender.com"],
   },
 });
 
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: "https://reactgirlysocialnetwork.onrender.com",
   })
 );
 
