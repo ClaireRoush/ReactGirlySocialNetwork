@@ -1,5 +1,6 @@
 .fullProfile {
   position: absolute;
+  padding-top: 60px;
   width: 100%;
   height: 100%;
 }
@@ -11,6 +12,7 @@
   align-items: center;
   justify-content: center;
   z-index: 999;
+  margin-top: 50px;
 }
 
 .upperProfile {
@@ -27,7 +29,6 @@
   justify-content: center;
   align-items: center;
   z-index: 999;
-
   width: 100%;
   height: 100%;
 }
@@ -41,6 +42,7 @@
 
 .profilePosts {
   z-index: 999;
+  margin-bottom: 500px;
 }
 
 .profileImg {

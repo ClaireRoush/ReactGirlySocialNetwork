@@ -5,11 +5,10 @@ import Header from "../pages/Header.jsx";
 
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
-    fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post"
-    ).then((response) => {
+    fetch("http://localhost:6969/post").then((response) => {
       response.json().then((posts) => {
         setPosts(posts);
       });
@@ -42,13 +41,15 @@ export default function IndexPage() {
       <Header />
 
       <div className={Styles.UserProfile}>
-        <div className={Styles.post}>
-          {posts.length > 0 &&
-            posts
-              .slice(0, visiblePosts)
-              .map((post) => (
-                <Post key={post.id} {...post} color={mainColor} />
-              ))}
+        <div className={Styles.postContainer}>
+          <div className={Styles.post}>
+            {posts.length > 0 &&
+              posts
+                .slice(0, visiblePosts)
+                .map((post) => (
+                  <Post key={post.id} {...post} color={mainColor} />
+                ))}
+          </div>
         </div>
       </div>
     </div>

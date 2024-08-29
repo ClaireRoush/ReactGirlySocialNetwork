@@ -24,24 +24,21 @@ export default function Settings() {
   async function changeInfo(ev) {
     ev.preventDefault();
     const token = localStorage.getItem("token");
-    const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/settings",
-      {
-        method: "Post",
-        body: JSON.stringify({
-          userAvatar,
-          username,
-          userDesc,
-          pronouns,
-          profileHashColor,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      }
-    );
+    const response = await fetch("http://localhost:6969/settings", {
+      method: "Post",
+      body: JSON.stringify({
+        userAvatar,
+        username,
+        userDesc,
+        pronouns,
+        profileHashColor,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
     if (response.ok) {
       {
         alert("meow");
@@ -50,7 +47,7 @@ export default function Settings() {
   }
 
   useEffect(() => {
-    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/me", {
+    fetch("http://localhost:6969/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

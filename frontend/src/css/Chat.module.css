@@ -1,0 +1,137 @@
+.wrapperForAll {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  box-sizing: border-box;
+  padding-top: 80px;
+  z-index: 9999;
+  display: grid;
+  grid-template-areas:
+    "navbar header"
+    "navbar messages"
+    "navbar messages";
+  grid-template-columns: 250px;
+  grid-template-rows: 80px auto;
+}
+
+.navBar {
+  grid-area: navbar;
+  border-right: #a6e3a1 2px solid;
+  background-color: #181825;
+}
+
+.header {
+  box-sizing: border-box;
+  font-size: 40px;
+  padding: 10px;
+  grid-area: header;
+  background-color: #181825;
+  gap: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.header img {
+  border-radius: 10px;
+  width: 60px;
+  height: 60px;
+}
+
+.messages {
+  grid-area: messages;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputWrapper {
+  position: flex;
+  height: 60px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+}
+
+.inputWrapper input {
+  color: #a6e3a1;
+  background-color: #181825;
+  width: 95%;
+  border-radius: 10px;
+  transition: outline 0.1s;
+  font-size: 30px;
+  border: none;
+  height: 40px;
+  box-shadow: none;
+  padding: 10px;
+}
+
+.inputWrapper input:focus {
+  outline: 4px solid #a6e3a1;
+}
+
+.inputWrapper input:not(:focus) {
+  outline: none;
+}
+
+.user {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 30px;
+}
+
+.user img {
+  width: 30px;
+  height: 30px;
+}
+
+.messagesWrapper {
+  overflow-y: scroll;
+  padding-bottom: 20px;
+}
+
+.messages {
+  box-sizing: border-box;
+  padding: 0px 10px 10px 10px;
+}
+
+.message:first-child {
+  margin-top: 0px;
+}
+
+.message {
+  height: auto;
+  padding: 0;
+  gap: 5px;
+  margin-top: 20px;
+  display: flex;
+}
+
+.messageContent {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.senderInfo {
+  font-size: 25px;
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+.text {
+  padding: 0;
+  margin: 0;
+  max-width: 90vh;
+  overflow-wrap: break-word;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.message img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}

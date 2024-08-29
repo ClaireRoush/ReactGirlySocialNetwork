@@ -1,24 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import Styles from "../css/Header.module.css";
 import { UserContext } from "../usercontext";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Frog from "../svg/svFROG.svg";
+import menuSvg from "../svg/menu.svg";
+import Navbar from "./Navbar";
 
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [userAvatar, setUserAvatar] = useState([]);
+  const [navOpen, setNavOpen] = useState(false);
+
+  let menuRef = useRef();
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setNavOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
-      fetch(
-        "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/profile",
-        {
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      fetch("http://localhost:6969/profile", {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -35,34 +53,20 @@ export default function Header() {
     }
   }, [userInfo, setUserInfo]);
 
-  function logout() {
-    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/logout", {
-      credentials: "include",
-      method: "POST",
-    })
-      .then(() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userInfo");
-        setUserInfo("");
-      })
-      .catch((error) => {
-        console.error("Failed to logout:", error);
-      });
-  }
-
   const username = userInfo?.username;
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${username}`
-    ).then((response) => {
-      response.json().then((userAvatar) => {
-        setUserAvatar(userAvatar);
-      });
-    });
-  }, []);
+    if (username) {
+      fetch(`http://localhost:6969/findUserAvatar/${username}`).then(
+        (response) => {
+          response.json().then((userAvatar) => {
+            setUserAvatar(userAvatar);
+          });
+        }
+      );
+    }
+  }, [username]);
 
   return (
-    /* НАСРАНО */
     <div className={Styles.header}>
       <div className={Styles.headerContainer}>
         <div className={Styles.logo}>
@@ -73,14 +77,14 @@ export default function Header() {
             <a>Home</a>
           </Link>
           <>
+            <Link className={Styles.links} to="/chat">
+              <a>Messages</a>
+            </Link>
             <Link className={Styles.links} to="/create">
               <a>Create Post</a>
             </Link>
             <Link className={Styles.links} to="/about">
               <a>About us</a>
-            </Link>
-            <Link className={Styles.links} to="/">
-              <a onClick={logout}>Logout</a>
             </Link>
           </>
           {!username && (
@@ -90,36 +94,21 @@ export default function Header() {
             </div>
           )}
         </div>
-        <div className={Styles.rightistElements}>
+        <section className={Styles.rightistElements}>
+          <img src={menuSvg} onClick={() => setNavOpen(!navOpen)}></img>
           <Link to={`/me`}>
             <a>{userInfo.username}</a>
           </Link>
           <img src={userAvatar}></img>
-        </div>
-      </div>
+        </section>
 
-      {/* <div className={Styles.ifNotLoggedIn}>
-        {!username && (
-        )}
+        <Navbar
+          ref={menuRef}
+          navOpen={navOpen}
+          username={userInfo.username}
+          userAvatar={userAvatar}
+        />
       </div>
-      {username && (
-        <div className={Styles.headerContainer}>
-          <div className={Styles.userProfile}>
-            <img src={userAvatar}></img>
-            <Link to={`/me`}>
-              <a>{userInfo.username}</a>
-            </Link>
-          </div>
-          <div className={Styles.postSomeShit}>
-            <Link to="/create">
-              <a>Post some shit</a>
-            </Link>
-          </div>
-          <div className={Styles.logout} onClick={logout}>
-            <a>Logout</a>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }

@@ -9,7 +9,7 @@ export default function Comments({ user, text, userAvatar }) {
       <div className={Styles.userInfo}>
         <img src={userAvatar}></img>
         <Link className={Styles.text} to={`/user/${user.username}`}>
-          <a>{user.username}</a>
+          <a>{user && user.username}</a>
         </Link>
       </div>
       <div className={Styles.text}>{text}</div>

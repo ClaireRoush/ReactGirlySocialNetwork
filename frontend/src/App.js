@@ -12,6 +12,7 @@ import FullPost from "./pages/FullPost.jsx";
 import AboutUs from "./pages/AboutUs";
 import Settings from "./pages/Settings.jsx";
 import Me from "./pages/Me.jsx";
+import Chat from "./pages/Chat.jsx";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path={"me"} element={<Me />} />
           <Route path={"/user/:userId"} element={<UserProfile />} />
           <Route path={"about"} element={<AboutUs />} />
+          <Route path={"chat"} element={<Chat />} />
         </Routes>
       </BrowserRouter>
     </div>

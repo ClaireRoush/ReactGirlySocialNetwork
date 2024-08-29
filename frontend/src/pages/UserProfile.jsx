@@ -4,6 +4,8 @@ import { UserContext } from "../usercontext";
 import Post from "./Post";
 import { useParams, Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import Header from "./Header";
+
 export default function UserProfile() {
   const { userId } = useParams();
   const [posts, setPosts] = useState([]);
@@ -16,9 +18,7 @@ export default function UserProfile() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
-    )
+    fetch(`http://localhost:6969/userProfile/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.username);
@@ -29,14 +29,29 @@ export default function UserProfile() {
       });
   }, [userId]);
 
+  async function AddToContacts(ev) {
+    ev.preventDefault();
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `http://localhost:6969/addToContacts/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
+  }
+
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      });
-    });
+    fetch(`http://localhost:6969/userProfile/posts/${userId}`).then(
+      (response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      }
+    );
   }, [userId]);
 
   useEffect(() => {
@@ -52,14 +67,16 @@ export default function UserProfile() {
   return (
     /* НАСРАНО */
     <div className={Styles.fullProfile}>
+      <Header></Header>
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
           <img className={Styles.profileImg} src={userAvatar} />
           <div className={Styles.desc}>
             <h1>{username}</h1>
-            <textarea placeholder={userDesc}></textarea>
             <a>{pronouns}</a>
+            <textarea placeholder={userDesc}></textarea>
           </div>
+          <div onClick={AddToContacts}>Add to contacts!</div>
         </div>
       </div>
       <div className={Styles.profileInfo}>

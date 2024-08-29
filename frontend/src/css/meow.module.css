@@ -12,7 +12,6 @@
 }
 
 .post:first-child {
-  margin-top: 100px;
 }
 
 .image {
@@ -23,7 +22,6 @@
 
 .image img {
   max-height: 600px;
-  min-height: 0px;
   max-width: 900px;
 }
 

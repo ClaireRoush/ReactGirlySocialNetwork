@@ -1,0 +1,32 @@
+.notificationContainer {
+  display: flex;
+  flex-direction: column;
+  border: 3px solid rgb(166, 227, 161);
+  box-sizing: border-box;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 30px;
+}
+
+.link {
+  color: #cdd6f4;
+  text-decoration: none;
+}
+
+.userAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.postInfo {
+  margin-top: 5px;
+  font-size: 25px;
+}

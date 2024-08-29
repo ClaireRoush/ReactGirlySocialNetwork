@@ -9,3 +9,7 @@
   flex-direction: column;
   z-index: 999;
 }
+
+.postContainer {
+  margin-top: 100px;
+}

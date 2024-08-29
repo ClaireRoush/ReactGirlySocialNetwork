@@ -1,9 +1,19 @@
 .aboutUsContainer {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   gap: 30px;
   width: 100%;
+  z-index: 9999;
   height: 100%;
+}
+
+.itemsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 80px;
 }
 
 .aboutUsMain {
@@ -21,4 +31,27 @@
   cursor: pointer;
   z-index: 999;
   margin-top: 10px;
+}
+
+.mainThing {
+  border-radius: 10px;
+  border: 4px solid rgb(166, 227, 161);
+  width: 80vw;
+  height: auto;
+  z-index: 9999;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #181825;
+}
+
+.meow {
+  font-size: 30px;
+}
+
+.text {
+  font-size: 25px;
+  margin-top: 4px;
+  margin-bottom: 4px;
 }

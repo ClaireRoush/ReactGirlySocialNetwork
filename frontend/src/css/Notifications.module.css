@@ -1,0 +1,21 @@
+.notificationsContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  font-size: 25px;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.header a:nth-child(2) {
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.main {
+  margin-top: 15px;
+}
