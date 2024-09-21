@@ -13,16 +13,33 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+
+    depends_on:
+      - nginx
+
+    volumes:
+      - frontend_static:/usr/app/build
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - backend
-  
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - frontend_static:/usr/share/nginx/html
   backend:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - 6969:6969
     depends_on:
       - mongo
+
+
+volumes:
+  frontend_static:
