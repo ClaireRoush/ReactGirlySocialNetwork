@@ -1,7 +1,7 @@
 import React from "react";
 import Styles from "../css/Comments.module.css";
 import { Link } from "react-router-dom";
-const Frog = "/static/images/svFROG.svg";
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 
 export default function Comments({ user, text, userAvatar }: {
   user: any,

@@ -3,7 +3,7 @@ import React, { useContext, useState , FormEvent} from "react";
 import { UserContext } from "../usercontext";
 import Styles from "../css/Login.module.css";
 
-const MadokaImg = "/static/images/MadokaRegister.jpg";
+const MadokaImg = process.env.REACT_APP_STATIC_URL + "/images/MadokaRegister.jpg";
 
 export default function Login() {
   const [username, setUsername] = useState("");

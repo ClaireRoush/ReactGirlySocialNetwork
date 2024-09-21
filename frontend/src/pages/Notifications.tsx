@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Notif from "./Notif";
 import Styles from "../css/Notifications.module.css";
 
-const Frog = "/static/images/svFROG.svg";
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);

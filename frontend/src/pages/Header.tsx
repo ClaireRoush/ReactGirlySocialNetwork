@@ -4,8 +4,8 @@ import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 
-const Frog = "/static/images/svFROG.svg";
-const menuSvg = "/static/images/menu.svg";
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
+const menuSvg = process.env.REACT_APP_STATIC_URL + "/images/menu.svg";
 
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
