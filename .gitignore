@@ -3,3 +3,6 @@ node_modules/
 
 # Ignore .env files
 .*.local
+
+# Ignore frontend build
+frontend/build
