@@ -16,7 +16,4 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 # Copy the rest of the application code
 COPY . .
 
-# Build the app
-RUN npm run build
-
-COPY static ./build/static
+ENTRYPOINT ["/bin/sh", "docker-entrypoint.sh"]
