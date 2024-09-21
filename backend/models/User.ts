@@ -1,11 +1,21 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import { Schema, model } from "mongoose"
 
-const UserSchema = new Schema(
+export interface IUser {
+  _id: String
+  username: String,
+  password: String,
+  userAvatar: String,
+  userDesc?: String,
+  pronouns: String,
+  profileHashColor: String,
+  contacts: Array<String>,
+}
+
+const UserSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, min: 4, unique: true },
     password: { type: String, required: true },
-    userAvatar: { type: String, default: "", required: false },
+    userAvatar: { type: String, default: "/static/images/default_user_avatar.png", required: false },
     userDesc: { type: String, default: "", required: false },
     pronouns: { type: String, default: "", required: false },
     profileHashColor: {
@@ -15,13 +25,13 @@ const UserSchema = new Schema(
       min: 4,
       max: 7,
     },
-    contacts: { type: Array, default: [] },
+    contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,
   }
 );
 
-const UserModel = model("User", UserSchema);
+const UserModel = model<IUser>("User", UserSchema);
 
 export default UserModel;
