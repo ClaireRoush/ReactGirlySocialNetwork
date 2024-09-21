@@ -31,11 +31,13 @@ const server = http.createServer(app);
 
 const API_URL = process.env.BASE_API_URL || "";
 
-const io = new socketIo.Server(server, {
+const socket_args = process.env.RUNNING_LOCALY == "1" ? {} : {
   cors: {
     origin: process.env.CORS_ORIGINS.split(" ") || "http://localhost",
   },
-});
+}
+
+const io = new socketIo.Server(server, socket_args);
 
 io.on("connection", (socket) => {
   console.log(socket.id);
@@ -66,12 +68,17 @@ io.on("connection", (socket) => {
 наверное...
 */
 
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.CORS_ORIGINS.split(" ") || "http://localhost",
-  })
-);
+if (process.env.RUNNING_LOCALY == "1") // yep :)
+{
+  app.use(
+    cors({
+      credentials: true,
+      origin: process.env.CORS_ORIGINS.split(" ") || "http://localhost",
+      methods: ["GET", "POST", "OPTIONS"],
+      allowedHeaders: ["Authorization", "Content-Type"]
+    })
+  );
+}
 
 app.use(express.json());
 app.use(cookieParser());
@@ -99,7 +106,7 @@ app.post(API_URL + "/register", async (req: Request, res: Response) => {
 app.post(API_URL + "/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const userDoc = await User.findOne({ username });
-  const passOk = bcrypt.compareSync(password, userDoc.password);
+  const passOk = bcrypt.compareSync(password, userDoc.password.toString());
   if (passOk) {
     jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
       if (err) throw err;
@@ -133,13 +140,21 @@ app.get(API_URL + "/profile", authenticateToken, (req: Request, res: Response) =
 
 app.get(API_URL + "/me", authenticateToken, async (req: Request, res: Response) => {
   let userId = (req as any).user.id;
-  const getUserInfo = await User.findById(userId);
+  console.log((req as any).user);
+  const userInfo = await User.findById(userId);
+
+  if (!userInfo) {
+    console.log("Trying to get user that doesn't exist. userId:", userId);
+    res.status(404).json({ message: "User not found" });
+    return
+  }
+
   const data = {
-    username: getUserInfo.username,
-    userAvatar: getUserInfo.userAvatar,
-    userDesc: getUserInfo.userDesc,
-    pronouns: getUserInfo.pronouns,
-    profileHashColor: getUserInfo.profileHashColor,
+    username: userInfo.username,
+    userAvatar: userInfo.userAvatar,
+    userDesc: userInfo.userDesc,
+    pronouns: userInfo.pronouns,
+    profileHashColor: userInfo.profileHashColor,
   };
   res.json(data);
 });
@@ -432,35 +447,19 @@ app.get(API_URL + "/changeInfo", authenticateToken, async (req: Request, res: Re
 });
 
 app.post(API_URL + "/settings", authenticateToken, async (req: Request, res: Response) => {
-  const userAvatar = req.body;
-  const userDesc = req.body;
-  const username = req.body;
-  const pronouns = req.body;
-  const profileHashColor = req.body;
+  const updateInfo = {
+    userAvatar: req.body.userAvatar,
+    userDesc: req.body.userDesc,
+    username: req.body.username,
+    pronouns: req.body.pronouns,
+    profileHashColor: req.body.profileHashColor,
+  }
 
-  const userId = (req as any).req.user.id;
+  const userId = (req as any).user.id;
   const user = await User.findOneAndUpdate(
     { _id: userId },
-    userAvatar,
-    {
-      new: true,
-    },
-    userDesc,
-    {
-      new: true,
-    },
-    username,
-    {
-      new: true,
-    },
-    pronouns,
-    {
-      new: true,
-    },
-    profileHashColor,
-    {
-      new: true,
-    }
+    updateInfo,
+    { new: true }
   );
   res.json(user);
 });
