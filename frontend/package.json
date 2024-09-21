@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx"
   },
   "eslintConfig": {
     "extends": [
@@ -46,8 +47,13 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.11.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.5.4",
     "@types/react": "^18.3.5",
+    "eslint": "^8.57.1",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.6.0",
     "typescript-plugin-css-modules": "^5.1.0"
   }
 }
