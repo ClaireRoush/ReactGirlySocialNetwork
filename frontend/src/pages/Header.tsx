@@ -60,14 +60,26 @@ export default function Header() {
   const username = userInfo?.username;
   useEffect(() => {
     if (username) {
-      fetch(
+      let data: any;
+      let result = fetch(
         process.env.REACT_APP_API_URL + `/findUserAvatar/${username}`
       ).then((response) => {
-        response.json().then((userAvatar) => {
-          setUserAvatar(userAvatar);
+        if (response.status == 404)
+          {
+            throw new Error("User avatar not found");
+          }
+          else if (response.status != 200)
+          {
+            throw new Error("Failed to fetch user profile");
+          }
+        response.json().then((data) => {
+          setUserAvatar(data);
         }).catch((error) => {
           console.error("Error fetching user profile:", error);
         });
+      }).catch((error: Error) => {
+        console.log("Failed to retrieve user avatar. Using default. Error text:\n", error);
+        setUserAvatar(process.env.REACT_APP_STATIC_URL + "/images/default_user_avatar.png");
       });
     }
   }, [username]);
