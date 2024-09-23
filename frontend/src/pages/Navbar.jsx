@@ -9,6 +9,8 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
   const [visible, setVisible] = useState(false);
   const [showNotifications, setShowNotifications] = useState("main");
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const api = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     if (navOpen) {
@@ -20,7 +22,7 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
   }, [navOpen]);
 
   function logout() {
-    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/logout", {
+    fetch("${api}/logout", {
       credentials: "include",
       method: "POST",
     })

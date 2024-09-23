@@ -6,18 +6,17 @@ import Styles from "../css/Notifications.module.css";
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const token = localStorage.getItem("token");
+  const api = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
-    fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/notifications",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      }
-    ).then((response) => {
+    fetch(`${api}/notifications`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    }).then((response) => {
       response.json().then((notifications) => {
         setNotifications(notifications);
       });

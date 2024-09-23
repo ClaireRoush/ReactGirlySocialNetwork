@@ -16,11 +16,10 @@ export default function UserProfile() {
   const [userDesc, setUserDesc] = useState("");
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+  const api = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/${userId}`
-    )
+    fetch(`${api}/userProfile/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.username);
@@ -35,7 +34,7 @@ export default function UserProfile() {
     ev.preventDefault();
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/addToContacts/${userId}`,
+      `${api}/addToContacts/${userId}`,
       {
         method: "POST",
         headers: {
@@ -47,13 +46,13 @@ export default function UserProfile() {
   }
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      });
-    });
+    fetch(`${api}/userProfile/posts/${userId}`).then(
+      (response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      }
+    );
   }, [userId]);
 
   useEffect(() => {

@@ -15,13 +15,12 @@ export default function Chat() {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const username = userInfo?.username;
-
+  const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
+  const api = process.env.REACT_APP_API_URL;
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com`
-    );
+    const newSocket = io(`http://localhost`);
     setSocket(newSocket);
 
     newSocket.on("chat message", (msg) => {
@@ -36,14 +35,11 @@ export default function Chat() {
   useEffect(() => {
     const fetchContacts = async () => {
       if (!token) return;
-      const response = await fetch(
-        "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/getContacts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${api}/getContacts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -59,7 +55,7 @@ export default function Chat() {
       socket.emit("leave room", room);
     }
     const fetchMessages = await fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/messages/${contact.username}`,
+      `${api}/messages/${contact.username}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,7 +63,6 @@ export default function Chat() {
       }
     );
 
-    const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
 
     const roomName = hash
       .sha256()
@@ -94,7 +89,7 @@ export default function Chat() {
 
     if (selectedContact && message.trim()) {
       const response = await fetch(
-        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/messages/${selectedContact.username}`,
+        `${api}/messages/${selectedContact.username}`,
         {
           method: "POST",
           body: JSON.stringify({ message }),

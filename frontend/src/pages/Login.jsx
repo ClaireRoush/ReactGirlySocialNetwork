@@ -3,6 +3,8 @@ import { useContext, useState } from "react";
 import { UserContext } from "../usercontext";
 import MadokaImg from "../images/MadokaRegister.jpg";
 import Styles from "../css/Login.module.css";
+const api = process.env.REACT_APP_API_URL;
+
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -12,15 +14,12 @@ export default function Login() {
 
   async function login(ev) {
     ev.preventDefault();
-    const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/login",
-      {
-        method: "Post",
-        body: JSON.stringify({ username, password }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${api}/login`, {
+      method: "Post",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
 
     if (response.ok) {
       response.json().then((userInfo) => {

@@ -3,6 +3,7 @@ import Styles from "../css/Comments.module.css";
 import Frog from "../svg/svFROG.svg";
 import { Link } from "react-router-dom";
 
+
 export default function Comments({ user, text, userAvatar }) {
   return (
     <div className={Styles.commentsContainer}>

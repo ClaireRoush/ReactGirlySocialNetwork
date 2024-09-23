@@ -11,11 +11,13 @@ export default function Me() {
   const [pronouns, setPronouns] = useState("");
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const token = localStorage.getItem("token");
+  const api = process.env.REACT_APP_API_URL;
+
 
   const userId = username;
 
   useEffect(() => {
-    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/me", {
+    fetch(`${api}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,13 +35,13 @@ export default function Me() {
   }, [token]);
 
   useEffect(() => {
-    fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/userProfile/posts/${userId}`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      });
-    });
+    fetch(`${api}/userProfile/posts/${userId}`).then(
+      (response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      }
+    );
   }, [username]);
 
   return (

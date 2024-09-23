@@ -3,9 +3,6 @@ services:
   mongo:
     image: mongo
     restart: always
-    # environment:
-      # MONGO_INITDB_ROOT_USERNAME: root
-      # MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - 27017:27017
     
@@ -17,6 +14,8 @@ services:
       - 80:80
     depends_on:
       - backend
+    volumes:
+      - /etc/letsencrypt/live/rgsn.live:/etc/letsencrypt/live/rgsn.live:ro
   
   backend:
     build: 

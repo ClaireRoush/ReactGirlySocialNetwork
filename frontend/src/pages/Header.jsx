@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import Frog from "../svg/svFROG.svg";
 import menuSvg from "../svg/menu.svg";
 import Navbar from "./Navbar";
+const api = process.env.REACT_APP_API_URL;
+const upload = process.env.REACT_APP_UPLOAD;
+
 
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
@@ -31,15 +34,12 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
-      fetch(
-        "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/profile",
-        {
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      fetch(`${api}/profile`, {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -59,13 +59,13 @@ export default function Header() {
   const username = userInfo?.username;
   useEffect(() => {
     if (username) {
-      fetch(
-        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${username}`
-      ).then((response) => {
-        response.json().then((userAvatar) => {
-          setUserAvatar(userAvatar);
-        });
-      });
+      fetch(`${api}/findUserAvatar/${username}`).then(
+        (response) => {
+          response.json().then((userAvatar) => {
+            setUserAvatar(userAvatar);
+          });
+        }
+      );
     }
   }, [username]);
 
@@ -83,9 +83,6 @@ export default function Header() {
             <Link className={Styles.links} to="/chat">
               <a>Messages</a>
             </Link>
-            <Link className={Styles.links} to="/create">
-              <a>Create Post</a>
-            </Link>
             <Link className={Styles.links} to="/about">
               <a>About us</a>
             </Link>
@@ -102,7 +99,7 @@ export default function Header() {
           <Link to={`/me`}>
             <a>{userInfo.username}</a>
           </Link>
-          <img src={userAvatar}></img>
+          <img src={`${upload}/${userAvatar}`}></img>
         </section>
 
         <Navbar

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import Styles from "../css/Index.module.css";
 import Header from "../pages/Header.jsx";
+import CreatePost from "../pages/CreatePost.jsx";
+const api = process.env.REACT_APP_API_URL;
 
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
-    fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post"
-    ).then((response) => {
+    fetch(`${api}/post`).then((response) => {
       response.json().then((posts) => {
         setPosts(posts);
       });
@@ -41,6 +41,9 @@ export default function IndexPage() {
   return (
     <div className="">
       <Header />
+      <div className={Styles.createPost}>
+      <CreatePost></CreatePost>
+      </div>
 
       <div className={Styles.UserProfile}>
         <div className={Styles.postContainer}>

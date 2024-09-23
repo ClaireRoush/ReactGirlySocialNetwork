@@ -4,15 +4,15 @@ import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Styles from "../css/Settings.module.css";
 import Header from "../pages/Header.jsx";
-<Header />;
 
 export default function Settings() {
-  const [userAvatar, setUserAvatar] = useState("");
   const token = localStorage.getItem("token");
+  const [files, setFiles] = useState('');
   const [username, setUsername] = useState("");
   const [userDesc, setUserDesc] = useState("");
   const [pronouns, setPronouns] = useState("");
   const [profileHashColor, setProfileHashColor] = useState("");
+  const api = process.env.REACT_APP_API_URL;
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -22,35 +22,31 @@ export default function Settings() {
   };
 
   async function changeInfo(ev) {
+    const data = new FormData();
+    data.set('file', files[0]); 
+    data.set("username", username);
+    data.set("userDesc", userDesc);
+    data.set("pronouns", pronouns);
+    data.set("profileHashColor",profileHashColor);
+    
     ev.preventDefault();
+
     const token = localStorage.getItem("token");
-    const response = await fetch(
-      "https://reactgirlysocialnetwork-backend-dzs8.onrender.com/settings",
-      {
-        method: "Post",
-        body: JSON.stringify({
-          userAvatar,
-          username,
-          userDesc,
-          pronouns,
-          profileHashColor,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${api}/settings`, {
+      method: "POST",
+      body: data,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
     if (response.ok) {
-      {
         alert("meow");
-      }
     }
   }
 
   useEffect(() => {
-    fetch("https://reactgirlysocialnetwork-backend-dzs8.onrender.com/me", {
+    fetch(`${api}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -58,7 +54,6 @@ export default function Settings() {
       if (response.ok) {
         return response.json().then((info) => {
           setUsername(info.username);
-          setUserAvatar(info.userAvatar);
           setUserDesc(info.userDesc);
           setPronouns(info.pronouns);
           setProfileHashColor(info.profileHashColor);
@@ -79,11 +74,10 @@ export default function Settings() {
             onChange={(ev) => setUsername(ev.target.value)}
           />
           <input
-            type="text"
-            placeholder="User avatar (url)"
-            value={userAvatar}
-            onChange={(ev) => setUserAvatar(ev.target.value)}
-          />
+            type="file"
+            placeholder="User avatar"
+            onChange={ev => setFiles(ev.target.files)}
+            />
           <input
             type="text"
             placeholder="User desc."

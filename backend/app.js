@@ -16,16 +16,18 @@ const cookieParser = require("cookie-parser");
 const multer = require("multer");
 const uploadMiddleware = multer({ dest: "uploads/" });
 const secret = process.env.JWT_SECRET;
+const api = process.env.API;
 const salt = bcrypt.genSaltSync(10);
 const fs = require("fs");
-const router = express.Router();
+const sharp = require("sharp")
+//const router = express.Router();
 
 const http = require("http");
 const server = http.createServer(app);
 
 const io = socketIo(server, {
   cors: {
-    origin: ["https://reactgirlysocialnetwork.onrender.com"],
+    origin: process.env.ORIGIN_SECRET,
   },
 });
 
@@ -48,7 +50,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat message", (msg) => {
     const { room, message } = msg;
-    socket.to(room).emit("chat message", message); // Отправляем сообщение всем в комнате, включая отправителя
+    socket.to(room).emit("chat message", message);
   });
 });
 
@@ -60,8 +62,8 @@ io.on("connection", (socket) => {
 
 app.use(
   cors({
+    origin: process.env.ORIGIN_SECRET,
     credentials: true,
-    origin: "https://reactgirlysocialnetwork.onrender.com",
   })
 );
 
@@ -69,13 +71,21 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('Error connecting to MongoDB:', err);
+});
 
-app.get("/", (req, res) => {
+app.get("/api/", (req, res) => {
   res.json("Vse rabotaet, privetiki!!!11");
 });
 
-app.post("/register", async (req, res) => {
+
+app.post(`/api/register`, async (req, res) => {
   const { username, password } = req.body;
   try {
     const userDoc = await User.create({
@@ -88,7 +98,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const userDoc = await User.findOne({ username });
   const passOk = bcrypt.compareSync(password, userDoc.password);
@@ -119,11 +129,11 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-app.get("/profile", authenticateToken, (req, res) => {
+app.get("/api/profile", authenticateToken, (req, res) => {
   res.json(req.user);
 });
 
-app.get("/me", authenticateToken, async (req, res) => {
+app.get("/api/me", authenticateToken, async (req, res) => {
   userId = req.user.id;
   const getUserInfo = await User.findById(userId);
   const data = {
@@ -136,28 +146,39 @@ app.get("/me", authenticateToken, async (req, res) => {
   res.json(data);
 });
 
-app.post("/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   res.json("ok");
 });
 
 app.post(
-  "/post",
+  "/api/post",
   uploadMiddleware.single("file"),
   authenticateToken,
   async (req, res) => {
-    const { title, summary, content, image } = req.body;
+    const {originalname,path: tempPath} = req.file;
+    const parts = originalname.split('.');
+    const ext = parts[parts.length - 1];
+    const newPath = tempPath+'.'+ext;
+
+    await sharp(tempPath)
+    .toFormat(ext)
+    .jpeg({quality: 30})
+    .toFile(newPath);
+
+
+    const { title, summary, content } = req.body;
     const postDoc = await Post.create({
       title,
       summary,
       content,
-      image,
+      image:newPath,
       author: req.user.id,
     });
     res.json({ postDoc });
   }
 );
 
-app.get("/post", async (req, res) => {
+app.get("/api/post", async (req, res) => {
   res.json(
     await Post.find()
       .populate("author", ["username"])
@@ -166,13 +187,13 @@ app.get("/post", async (req, res) => {
   );
 });
 
-app.get("/post/:id", async (req, res) => {
+app.get("/api/post/:id", async (req, res) => {
   id = req.params.id;
   const postId = await Post.findById(id);
   res.json(postId);
 });
 
-app.get("/userProfile/:username", async (req, res) => {
+app.get("/api/userProfile/:username", async (req, res) => {
   const user = await User.findOne({ username: req.params.username });
   if (!user) {
     return res.status(404).json({ message: "Ты дурашка та ещё!!!" });
@@ -186,7 +207,7 @@ app.get("/userProfile/:username", async (req, res) => {
   });
 });
 
-app.get("/userProfile/posts/:User", async (req, res) => {
+app.get("/api/userProfile/posts/:User", async (req, res) => {
   const username = req.params.User;
   const user = await User.findOne({ username: username });
   res.json(
@@ -196,7 +217,7 @@ app.get("/userProfile/posts/:User", async (req, res) => {
   );
 });
 
-app.post("/post/likes/:id", authenticateToken, async (req, res) => {
+app.post("/api/post/likes/:id", authenticateToken, async (req, res) => {
   const username = req.user.username;
   const likedPostId = req.params.id;
   const user = await User.findOne({ username: username });
@@ -220,7 +241,7 @@ app.post("/post/likes/:id", authenticateToken, async (req, res) => {
   res.json({ likeCount });
 });
 
-app.post("/messages/:forWho", authenticateToken, async (req, res) => {
+app.post("/api/messages/:forWho", authenticateToken, async (req, res) => {
   const username = req.user.username;
   const forWhoRecieve = req.params.forWho;
   const message = req.body.message;
@@ -238,7 +259,7 @@ app.post("/messages/:forWho", authenticateToken, async (req, res) => {
       forWho: forWho._id,
       message: message,
       userAvatar: user.userAvatar,
-    });
+    });const fs = require('fs');
 
     const populatedMessageDoc = await Messages.findById(messageDoc._id)
       .populate("user", "username")
@@ -252,7 +273,7 @@ app.post("/messages/:forWho", authenticateToken, async (req, res) => {
   }
 });
 
-app.get("/messages/:user", authenticateToken, async (req, res) => {
+app.get("/api/messages/:user", authenticateToken, async (req, res) => {
   const currentUsername = req.user.username;
   const targetUsername = req.params.user;
 
@@ -279,26 +300,7 @@ app.get("/messages/:user", authenticateToken, async (req, res) => {
   res.json(messages);
 });
 
-/* app.get("/checkAviableContacts", authenticateToken, async (req, res) => {
-  const username = req.user.username;
-  const grabUser = await User.findOne({ username: username });
-  const userId = grabUser.id;
-
-  const messages = await Messages.find({ forWho: userId }).select("user");
-  const uniqueSenderIds = [
-    ...new Set(messages.map((message) => message.user.toString())),
-  ];
-  const contacts = await User.find({ _id: { $in: uniqueSenderIds } });
-
-  const contactsMainInfo = contacts.map((contact) => ({
-    username: contact.username,
-    userAvatar: contact.userAvatar,
-  }));
-
-  res.json(contactsMainInfo);
-}); */
-
-app.post("/addToContacts/:user", authenticateToken, async (req, res) => {
+app.post("/api/addToContacts/:user", authenticateToken, async (req, res) => {
   const user = req.params.user;
   const me = req.user.username;
 
@@ -316,7 +318,7 @@ app.post("/addToContacts/:user", authenticateToken, async (req, res) => {
   res.json(updatedUser);
 });
 
-app.get("/getContacts", authenticateToken, async (req, res) => {
+app.get("/api/getContacts", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const userInfo = await User.findById(userId);
@@ -345,13 +347,13 @@ app.get("/getContacts", authenticateToken, async (req, res) => {
   }
 });
 
-app.get("/post/likes/:id", async (req, res) => {
+app.get("/api/post/likes/:id", async (req, res) => {
   const likedPost = req.params.id;
   const likeCount = await Likes.countDocuments({ likedPost: likedPost });
   res.json({ likeCount });
 });
 
-app.post("/post/comments/:id", authenticateToken, async (req, res) => {
+app.post("/api/post/comments/:id", authenticateToken, async (req, res) => {
   const commentedOn = req.params.id;
   const username = req.user.username;
   const { text } = req.body;
@@ -376,7 +378,7 @@ app.post("/post/comments/:id", authenticateToken, async (req, res) => {
   res.json(commentedOn);
 });
 
-app.get("/post/comments/:id", async (req, res) => {
+app.get("/api/post/comments/:id", async (req, res) => {
   const mainPostId = req.params.id;
   meowComments = await Comments.find({ commentedOn: mainPostId }).populate(
     "user",
@@ -385,7 +387,7 @@ app.get("/post/comments/:id", async (req, res) => {
   res.json(meowComments);
 });
 
-app.get("/notifications", authenticateToken, async (req, res) => {
+app.get("/api/notifications", authenticateToken, async (req, res) => {
   userId = req.user.id;
   const myNotifications = await Notifications.find({ userId: userId });
 
@@ -416,47 +418,39 @@ app.get("/notifications", authenticateToken, async (req, res) => {
   res.json(notificationsWithUsernames);
 });
 
-app.get("/changeInfo", authenticateToken, async (req, res) => {
+app.get("/api/changeInfo", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const user = await User.findOne({ _id: userId });
   res.json(user);
 });
 
-app.post("/settings", authenticateToken, async (req, res) => {
-  const userAvatar = req.body;
-  const userDesc = req.body;
-  const username = req.body;
-  const pronouns = req.body;
-  const profileHashColor = req.body;
+app.post("/api/settings", authenticateToken, uploadMiddleware.single("file"), async (req, res) => {
+const {originalname,path} = req.file;
+  const parts = originalname.split('.');
+  const ext = parts[parts.length - 1];
+  const newPath = path+'.'+ext;
+  fs.renameSync(path, newPath);
+
+  const { userDesc, username, pronouns, profileHashColor } = req.body;
 
   const userId = req.user.id;
-  const user = await User.findOneAndUpdate(
+
+  const updatedUser = await User.findOneAndUpdate(
     { _id: userId },
-    userAvatar,
     {
-      new: true,
+      userAvatar: newPath,      
+      userDesc: userDesc,
+      username: username,
+      pronouns: pronouns,
+      profileHashColor: profileHashColor
     },
-    userDesc,
-    {
-      new: true,
-    },
-    username,
-    {
-      new: true,
-    },
-    pronouns,
-    {
-      new: true,
-    },
-    profileHashColor,
-    {
-      new: true,
-    }
+    { new: true }               
   );
-  res.json(user);
+  res.json(updatedUser)
 });
 
-app.post("/isMyPost/:id", authenticateToken, async (req, res) => {
+
+app.post("/api/isMyPost/:id", authenticateToken, async (req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
   const postDoc = await Post.findOne({ _id: postId }).populate(
@@ -471,7 +465,7 @@ app.post("/isMyPost/:id", authenticateToken, async (req, res) => {
   }
 });
 
-app.post("/deletePost/:id", authenticateToken, async (req, res) => {
+app.post("/api/deletePost/:id", authenticateToken, async (req, res) => {
   const userId = req.user.id;
   const postId = req.params.id;
   const postDoc = await Post.findOneAndDelete({ _id: postId });
@@ -484,7 +478,7 @@ app.post("/deletePost/:id", authenticateToken, async (req, res) => {
   }
 });
 
-app.get("/findUserAvatar/:User", async (req, res) => {
+app.get("/api/findUserAvatar/:User", async (req, res) => {
   const user = req.params.User;
   const postDoc = await User.findOne({ username: user });
   try {
@@ -494,7 +488,7 @@ app.get("/findUserAvatar/:User", async (req, res) => {
   }
 });
 
-app.get("/checkIfLiked/:Id", authenticateToken, async (req, res) => {
+app.get("/api/checkIfLiked/:Id", authenticateToken, async (req, res) => {
   const postId = req.params.Id;
   const userId = req.user.id;
   const existingLike = await Likes.findOne({
