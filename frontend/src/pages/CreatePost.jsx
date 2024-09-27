@@ -25,7 +25,7 @@ const modules = {
   ],
 };
 
-export default function CreatePost() {
+export default function CreatePost({ updatePosts }) {
   const [content, setContent] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [files, setFiles] = useState('');
@@ -33,7 +33,7 @@ export default function CreatePost() {
   async function createNewPost(ev) {
     const data = new FormData();
     data.set("content", content);
-    data.set('file', files[0]); 
+    data.set('file', files[0]);
     ev.preventDefault();
     const token = localStorage.getItem("token");
 
@@ -51,22 +51,22 @@ export default function CreatePost() {
   }
 
   if (redirect) {
-    return <Navigate to={"/"} />;
+    updatePosts();
   }
-  
+
   return (
     <div>
       <Header />
       <div className={Styles.wrapper}>
-        <form onSubmit={createNewPost}   className={Styles.quillContainer}>
+        <form onSubmit={createNewPost} className={Styles.quillContainer}>
           <section className={Styles.header}>
-          <a>
-            Wanna post something? :3
-          </a>
-          <input
-            type="file"
+            <a>
+              Wanna post something? :3
+            </a>
+            <input
+              type="file"
               onChange={ev => setFiles(ev.target.files)}
-          />
+            />
           </section>
 
           <ReactQuill
@@ -74,8 +74,8 @@ export default function CreatePost() {
             modules={modules}
             onChange={setContent}
             className={Styles.quill}
-            />
-            <button className={Styles.postButton}>Post</button>
+          />
+          <button className={Styles.postButton}>Post</button>
 
         </form>
       </div>

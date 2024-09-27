@@ -9,13 +9,17 @@ export default function IndexPage() {
   const [posts, setPosts] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
 
-  useEffect(() => {
+  async function FetchPosts() {
     fetch(`${api}/post`).then((response) => {
       response.json().then((posts) => {
         setPosts(posts);
       });
     });
-  }, []);
+  }
+
+  useEffect(() => {
+    FetchPosts()
+  }, [])
 
   const [visiblePosts, setVisiblePosts] = useState(5);
 
@@ -42,7 +46,7 @@ export default function IndexPage() {
     <div className="">
       <Header />
       <div className={Styles.createPost}>
-      <CreatePost></CreatePost>
+        <CreatePost updatePosts={FetchPosts}></CreatePost>
       </div>
 
       <div className={Styles.UserProfile}>

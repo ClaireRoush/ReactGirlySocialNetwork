@@ -11,6 +11,7 @@ import Comments from "../pages/Comments";
 
 export default function Post({ image, content, author, _id, color }) {
   const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -114,7 +115,7 @@ export default function Post({ image, content, author, _id, color }) {
       .then((comments) => {
         setComments(comments);
       });
-  }, [setComments]);
+  }, [_id, setComments]);
 
   async function postComment(ev) {
     ev.preventDefault();
@@ -175,7 +176,7 @@ export default function Post({ image, content, author, _id, color }) {
     >
       <div className={Styles.info} onClick={handleClick}>
         <div className={Styles.author} onClick={handleClick}>
-          <img src={userAvatar} alt="User Avatar"></img>
+          <img src={`${upload}/${userAvatar}`} alt=""></img>
           <Link to={`/user/${author.username}`}>
             <a>{author.username}</a>
           </Link>
@@ -183,8 +184,8 @@ export default function Post({ image, content, author, _id, color }) {
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
       </div>
       <div className={Styles.image}>
-      <img src={image} alt=""></img>
-      <img src={`http://localhost:6969/${image}`} alt=""></img>
+        <img src={image} alt=""></img>
+        <img src={`${upload}/${image}`} alt=""></img>
       </div>
 
       <section className={Styles.postActions}>
@@ -244,7 +245,7 @@ export default function Post({ image, content, author, _id, color }) {
               key={comment._id}
               user={comment.user}
               text={comment.text}
-              userAvatar={comment.user.userAvatar}
+              userAvatar={`${upload}/${comment.user.userAvatar}`}
             />
           ))}
         </div>

@@ -14,13 +14,12 @@ const jwt = require("jsonwebtoken");
 const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
-const uploadMiddleware = multer({ dest: "uploads/" });
+const uploadMiddleware = multer({ dest: "../uploads/" });
+const uploadAvatarMiddleware = multer({ dest: "../uploads/userAvatars/" });
 const secret = process.env.JWT_SECRET;
-const api = process.env.API;
 const salt = bcrypt.genSaltSync(10);
 const fs = require("fs");
 const sharp = require("sharp")
-//const router = express.Router();
 
 const http = require("http");
 const server = http.createServer(app);
@@ -69,7 +68,7 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-app.use("/uploads", express.static(__dirname + "/uploads"));
+app.use("/uploads", express.static(__dirname + "../../uploads"));
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -134,7 +133,7 @@ app.get("/api/profile", authenticateToken, (req, res) => {
 });
 
 app.get("/api/me", authenticateToken, async (req, res) => {
-  userId = req.user.id;
+  const userId = req.user.id;
   const getUserInfo = await User.findById(userId);
   const data = {
     username: getUserInfo.username,
@@ -155,23 +154,28 @@ app.post(
   uploadMiddleware.single("file"),
   authenticateToken,
   async (req, res) => {
-    const {originalname,path: tempPath} = req.file;
+    const { originalname, path: tempPath } = req.file;
     const parts = originalname.split('.');
     const ext = parts[parts.length - 1];
-    const newPath = tempPath+'.'+ext;
+    const newPath = tempPath + '.' + ext;
 
     await sharp(tempPath)
-    .toFormat(ext)
-    .jpeg({quality: 30})
-    .toFile(newPath);
+      .toFormat(ext)
+      .jpeg({ quality: 30 })
+      .toFile(newPath);
 
+    fs.unlink(tempPath, (err) => {
+      if (err) {
+        console.error("Error is", err)
+      }
+    })
 
     const { title, summary, content } = req.body;
     const postDoc = await Post.create({
       title,
       summary,
       content,
-      image:newPath,
+      image: newPath,
       author: req.user.id,
     });
     res.json({ postDoc });
@@ -259,7 +263,7 @@ app.post("/api/messages/:forWho", authenticateToken, async (req, res) => {
       forWho: forWho._id,
       message: message,
       userAvatar: user.userAvatar,
-    });const fs = require('fs');
+    }); const fs = require('fs');
 
     const populatedMessageDoc = await Messages.findById(messageDoc._id)
       .populate("user", "username")
@@ -363,13 +367,13 @@ app.post("/api/post/comments/:id", authenticateToken, async (req, res) => {
 
   const user = await User.findOne({ username: username });
 
-  postDoc = await Comments.create({
+  const postDoc = await Comments.create({
     user,
     text,
     commentedOn,
   });
 
-  postNotificationDoc = await Notifications.create({
+  const postNotificationDoc = await Notifications.create({
     whoIsPost: user,
     commentedOn: commentedOn,
     userId: postAuthor._id,
@@ -388,7 +392,7 @@ app.get("/api/post/comments/:id", async (req, res) => {
 });
 
 app.get("/api/notifications", authenticateToken, async (req, res) => {
-  userId = req.user.id;
+  const userId = req.user.id;
   const myNotifications = await Notifications.find({ userId: userId });
 
   const getAllData = myNotifications.map((notification) => ({
@@ -424,12 +428,27 @@ app.get("/api/changeInfo", authenticateToken, async (req, res) => {
   res.json(user);
 });
 
-app.post("/api/settings", authenticateToken, uploadMiddleware.single("file"), async (req, res) => {
-const {originalname,path} = req.file;
+app.post("/api/settings", authenticateToken, uploadAvatarMiddleware.single("file"), async (req, res) => {
+  const { originalname, path: tempPath } = req.file;
   const parts = originalname.split('.');
   const ext = parts[parts.length - 1];
-  const newPath = path+'.'+ext;
-  fs.renameSync(path, newPath);
+  const newPath = tempPath + '.' + ext;
+
+  await sharp(tempPath)
+    .toFormat(ext)
+    .resize({
+      width: 800,
+      height: 800,
+    })
+    .jpeg({ quality: 50 })
+    .toFile(newPath)
+
+  fs.unlink(tempPath, (err) => {
+    if (err) {
+      console.error("Error in fs:", err)
+    }
+  }
+  );
 
   const { userDesc, username, pronouns, profileHashColor } = req.body;
 
@@ -438,13 +457,13 @@ const {originalname,path} = req.file;
   const updatedUser = await User.findOneAndUpdate(
     { _id: userId },
     {
-      userAvatar: newPath,      
+      userAvatar: newPath,
       userDesc: userDesc,
       username: username,
       pronouns: pronouns,
       profileHashColor: profileHashColor
     },
-    { new: true }               
+    { new: true }
   );
   res.json(updatedUser)
 });

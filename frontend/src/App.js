@@ -29,7 +29,7 @@ function App() {
             <img src={Frogggy} style={{ "--i": 12 }} alt="Froggy" />
             <img src={Frogggy} style={{ "--i": 14 }} alt="Froggy" />
             <img src={Frogggy} style={{ "--i": 9 }} alt="Froggy" />
-            <img src={Frogggy} style={{ "--i": 16 }} alt="Froggy" />
+            <img src={Frogggy} style={{ "--i": 16 }} alt="My gf" />
             <img src={Frogggy} style={{ "--i": 10.5 }} alt="Froggy" />
             <img src={Frogggy} style={{ "--i": 8 }} alt="Froggy" />
             <img src={Frogggy} style={{ "--i": 13.4 }} alt="Froggy" />

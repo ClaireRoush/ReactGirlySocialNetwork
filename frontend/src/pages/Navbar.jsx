@@ -9,8 +9,7 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
   const [visible, setVisible] = useState(false);
   const [showNotifications, setShowNotifications] = useState("main");
   const { userInfo, setUserInfo } = useContext(UserContext);
-  const api = process.env.REACT_APP_API_URL;
-
+  const upload = process.env.REACT_APP_UPLOAD;
 
   useEffect(() => {
     if (navOpen) {
@@ -52,7 +51,7 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
               className={Styles.navItem}
               onClick={() => setShowNotifications("notifications")}
             >
-              <Link to="/notif">Notifications</Link>
+              <Link>Notifications</Link>
             </div>
             <div className={Styles.navItem}>
               <Link to="/settings">Settings</Link>
@@ -70,13 +69,12 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
   return (
     <div
       ref={ref}
-      className={`${Styles.navbar} ${navOpen ? Styles.open : Styles.closed} ${
-        visible ? Styles.visible : ""
-      }`}
+      className={`${Styles.navbar} ${navOpen ? Styles.open : Styles.closed} ${visible ? Styles.visible : ""
+        }`}
     >
       <section className={Styles.header}>
         <div className={Styles.userInfo}>
-          <img src={userAvatar} alt="User Avatar" />
+          <img src={`${upload}/${userAvatar}`} alt="User Avatar" />
           {username}
         </div>
       </section>

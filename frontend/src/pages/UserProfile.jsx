@@ -17,6 +17,8 @@ export default function UserProfile() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
   const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
+
 
   useEffect(() => {
     fetch(`${api}/userProfile/${userId}`)
@@ -71,7 +73,7 @@ export default function UserProfile() {
       <Header></Header>
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
-          <img className={Styles.profileImg} src={userAvatar} />
+          <img className={Styles.profileImg} src={`${upload}/${userAvatar}`} />
           <div className={Styles.desc}>
             <h1>{username}</h1>
             <a>{pronouns}</a>

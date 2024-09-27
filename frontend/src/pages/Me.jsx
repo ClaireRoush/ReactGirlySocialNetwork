@@ -12,6 +12,7 @@ export default function Me() {
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const token = localStorage.getItem("token");
   const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
 
 
   const userId = username;
@@ -50,7 +51,7 @@ export default function Me() {
 
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
-          <img className={Styles.profileImg} src={userAvatar} />
+          <img className={Styles.profileImg} src={`${upload}/${userAvatar}`} />
           <div className={Styles.desc}>
             <h1>{username}</h1>
             <textarea placeholder={userDesc}></textarea>

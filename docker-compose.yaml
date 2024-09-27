@@ -1,27 +1,30 @@
 services:
 
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - 27017:27017
-    
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - backend
-    volumes:
-      - /etc/letsencrypt/live/rgsn.live:/etc/letsencrypt/live/rgsn.live:ro
-  
+    networks:
+      - custom-network 
+    volumes: 
+      - /etc/letsencrypt:/etc/letsenctypt:ro
+      - ./uploads:/usr/share/nginx/uploads
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - 6969:6969
-    depends_on:
-      - mongo
+    networks:
+      - custom-network
+    volumes:
+      - ./uploads:/app/uploads
+
+networks:
+  custom-network:
+    driver: bridge

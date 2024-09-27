@@ -17,6 +17,7 @@ export default function Chat() {
   const username = userInfo?.username;
   const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
   const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -136,7 +137,7 @@ export default function Chat() {
         <section className={Styles.header}>
           {selectedContact ? (
             <>
-              <img src={selectedContact.userAvatar} alt="User Avatar" />
+              <img src={`${upload}/${selectedContact.userAvatar}`} alt="" />
               <div>{selectedContact.username}</div>
             </>
           ) : (
@@ -152,7 +153,7 @@ export default function Chat() {
                 onClick={() => handleContactClick(contact)}
                 className={Styles.user}
               >
-                <img src={contact.userAvatar} alt="unknown avatar"></img>
+                <img src={`${upload}${contact.userAvatar}`} alt=''></img>
                 {contact.username}
               </div>
             ))
@@ -168,8 +169,8 @@ export default function Chat() {
                 <div key={msg._id} className={Styles.message}>
                   <div className={Styles.senderInfo}>
                     <img
-                      src={msg.user?.userAvatar || msg.userAvatar}
-                      alt="Avatar"
+                      src={`${upload}/${msg.user?.userAvatar}` || `{upload}/${msg.userAvatar}`}
+                      alt=""
                     />
                   </div>
                   <div className={Styles.messageContent}>
