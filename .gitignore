@@ -1,5 +1,6 @@
 # Ignore node_modules directory
 node_modules/
+uploads/
 
 # Ignore .env files
 .env

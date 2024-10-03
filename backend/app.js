@@ -14,8 +14,6 @@ const jwt = require("jsonwebtoken");
 const socketIo = require("socket.io");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
-const uploadMiddleware = multer({ dest: "../uploads/" });
-const uploadAvatarMiddleware = multer({ dest: "../uploads/userAvatars/" });
 const secret = process.env.JWT_SECRET;
 const salt = bcrypt.genSaltSync(10);
 const fs = require("fs");
@@ -53,11 +51,11 @@ io.on("connection", (socket) => {
   });
 });
 
-/* 
-Я обещаю, что перепишу всё на более читабельный вид
-без 1000+ запросов за один пост... 
-наверное...
-*/
+/*
+ Я обещаю, что перепишу всё на более читабельный вид              *
+ без 1000+ запросов за один пост...
+ наверное...
+ */
 
 app.use(
   cors({
@@ -68,7 +66,12 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-app.use("/uploads", express.static(__dirname + "../../uploads"));
+
+const path = require('path')
+const uploadMiddleware = multer({ dest: path.join(__dirname, "../uploads/") });
+const uploadAvatarMiddleware = multer({ dest: path.join(__dirname, "../uploads/userAvatars/")});
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -169,13 +172,13 @@ app.post(
         console.error("Error is", err)
       }
     })
-
+    const relativePath = `uploads/${path.basename(newPath)}`
     const { title, summary, content } = req.body;
     const postDoc = await Post.create({
       title,
       summary,
       content,
-      image: newPath,
+      image: relativePath,
       author: req.user.id,
     });
     res.json({ postDoc });
