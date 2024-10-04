@@ -17,10 +17,17 @@ const multer = require("multer");
 const secret = process.env.JWT_SECRET;
 const salt = bcrypt.genSaltSync(10);
 const fs = require("fs");
-const sharp = require("sharp")
+const sharp = require("sharp");
 
 const http = require("http");
 const server = http.createServer(app);
+const path = require("path");
+const uploadMiddleware = multer({
+  dest: path.join(__dirname, "../uploads/"),
+});
+const uploadAvatarMiddleware = multer({
+  dest: path.join(__dirname, "../uploads/userAvatars/"),
+});
 
 const io = socketIo(server, {
   cors: {
@@ -67,25 +74,23 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-const path = require('path')
-const uploadMiddleware = multer({ dest: path.join(__dirname, "../uploads/") });
-const uploadAvatarMiddleware = multer({ dest: path.join(__dirname, "../uploads/userAvatars/")});
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('Error connecting to MongoDB:', err);
-});
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+  });
 
 app.get("/api/", (req, res) => {
   res.json("Vse rabotaet, privetiki!!!11");
 });
-
 
 app.post(`/api/register`, async (req, res) => {
   const { username, password } = req.body;
@@ -157,30 +162,35 @@ app.post(
   uploadMiddleware.single("file"),
   authenticateToken,
   async (req, res) => {
-    const { originalname, path: tempPath } = req.file;
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    const newPath = tempPath + '.' + ext;
-
-    await sharp(tempPath)
-      .toFormat(ext)
-      .jpeg({ quality: 30 })
-      .toFile(newPath);
-
-    fs.unlink(tempPath, (err) => {
-      if (err) {
-        console.error("Error is", err)
-      }
-    })
-    const relativePath = `uploads/${path.basename(newPath)}`
     const { title, summary, content } = req.body;
-    const postDoc = await Post.create({
+
+    const postData = {
       title,
       summary,
       content,
-      image: relativePath,
       author: req.user.id,
-    });
+    };
+
+    if (req.file) {
+      const { originalname, path: tempPath } = req.file;
+      const parts = originalname.split(".");
+      const ext = parts[parts.length - 1];
+      const newPath = tempPath + "." + ext;
+
+      await sharp(tempPath).toFormat(ext).jpeg({ quality: 30 }).toFile(newPath);
+
+      fs.unlink(tempPath, (err) => {
+        if (err) {
+          console.error("Error is", err);
+        }
+      });
+      const relativePath = `uploads/${path.basename(newPath)}`;
+
+      postData.image = relativePath;
+    }
+
+    const postDoc = await Post.create(postData);
+
     res.json({ postDoc });
   }
 );
@@ -266,7 +276,8 @@ app.post("/api/messages/:forWho", authenticateToken, async (req, res) => {
       forWho: forWho._id,
       message: message,
       userAvatar: user.userAvatar,
-    }); const fs = require('fs');
+    });
+    const fs = require("fs");
 
     const populatedMessageDoc = await Messages.findById(messageDoc._id)
       .populate("user", "username")
@@ -431,46 +442,51 @@ app.get("/api/changeInfo", authenticateToken, async (req, res) => {
   res.json(user);
 });
 
-app.post("/api/settings", authenticateToken, uploadAvatarMiddleware.single("file"), async (req, res) => {
-  const { originalname, path: tempPath } = req.file;
-  const parts = originalname.split('.');
-  const ext = parts[parts.length - 1];
-  const newPath = tempPath + '.' + ext;
+app.post(
+  "/api/settings",
+  authenticateToken,
+  uploadAvatarMiddleware.single("file"),
+  async (req, res) => {
+    const { originalname, path: tempPath } = req.file;
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    const newPath = tempPath + "." + ext;
 
-  await sharp(tempPath)
-    .toFormat(ext)
-    .resize({
-      width: 800,
-      height: 800,
-    })
-    .jpeg({ quality: 50 })
-    .toFile(newPath)
+    await sharp(tempPath)
+      .toFormat(ext)
+      .resize({
+        width: 800,
+        height: 800,
+      })
+      .jpeg({ quality: 50 })
+      .toFile(newPath);
 
-  fs.unlink(tempPath, (err) => {
-    if (err) {
-      console.error("Error in fs:", err)
-    }
+    fs.unlink(tempPath, (err) => {
+      if (err) {
+        console.error("Error in fs:", err);
+      }
+    });
+
+    const relativePath = `uploads/userAvatars/${path.basename(newPath)}`;
+
+    const { userDesc, username, pronouns, profileHashColor } = req.body;
+
+    const userId = req.user.id;
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        userAvatar: relativePath,
+        userDesc: userDesc,
+        username: username,
+        pronouns: pronouns,
+        profileHashColor: profileHashColor,
+      },
+      { new: true }
+    );
+    res.json(updatedUser);
   }
-  );
-
-  const { userDesc, username, pronouns, profileHashColor } = req.body;
-
-  const userId = req.user.id;
-
-  const updatedUser = await User.findOneAndUpdate(
-    { _id: userId },
-    {
-      userAvatar: newPath,
-      userDesc: userDesc,
-      username: username,
-      pronouns: pronouns,
-      profileHashColor: profileHashColor
-    },
-    { new: true }
-  );
-  res.json(updatedUser)
-});
-
+);
 
 app.post("/api/isMyPost/:id", authenticateToken, async (req, res) => {
   const postId = req.params.id;

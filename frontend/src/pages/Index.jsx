@@ -10,22 +10,29 @@ export default function IndexPage() {
   const [navOpen, setNavOpen] = useState(false);
 
   async function FetchPosts() {
-    fetch(`${api}/post`).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      });
-    });
+    try {
+      const response = await fetch(`${api}/post`);
+      if (response.ok) {
+        const data = await response.json();
+        if (JSON.stringify(data) !== JSON.stringify(posts)) {
+          setPosts(data);
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка при получении постов:", error);
+    }
   }
 
   useEffect(() => {
-    FetchPosts()
-  }, [])
+    FetchPosts();
+  }, []);
 
   const [visiblePosts, setVisiblePosts] = useState(5);
 
   const loadMorePosts = () => {
     setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 5);
   };
+
   const handleScroll = () => {
     const { innerHeight, scrollY } = window;
     const { scrollHeight } = document.documentElement;

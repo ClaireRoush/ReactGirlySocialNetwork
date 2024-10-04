@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
-import "../css/Quill.css"
+import "react-quill/dist/quill.snow.css";
+import "../css/Quill.css";
 import { Navigate } from "react-router-dom";
 import Styles from "../css/CreatePost.module.css";
 import Header from "../pages/Header.jsx";
 const api = process.env.REACT_APP_API_URL;
 
 const modules = {
-  clipboard: {
-    matchVisual: false,
-  },
   toolbar: [
     [{ header: [1, false] }],
     ["bold", "italic", "underline", "strike", "blockquote"],
@@ -28,12 +25,12 @@ const modules = {
 export default function CreatePost({ updatePosts }) {
   const [content, setContent] = useState("");
   const [redirect, setRedirect] = useState(false);
-  const [files, setFiles] = useState('');
+  const [files, setFiles] = useState("");
 
   async function createNewPost(ev) {
     const data = new FormData();
     data.set("content", content);
-    data.set('file', files[0]);
+    data.set("file", files[0]);
     ev.preventDefault();
     const token = localStorage.getItem("token");
 
@@ -60,13 +57,8 @@ export default function CreatePost({ updatePosts }) {
       <div className={Styles.wrapper}>
         <form onSubmit={createNewPost} className={Styles.quillContainer}>
           <section className={Styles.header}>
-            <a>
-              Wanna post something? :3
-            </a>
-            <input
-              type="file"
-              onChange={ev => setFiles(ev.target.files)}
-            />
+            <a>Wanna post something? :3</a>
+            <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
           </section>
 
           <ReactQuill
@@ -76,7 +68,6 @@ export default function CreatePost({ updatePosts }) {
             className={Styles.quill}
           />
           <button className={Styles.postButton}>Post</button>
-
         </form>
       </div>
     </div>

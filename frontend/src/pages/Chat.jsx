@@ -20,7 +20,7 @@ export default function Chat() {
   const upload = process.env.REACT_APP_UPLOAD;
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const newSocket = io(`http://localhost`);
     setSocket(newSocket);
 
@@ -31,7 +31,7 @@ export default function Chat() {
       newSocket.off("chat message");
       newSocket.disconnect();
     };
-  }, []);
+  }, []); */
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -55,15 +55,11 @@ export default function Chat() {
     if (room && socket) {
       socket.emit("leave room", room);
     }
-    const fetchMessages = await fetch(
-      `${api}/messages/${contact.username}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
+    const fetchMessages = await fetch(`${api}/messages/${contact.username}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     const roomName = hash
       .sha256()
@@ -108,7 +104,7 @@ export default function Chat() {
           _id: data._id,
           user: {
             username: data.user.username,
-            userAvatar: data.userAvatar,
+            userAvatar: data.user.userAvatar,
           },
           message: data.message,
           timestamp: new Date(),
@@ -153,7 +149,7 @@ export default function Chat() {
                 onClick={() => handleContactClick(contact)}
                 className={Styles.user}
               >
-                <img src={`${upload}${contact.userAvatar}`} alt=''></img>
+                <img src={`${upload}${contact.userAvatar}`} alt=""></img>
                 {contact.username}
               </div>
             ))
@@ -169,8 +165,16 @@ export default function Chat() {
                 <div key={msg._id} className={Styles.message}>
                   <div className={Styles.senderInfo}>
                     <img
-                      src={`${upload}/${msg.user?.userAvatar}` || `{upload}/${msg.userAvatar}`}
-                      alt=""
+                      src={
+                        msg.user?.userAvatar
+                          ? msg.user.userAvatar.startsWith("http")
+                            ? msg.user.userAvatar
+                            : `${upload}/${msg.user.userAvatar}`
+                          : msg.userAvatar.startsWith("http")
+                          ? msg.userAvatar
+                          : `${upload}/${msg.userAvatar}`
+                      }
+                      alt={msg.user?.username || "avatar"}
                     />
                   </div>
                   <div className={Styles.messageContent}>

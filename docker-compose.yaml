@@ -12,8 +12,8 @@ services:
     networks:
       - custom-network 
     volumes: 
-      - /etc/letsencrypt:/etc/letsenctypt:ro
-      - /home/Desktop/ReactGirlySocialNetowk/uploads:/usr/share/nginx/uploads
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./uploads:/usr/share/nginx/uploads
   backend:
     build:
       context: ./backend

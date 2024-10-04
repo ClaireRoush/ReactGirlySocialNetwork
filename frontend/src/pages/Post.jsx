@@ -8,7 +8,6 @@ import Frog from "../svg/svFROG.svg";
 import frogLike from "../svg/frogLike.svg";
 import Comments from "../pages/Comments";
 
-
 export default function Post({ image, content, author, _id, color }) {
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD;
@@ -27,14 +26,11 @@ export default function Post({ image, content, author, _id, color }) {
 
   const checkLikes = async () => {
     try {
-      const response = await fetch(
-        `${api}/checkIfLiked/${_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${api}/checkIfLiked/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setExistingLike(data);
@@ -99,7 +95,7 @@ export default function Post({ image, content, author, _id, color }) {
     if (response.ok) {
       const likesData = await response.json();
       setLikes(likesData.likeCount);
-      checkLikes(); // Ensure the like status is updated after liking
+      checkLikes();
     }
   }
 
@@ -164,7 +160,7 @@ export default function Post({ image, content, author, _id, color }) {
 
   const handleClick = (event) => {
     if (event.currentTarget === event.target) {
-      setRedirect(true);
+      setRedirect(false);
     }
   };
 
@@ -184,8 +180,11 @@ export default function Post({ image, content, author, _id, color }) {
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
       </div>
       <div className={Styles.image}>
-        <img src={image} alt=""></img>
-        <img src={`${upload}/${image}`} alt=""></img>
+        {image.startsWith("http") ? (
+          <img src={image} alt="" />
+        ) : (
+          <img src={`${upload}/${image}`} alt="" />
+        )}
       </div>
 
       <section className={Styles.postActions}>
