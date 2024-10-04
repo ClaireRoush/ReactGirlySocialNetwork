@@ -13,7 +13,7 @@ import Settings from "./pages/Settings";
 import Me from "./pages/Me";
 import Chat from "./pages/Chat";
 
-const Frogggy = "/static/images/svFROG.svg";
+const Frogggy = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 
 function App() {
   return (

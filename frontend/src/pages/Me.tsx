@@ -23,7 +23,12 @@ export default function Me() {
       if (response.ok) {
         return response.json().then((info) => {
           setUsername(info.username);
-          setUserAvatar(info.userAvatar);
+          if (info.userAvatar !== "") {
+            setUserAvatar(info.userAvatar);
+          }
+          else {
+            setUserAvatar(process.env.REACT_APP_STATIC_URL + "")
+          }
           setUserDesc(info.userDesc);
           setPronouns(info.pronouns);
           setprofileHashColor(info.profileHashColor);

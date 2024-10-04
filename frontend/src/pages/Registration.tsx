@@ -2,9 +2,9 @@ import React, { FormEvent } from "react";
 import { useState } from "react";
 import { FormEncType, Link } from "react-router-dom";
 import Styles from "../css/Registration.module.css";
-// import MadokaImg from "/static/images/MadokaRegister.jpg";
+// import MadokaImg from process.env.REACT_APP_STATIC_URL + "/images/MadokaRegister.jpg";
 
-const MadokaImg = "/static/images/MadokaRegister.jpg";
+const MadokaImg = process.env.REACT_APP_STATIC_URL + "/images/MadokaRegister.jpg";
 
 export default function Registration() {
   const [username, setUsername] = useState("");

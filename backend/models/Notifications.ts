@@ -1,7 +1,18 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import { Schema, model } from "mongoose";
+import { IUser } from "./User";
 
-const NotificationsSchema = new Schema(
+
+export interface INotification {
+    userId: IUser;
+    commentedOn: String;
+    likedOn: String;
+    userAvatar: String;
+    whoIsPost: IUser;
+    isRead: Boolean;
+}
+
+
+const NotificationsSchema = new Schema<INotification>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     commentedOn: { type: String, ref: "Comments" },
@@ -15,6 +26,6 @@ const NotificationsSchema = new Schema(
   }
 );
 
-const NotificationsModel = model("Notifications", NotificationsSchema);
+const NotificationsModel = model<INotification>("Notifications", NotificationsSchema);
 
 export default NotificationsModel;

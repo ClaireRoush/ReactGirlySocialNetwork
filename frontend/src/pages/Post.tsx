@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef, MouseEvent, FormEvent } from "react
 import Styles from "../css/meow.module.css";
 import { Link, Navigate, redirect } from "react-router-dom";
 import Comments from "./Comments";
-const commentSvg = "/static/images/comment.svg";
-const likeSvg = "/static/images/like.svg";
-const chromiumSvg = "/static/images/chromium.svg";
-const Frog = "/static/images/svFROG.svg";
-const frogLike = "/static/images/frogLike.svg";
+const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
+const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
+const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
+const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
 
 export default function Post({ image, content, author, _id, color }: {
   image: string;
