@@ -8,7 +8,8 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["DOM", "es2017"],
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "target": "ES2022"
+    "target": "ES2022",
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "include": [
     "./**/*"

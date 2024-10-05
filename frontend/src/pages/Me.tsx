@@ -11,11 +11,14 @@ export default function Me() {
   const [pronouns, setPronouns] = useState("");
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const token = localStorage.getItem("token");
+  const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
+
 
   const userId = username;
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL + `/me`, {
+    fetch(`${api}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -23,12 +26,7 @@ export default function Me() {
       if (response.ok) {
         return response.json().then((info) => {
           setUsername(info.username);
-          if (info.userAvatar !== "") {
-            setUserAvatar(info.userAvatar);
-          }
-          else {
-            setUserAvatar(process.env.REACT_APP_STATIC_URL + "")
-          }
+          setUserAvatar(info.userAvatar);
           setUserDesc(info.userDesc);
           setPronouns(info.pronouns);
           setprofileHashColor(info.profileHashColor);
@@ -40,15 +38,13 @@ export default function Me() {
   }, [token]);
 
   useEffect(() => {
-    fetch(
-      process.env.REACT_APP_API_URL + `/userProfile/posts/${userId}`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      }).catch((error) => {
-        console.error("Error fetching posts:", error);
-      });
-    });
+    fetch(`${api}/userProfile/posts/${userId}`).then(
+      (response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      }
+    );
   }, [username]);
 
   return (
@@ -57,7 +53,7 @@ export default function Me() {
 
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
-          <img className={Styles.profileImg} src={userAvatar} />
+          <img className={Styles.profileImg} src={`${upload}/${userAvatar}`} />
           <div className={Styles.desc}>
             <h1>{username}</h1>
             <textarea placeholder={userDesc}></textarea>

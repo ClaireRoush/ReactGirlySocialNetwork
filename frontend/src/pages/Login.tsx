@@ -2,6 +2,8 @@ import { Link, Navigate } from "react-router-dom";
 import React, { useContext, useState , FormEvent} from "react";
 import { UserContext } from "../usercontext";
 import Styles from "../css/Login.module.css";
+const api = process.env.REACT_APP_API_URL;
+
 
 const MadokaImg = process.env.REACT_APP_STATIC_URL + "/images/MadokaRegister.jpg";
 
@@ -13,16 +15,12 @@ export default function Login() {
 
   async function login(ev: FormEvent) {
     ev.preventDefault();
-    console.log(process.env.REACT_APP_API_URL);
-    const response = await fetch(
-      process.env.REACT_APP_API_URL + `/login`,
-      {
-        method: "Post",
-        body: JSON.stringify({ username, password }),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${api}/login`, {
+      method: "Post",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
 
     if (response.ok) {
       response.json().then((userInfo) => {

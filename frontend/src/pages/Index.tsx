@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import Styles from "../css/Index.module.css";
-import Header from "./Header";
+import Header from "./Header.jsx";
+import CreatePost from "./CreatePost.jsx";
+const api = process.env.REACT_APP_API_URL;
 
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
 
+  async function FetchPosts() {
+    try {
+      const response = await fetch(`${api}/post`);
+      if (response.ok) {
+        const data = await response.json();
+        if (JSON.stringify(data) !== JSON.stringify(posts)) {
+          setPosts(data);
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка при получении постов:", error);
+    }
+  }
+
   useEffect(() => {
-    fetch(
-      process.env.REACT_APP_API_URL + `/post`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      }).catch((error) => {
-        console.error("Error fetching posts:", error);
-      });
-    });
+    FetchPosts();
   }, []);
 
   const [visiblePosts, setVisiblePosts] = useState(5);
@@ -24,6 +32,7 @@ export default function IndexPage() {
   const loadMorePosts = () => {
     setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 5);
   };
+
   const handleScroll = () => {
     const { innerHeight, scrollY } = window;
     const { scrollHeight } = document.documentElement;
@@ -43,6 +52,9 @@ export default function IndexPage() {
   return (
     <div className="">
       <Header />
+      <div className={Styles.createPost}>
+        <CreatePost updatePosts={FetchPosts}></CreatePost>
+      </div>
 
       <div className={Styles.UserProfile}>
         <div className={Styles.postContainer}>
