@@ -10,4 +10,4 @@ const CommentsSchema = new Schema({
 
 const CommentsModel = model("Comments", CommentsSchema);
 
-module.exports = CommentsModel;
+export default CommentsModel;

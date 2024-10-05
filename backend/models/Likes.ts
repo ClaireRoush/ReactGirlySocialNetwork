@@ -8,4 +8,4 @@ const LikesSchema = new Schema({
 
 const LikesModel = model("Likes", LikesSchema);
 
-module.exports = LikesModel;
+export default LikesModel;

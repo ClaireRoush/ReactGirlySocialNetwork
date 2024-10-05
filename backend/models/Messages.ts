@@ -10,4 +10,4 @@ const MessagesSchema = new Schema({
 
 const MessagesModel = model("Messages", MessagesSchema);
 
-module.exports = MessagesModel;
+export default MessagesModel;

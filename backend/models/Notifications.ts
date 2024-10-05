@@ -17,4 +17,4 @@ const NotificationsSchema = new Schema(
 
 const NotificationsModel = model("Notifications", NotificationsSchema);
 
-module.exports = NotificationsModel;
+export default NotificationsModel;
