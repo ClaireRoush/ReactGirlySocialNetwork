@@ -431,21 +431,6 @@ app.post(API_URL + "/settings", authenticateToken, async (req: Request, res: Res
   res.json(user);
 });
 
-app.post(API_URL + "/isMyPost/:id", authenticateToken, async (req: Request, res: Response) => {
-  const postId = req.params.id;
-  const userId = (req as any).user.id;
-  const postDoc = await Post.findOne({ _id: postId }).populate(
-    "author",
-    "username"
-  );
-  const authorCheck = postDoc.author._id.toString() === userId;
-  if (authorCheck) {
-    res.json(authorCheck);
-  } else {
-    res.status(404).json({ message: "You are so silly!!!!" });
-  }
-});
-
 app.post(API_URL + "/deletePost/:id", authenticateToken, async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const postId = req.params.id;

@@ -66,20 +66,7 @@ export default function Post({ image, content, author, _id, color }: {
 
   useEffect(() => {
     const checkIsAuthor = async () => {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + `/isMyPost/${_id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setIsAuthor(data);
-      }
+      setIsAuthor(author.username === JSON.parse(localStorage.getItem("userInfo")).username);  // TODO: maybe save username in localStorage?
     };
     checkIsAuthor();
   }, [_id, token]);
