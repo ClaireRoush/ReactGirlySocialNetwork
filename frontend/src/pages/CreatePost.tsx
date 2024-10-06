@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import "../css/Quill.css";
 import { Navigate } from "react-router-dom";
 import Styles from "../css/CreatePost.module.css";
-import Header from "./Header.jsx";
+import Header from "./Header";
 const api = process.env.REACT_APP_API_URL;
 
 const modules = {
@@ -22,15 +22,17 @@ const modules = {
   ],
 };
 
-export default function CreatePost({ updatePosts }) {
-  const [content, setContent] = useState("");
-  const [redirect, setRedirect] = useState(false);
-  const [files, setFiles] = useState("");
+export default function CreatePost({ updatePosts }: {updatePosts: () => void}) {
+  const [content, setContent] = useState<string>("");
+  const [redirect, setRedirect] = useState<boolean>(false);
+  const [files, setFiles] = useState<FileList | null>(null);
 
-  async function createNewPost(ev) {
+  async function createNewPost(ev: FormEvent) {
     const data = new FormData();
     data.set("content", content);
-    data.set("file", files[0]);
+    if (files) {
+      data.set("file", files[0]);
+    }
     ev.preventDefault();
     const token = localStorage.getItem("token");
 
@@ -67,7 +69,7 @@ export default function CreatePost({ updatePosts }) {
             onChange={setContent}
             className={Styles.quill}
           />
-          <button className={Styles.postButton}>Post</button>
+          <button className={Styles.postButton} type="submit">Post</button>
         </form>
       </div>
     </div>

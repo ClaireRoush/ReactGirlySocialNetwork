@@ -47,7 +47,7 @@ function App() {
           <Route path="/" element={<IndexPage />}></Route>
           <Route path={"login"} element={<Login />} />
           <Route path={"register"} element={<Registration />} />
-          <Route path={"create"} element={<CreatePost />} />
+          <Route path={"create"} element={<CreatePost updatePosts={() => {}}/>} />
           <Route path={"settings"} element={<Settings />} />
           <Route path={"post/:id"} element={<FullPost />} />
           <Route path={"changelog"} element={<ChangeLog />} />

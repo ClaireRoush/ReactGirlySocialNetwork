@@ -7,8 +7,6 @@ const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
-const api = process.env.REACT_APP_API_URL;
-const upload = process.env.REACT_APP_UPLOAD;
 
 export default function Post({ image, content, author, _id, color }: {
   image: string;
@@ -32,11 +30,14 @@ export default function Post({ image, content, author, _id, color }: {
 
   const checkLikes = async () => {
     try {
-      const response = await fetch(`${api}/checkIfLiked/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        process.env.REACT_APP_API_URL + `/checkIfLiked/${_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setExistingLike(data);
@@ -52,11 +53,9 @@ export default function Post({ image, content, author, _id, color }: {
 
   useEffect(() => {
     const getLikes = async () => {
-==== BASE ====
       const response = await fetch(
-        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/likes/${_id}`
+        process.env.REACT_APP_API_URL + `/post/likes/${_id}`
       );
-==== BASE ====
       if (response.ok) {
         const likesData = await response.json();
         setLikes(likesData.likeCount);
@@ -67,9 +66,8 @@ export default function Post({ image, content, author, _id, color }: {
 
   useEffect(() => {
     const checkIsAuthor = async () => {
-==== BASE ====
       const response = await fetch(
-        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/isMyPost/${_id}`,
+        process.env.REACT_APP_API_URL + `/isMyPost/${_id}`,
         {
           method: "POST",
           headers: {
@@ -78,7 +76,6 @@ export default function Post({ image, content, author, _id, color }: {
           credentials: "include",
         }
       );
-==== BASE ====
       if (response.ok) {
         const data = await response.json();
         setIsAuthor(data);
@@ -88,11 +85,9 @@ export default function Post({ image, content, author, _id, color }: {
   }, [_id, token]);
 
   useEffect(() => {
-==== BASE ====
     fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${author.username}`
+      process.env.REACT_APP_API_URL + `/findUserAvatar/${author.username}`
     )
-==== BASE ====
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -105,9 +100,8 @@ export default function Post({ image, content, author, _id, color }: {
 
   async function postLike(ev: MouseEvent) {
     ev.preventDefault();
-==== BASE ====
     const response = await fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/likes/${_id}`,
+      process.env.REACT_APP_API_URL + `/post/likes/${_id}`,
       {
         method: "POST",
         headers: {
@@ -115,20 +109,17 @@ export default function Post({ image, content, author, _id, color }: {
         },
       }
     );
-==== BASE ====
     if (response.ok) {
       const likesData = await response.json();
       setLikes(likesData.likeCount);
-      checkLikes();
+      checkLikes(); // Ensure the like status is updated after liking
     }
   }
 
   useEffect(() => {
-==== BASE ====
     fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/comments/${_id}`
+      process.env.REACT_APP_API_URL + `/post/comments/${_id}`
     )
-==== BASE ====
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -139,13 +130,12 @@ export default function Post({ image, content, author, _id, color }: {
       .then((comments) => {
         setComments(comments);
       });
-  }, [_id, setComments]);
+  }, [setComments]);
 
   async function postComment(ev: FormEvent) {
     ev.preventDefault();
-==== BASE ====
     const response = await fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/comments/${_id}`,
+      process.env.REACT_APP_API_URL + `/post/comments/${_id}`,
       {
         method: "POST",
         body: JSON.stringify({ text }),
@@ -155,7 +145,6 @@ export default function Post({ image, content, author, _id, color }: {
         },
       }
     );
-==== BASE ====
     if (response.ok) {
       const newComment = await response.json();
       setComments([...comments, newComment]);
@@ -163,9 +152,8 @@ export default function Post({ image, content, author, _id, color }: {
   }
 
   const deletePost = async () => {
-==== BASE ====
     const response = await fetch(
-      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/deletePost/${_id}`,
+      process.env.REACT_APP_API_URL + `/deletePost/${_id}`,
       {
         method: "POST",
         headers: {
@@ -174,7 +162,6 @@ export default function Post({ image, content, author, _id, color }: {
         credentials: "include",
       }
     );
-==== BASE ====
     if (response.ok) {
       setIsDeleted(true);
     }
@@ -198,7 +185,7 @@ export default function Post({ image, content, author, _id, color }: {
 
   const handleClick = (event: MouseEvent) => {
     if (event.currentTarget === event.target) {
-      setRedirect(false);
+      setRedirect(true);
     }
   };
 
@@ -210,7 +197,7 @@ export default function Post({ image, content, author, _id, color }: {
     >
       <div className={Styles.info} onClick={handleClick}>
         <div className={Styles.author} onClick={handleClick}>
-          <img src={`${upload}/${userAvatar}`} alt=""></img>
+          <img src={userAvatar} alt="User Avatar"></img>
           <Link to={`/user/${author.username}`}>
             <a>{author.username}</a>
           </Link>
@@ -218,11 +205,7 @@ export default function Post({ image, content, author, _id, color }: {
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
       </div>
       <div className={Styles.image}>
-        {image.startsWith("http") ? (
-          <img src={image} alt="" />
-        ) : (
-          <img src={`${upload}/${image}`} alt="" />
-        )}
+        <img src={image} alt=""></img>
       </div>
 
       <section className={Styles.postActions}>
@@ -282,7 +265,7 @@ export default function Post({ image, content, author, _id, color }: {
               key={comment._id}
               user={comment.user}
               text={comment.text}
-              userAvatar={`${upload}/${comment.user.userAvatar}`}
+              userAvatar={comment.user.userAvatar}
             />
           ))}
         </div>

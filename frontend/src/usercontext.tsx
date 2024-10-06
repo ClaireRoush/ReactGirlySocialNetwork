@@ -4,7 +4,7 @@ interface UserInfoType {
   username: string;
 }
 
-type UserContextType = {
+export type UserContextType = {
   userInfo: UserInfoType;
   setUserInfo: React.Dispatch<React.SetStateAction<UserInfoType>>;
 };

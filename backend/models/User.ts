@@ -1,14 +1,14 @@
 import { Schema, model } from "mongoose"
 
 export interface IUser {
-  _id: String
-  username: String,
-  password: String,
-  userAvatar: String,
-  userDesc?: String,
-  pronouns: String,
-  profileHashColor: String,
-  contacts: Array<String>,
+  _id: string
+  username: string,
+  password: string,
+  userAvatar: string,
+  userDesc?: string,
+  pronouns: string,
+  profileHashColor: string,
+  contacts: Array<string>,
 }
 
 const UserSchema = new Schema<IUser>(

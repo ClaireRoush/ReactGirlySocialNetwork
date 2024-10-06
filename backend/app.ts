@@ -130,7 +130,7 @@ app.post(API_URL + "/logout", (req: Request, res: Response) => {
 });
 
 app.post(
-  "/post",
+  API_URL + "/post",
   uploadMiddleware.single("file"),
   authenticateToken,
   async (req: Request, res: Response) => {
@@ -186,7 +186,7 @@ app.get(API_URL + "/userProfile/posts/:User", async (req: Request, res: Response
 });
 
 app.post(API_URL + "/post/likes/:id", authenticateToken, async (req: Request, res: Response) => {
-  const username = (req as any).req.user.username;
+  const username = (req as any).user.username;
   const likedPostId = req.params.id;
   const user = await User.findOne({ username: username });
   const post = await Post.findById(likedPostId);
@@ -210,7 +210,7 @@ app.post(API_URL + "/post/likes/:id", authenticateToken, async (req: Request, re
 });
 
 app.post(API_URL + "/messages/:forWho", authenticateToken, async (req: Request, res: Response) => {
-  const username = (req as any).req.user.username;
+  const username = (req as any).user.username;
   const forWhoRecieve = req.params.forWho;
   const message = req.body.message;
 
@@ -241,8 +241,9 @@ app.post(API_URL + "/messages/:forWho", authenticateToken, async (req: Request, 
   }
 });
 
+
 app.get(API_URL + "/messages/:user", authenticateToken, async (req: Request, res: Response) => {
-  const currentUsername = (req as any).req.user.username;
+  const currentUsername = (req as any).user.username;
   const targetUsername = req.params.user;
 
   const currentUserDoc = await User.findOne({ username: currentUsername });
@@ -250,8 +251,7 @@ app.get(API_URL + "/messages/:user", authenticateToken, async (req: Request, res
 
   if (!currentUserDoc || !targetUserDoc) {
     return res.status(404).json({ message: "User not found" });
-  }};
-);
+  }
 
   const currentUserId = currentUserDoc._id;
   const targetUserId = targetUserDoc._id;
@@ -270,7 +270,7 @@ app.get(API_URL + "/messages/:user", authenticateToken, async (req: Request, res
 });
 
 /* app.get(API_URL + "/checkAviableContacts", authenticateToken, async (req: Request, res: Response) => {
-  const username = (req as any).req.user.username;
+  const username = (req as any).user.username;
   const grabUser = await User.findOne({ username: username });
   const userId = grabUser.id;
 
@@ -290,7 +290,7 @@ app.get(API_URL + "/messages/:user", authenticateToken, async (req: Request, res
 
 app.post(API_URL + "/addToContacts/:user", authenticateToken, async (req: Request, res: Response) => {
   const user = req.params.user;
-  const me = (req as any).req.user.username;
+  const me = (req as any).user.username;
 
   const addToContacts = await User.findOneAndUpdate(
     { username: me },
@@ -308,7 +308,7 @@ app.post(API_URL + "/addToContacts/:user", authenticateToken, async (req: Reques
 
 app.get(API_URL + "/getContacts", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).req.user.id;
+    const userId = (req as any).user.id;
     const userInfo = await User.findById(userId);
 
     const contactUsernames = userInfo.contacts;
@@ -343,7 +343,7 @@ app.get(API_URL + "/post/likes/:id", async (req: Request, res: Response) => {
 
 app.post(API_URL + "/post/comments/:id", authenticateToken, async (req: Request, res: Response) => {
   const commentedOn = req.params.id;
-  const username = (req as any).req.user.username;
+  const username = (req as any).user.username;
   const { text } = req.body;
 
   const post = await Post.findById(commentedOn).populate("author");
@@ -376,7 +376,7 @@ app.get(API_URL + "/post/comments/:id", async (req: Request, res: Response) => {
 });
 
 app.get(API_URL + "/notifications", authenticateToken, async (req: Request, res: Response) => {
-  let userId = (req as any).req.user.id;
+  let userId = (req as any).user.id;
   const myNotifications = await Notifications.find({ userId: userId });
 
   // TODO: replace notification type with actual type
@@ -408,7 +408,7 @@ app.get(API_URL + "/notifications", authenticateToken, async (req: Request, res:
 });
 
 app.get(API_URL + "/changeInfo", authenticateToken, async (req: Request, res: Response) => {
-  const userId = (req as any).req.user.id;
+  const userId = (req as any).user.id;
   const user = await User.findOne({ _id: userId });
   res.json(user);
 });
@@ -433,7 +433,7 @@ app.post(API_URL + "/settings", authenticateToken, async (req: Request, res: Res
 
 app.post(API_URL + "/isMyPost/:id", authenticateToken, async (req: Request, res: Response) => {
   const postId = req.params.id;
-  const userId = (req as any).req.user.id;
+  const userId = (req as any).user.id;
   const postDoc = await Post.findOne({ _id: postId }).populate(
     "author",
     "username"
@@ -447,7 +447,7 @@ app.post(API_URL + "/isMyPost/:id", authenticateToken, async (req: Request, res:
 });
 
 app.post(API_URL + "/deletePost/:id", authenticateToken, async (req: Request, res: Response) => {
-  const userId = (req as any).req.user.id;
+  const userId = (req as any).user.id;
   const postId = req.params.id;
   const postDoc = await Post.findOneAndDelete({ _id: postId });
   const authorCheck = postDoc.author._id.toString() === userId;
@@ -471,7 +471,7 @@ app.get(API_URL + "/findUserAvatar/:User", async (req: Request, res: Response) =
 
 app.get(API_URL + "/checkIfLiked/:Id", authenticateToken, async (req: Request, res: Response) => {
   const postId = req.params.Id;
-  const userId = (req as any).req.user.id;
+  const userId = (req as any).user.id;
   const existingLike = await Likes.findOne({
     user: userId,
     likedPost: postId,

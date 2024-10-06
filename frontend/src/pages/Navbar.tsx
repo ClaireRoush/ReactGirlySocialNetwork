@@ -1,6 +1,6 @@
 import React, { useEffect, useState, forwardRef, useContext, Ref } from "react";
 import Styles from "../css/Navbar.module.css";
-import { UserContext } from "../usercontext";
+import { UserContext, UserContextType } from "../usercontext";
 
 import { Link } from "react-router-dom";
 import Notifications from "./Notifications";
@@ -8,7 +8,7 @@ import Notifications from "./Notifications";
 const Navbar = forwardRef(({ navOpen, username, userAvatar }: {navOpen: boolean, username: string, userAvatar: string}, ref: Ref<HTMLDivElement>) => {
   const [visible, setVisible] = useState(false);
   const [showNotifications, setShowNotifications] = useState("main");
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext<UserContextType>(UserContext);
   const upload = process.env.REACT_APP_UPLOAD;
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }: {navOpen: boolean,
         localStorage.removeItem("token");
         localStorage.removeItem("userInfo");
         setVisible(false);
-        setUserInfo("");
+        setUserInfo(null);
       })
       .catch((error) => {
         console.error("Failed to logout:", error);
@@ -51,7 +51,7 @@ const Navbar = forwardRef(({ navOpen, username, userAvatar }: {navOpen: boolean,
               className={Styles.navItem}
               onClick={() => setShowNotifications("notifications")}
             >
-              <Link>Notifications</Link>
+              <div>Notifications</div>
             </div>
             <div className={Styles.navItem}>
               <Link to="/settings">Settings</Link>

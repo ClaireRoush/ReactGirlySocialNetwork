@@ -3,14 +3,14 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Styles from "../css/Settings.module.css";
-import Header from "./Header.jsx";
+import Header from "./Header";
 
 export default function Settings() {
   const token = localStorage.getItem("token");
-  const [files, setFiles] = useState('');
-  const [username, setUsername] = useState("");
-  const [userDesc, setUserDesc] = useState("");
-  const [pronouns, setPronouns] = useState("");
+  const [files, setFiles] = useState<FileList>(new FileList);
+  const [username, setUsername] = useState<string>("");
+  const [userDesc, setUserDesc] = useState<string>("");
+  const [pronouns, setPronouns] = useState<string>("");
   const [profileHashColor, setProfileHashColor] = useState("");
   const api = process.env.REACT_APP_API_URL;
 
