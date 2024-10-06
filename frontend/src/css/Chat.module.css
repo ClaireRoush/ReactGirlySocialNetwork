@@ -18,6 +18,7 @@
   grid-area: navbar;
   border-right: #a6e3a1 2px solid;
   background-color: #181825;
+  padding: 3px;
 }
 
 .header {
@@ -29,6 +30,14 @@
   gap: 5px;
   display: flex;
   align-items: center;
+}
+
+.contactItem {
+  cursor: pointer;
+}
+
+.contactItem:hover {
+  color: #a6e3a1;
 }
 
 .header img {
@@ -78,12 +87,19 @@
   display: flex;
   gap: 5px;
   align-items: center;
-  font-size: 30px;
+  font-size: 45px;
+  cursor: pointer;
+}
+
+.user:hover {
+  transition: 0.1s;
+  color: #a6e3a1;
 }
 
 .user img {
-  width: 30px;
-  height: 30px;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
 }
 
 .messagesWrapper {

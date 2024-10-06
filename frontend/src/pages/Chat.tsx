@@ -15,7 +15,9 @@ export default function Chat() {
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const username = userInfo?.username;
-
+  const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
+  const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -36,14 +38,11 @@ export default function Chat() {
   useEffect(() => {
     const fetchContacts = async () => {
       if (!token) return;
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + `/getContacts`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${api}/getContacts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -58,16 +57,11 @@ export default function Chat() {
     if (room && socket) {
       socket.emit("leave room", room);
     }
-    const fetchMessages = await fetch(
-      process.env.REACT_APP_API_URL + `/messages/${contact.username}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
+    const fetchMessages = await fetch(`${api}/messages/${contact.username}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     const roomName = hash
       .sha256()
@@ -94,7 +88,7 @@ export default function Chat() {
 
     if (selectedContact && message.trim()) {
       const response = await fetch(
-        process.env.REACT_APP_API_URL + `/messages/${selectedContact.username}`,
+        `${api}/messages/${selectedContact.username}`,
         {
           method: "POST",
           body: JSON.stringify({ message }),
@@ -112,7 +106,7 @@ export default function Chat() {
           _id: data._id,
           user: {
             username: data.user.username,
-            userAvatar: data.userAvatar,
+            userAvatar: data.user.userAvatar,
           },
           message: data.message,
           timestamp: new Date(),
@@ -141,7 +135,7 @@ export default function Chat() {
         <section className={Styles.header}>
           {selectedContact ? (
             <>
-              <img src={selectedContact.userAvatar} alt="User Avatar" />
+              <img src={`${upload}/${selectedContact.userAvatar}`} alt="" />
               <div>{selectedContact.username}</div>
             </>
           ) : (
@@ -157,7 +151,7 @@ export default function Chat() {
                 onClick={() => handleContactClick(contact)}
                 className={Styles.user}
               >
-                <img src={contact.userAvatar} alt="unknown avatar"></img>
+                <img src={`${upload}${contact.userAvatar}`} alt=""></img>
                 {contact.username}
               </div>
             ))
@@ -173,8 +167,16 @@ export default function Chat() {
                 <div key={msg._id} className={Styles.message}>
                   <div className={Styles.senderInfo}>
                     <img
-                      src={msg.user?.userAvatar || msg.userAvatar}
-                      alt="Avatar"
+                      src={
+                        msg.user?.userAvatar
+                          ? msg.user.userAvatar.startsWith("http")
+                            ? msg.user.userAvatar
+                            : `${upload}/${msg.user.userAvatar}`
+                          : msg.userAvatar.startsWith("http")
+                          ? msg.userAvatar
+                          : `${upload}/${msg.userAvatar}`
+                      }
+                      alt={msg.user?.username || "avatar"}
                     />
                   </div>
                   <div className={Styles.messageContent}>

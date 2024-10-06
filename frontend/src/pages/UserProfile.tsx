@@ -16,11 +16,12 @@ export default function UserProfile() {
   const [userDesc, setUserDesc] = useState("");
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
+  const api = process.env.REACT_APP_API_URL;
+  const upload = process.env.REACT_APP_UPLOAD;
+
 
   useEffect(() => {
-    fetch(
-      process.env.REACT_APP_API_URL + `/userProfile/${userId}`
-    )
+    fetch(`${api}/userProfile/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setUsername(data.username);
@@ -35,7 +36,7 @@ export default function UserProfile() {
     ev.preventDefault();
     const token = localStorage.getItem("token");
     const response = await fetch(
-      process.env.REACT_APP_API_URL + `/addToContacts/${userId}`,
+      `${api}/addToContacts/${userId}`,
       {
         method: "POST",
         headers: {
@@ -51,13 +52,13 @@ export default function UserProfile() {
   }
 
   useEffect(() => {
-    fetch(
-      process.env.REACT_APP_API_URL + `/userProfile/posts/${userId}`
-    ).then((response) => {
-      response.json().then((posts) => {
-        setPosts(posts);
-      });
-    });
+    fetch(`${api}/userProfile/posts/${userId}`).then(
+      (response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      }
+    );
   }, [userId]);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function UserProfile() {
       <Header></Header>
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
-          <img className={Styles.profileImg} src={userAvatar} />
+          <img className={Styles.profileImg} src={`${upload}/${userAvatar}`} />
           <div className={Styles.desc}>
             <h1>{username}</h1>
             <a>{pronouns}</a>

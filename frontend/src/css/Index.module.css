@@ -4,6 +4,10 @@
   justify-content: center;
 }
 
+.createPost {
+  z-index: 99999999;
+}
+
 .post {
   display: flex;
   flex-direction: column;
@@ -11,5 +15,4 @@
 }
 
 .postContainer {
-  margin-top: 100px;
 }

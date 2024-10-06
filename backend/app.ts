@@ -13,9 +13,11 @@ import multer from "multer";
 import User from "./models/User";
 import Post from "./models/Post";
 import Likes from "./models/Likes";
+import "./types/types";
 import Comments from "./models/Comments";
 import Messages from "./models/Messages";
 import Notifications from "./models/Notifications";
+import { register, login } from "./controllers/AuthControllers";
 
 dotenv.config();
 dotenv.config({ path: `.env.local`, override: true });
@@ -90,36 +92,8 @@ app.get(API_URL + "/", (req: Request, res: Response) => {
   res.json("Vse rabotaet, privetiki!!!11");
 });
 
-app.post(API_URL + "/register", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  try {
-    const userDoc = await User.create({
-      username,
-      password: bcrypt.hashSync(password, salt),
-    });
-    res.json(userDoc);
-  } catch (e) {
-    res.status(400).json(e);
-  }
-});
-
-app.post(API_URL + "/login", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDoc = await User.findOne({ username });
-  const passOk = bcrypt.compareSync(password, userDoc.password.toString());
-  if (passOk) {
-    jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-      if (err) throw err;
-      res.json({
-        id: userDoc._id,
-        username,
-        token,
-      });
-    });
-  } else {
-    res.status(400).json("Wrong!!!");
-  }
-});
+app.post(API_URL + "/register", register);
+app.post(API_URL + "/login", login);
 
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
@@ -129,7 +103,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
 
   jwt.verify(token, secret, (err, user) => {
     if (err) return res.sendStatus(403);
-    (req as any).user = user;
+    req.user = user as { id: string; username: string };
     next();
   });
 };
@@ -139,22 +113,14 @@ app.get(API_URL + "/profile", authenticateToken, (req: Request, res: Response) =
 });
 
 app.get(API_URL + "/me", authenticateToken, async (req: Request, res: Response) => {
-  let userId = (req as any).user.id;
-  console.log((req as any).user);
-  const userInfo = await User.findById(userId);
-
-  if (!userInfo) {
-    console.log("Trying to get user that doesn't exist. userId:", userId);
-    res.status(404).json({ message: "User not found" });
-    return
-  }
-
+  let userId = req.user.id;
+  const getUserInfo = await User.findById(userId);
   const data = {
-    username: userInfo.username,
-    userAvatar: userInfo.userAvatar,
-    userDesc: userInfo.userDesc,
-    pronouns: userInfo.pronouns,
-    profileHashColor: userInfo.profileHashColor,
+    username: getUserInfo.username,
+    userAvatar: getUserInfo.userAvatar,
+    userDesc: getUserInfo.userDesc,
+    pronouns: getUserInfo.pronouns,
+    profileHashColor: getUserInfo.profileHashColor,
   };
   res.json(data);
 });
@@ -284,7 +250,8 @@ app.get(API_URL + "/messages/:user", authenticateToken, async (req: Request, res
 
   if (!currentUserDoc || !targetUserDoc) {
     return res.status(404).json({ message: "User not found" });
-  }
+  }};
+);
 
   const currentUserId = currentUserDoc._id;
   const targetUserId = targetUserDoc._id;

@@ -3,6 +3,9 @@ import Styles from "../css/Header.module.css";
 import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
+const api = process.env.REACT_APP_API_URL;
+const upload = process.env.REACT_APP_UPLOAD;
+
 
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const menuSvg = process.env.REACT_APP_STATIC_URL + "/images/menu.svg";
@@ -32,15 +35,12 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && !userInfo) {
-      fetch(
-        process.env.REACT_APP_API_URL + `/profile`,
-        {
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      fetch(`${api}/profile`, {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -60,27 +60,13 @@ export default function Header() {
   const username = userInfo?.username;
   useEffect(() => {
     if (username) {
-      let data: any;
-      let result = fetch(
-        process.env.REACT_APP_API_URL + `/findUserAvatar/${username}`
-      ).then((response) => {
-        if (response.status == 404)
-          {
-            throw new Error("User avatar not found");
-          }
-          else if (response.status != 200)
-          {
-            throw new Error("Failed to fetch user profile");
-          }
-        response.json().then((data) => {
-          setUserAvatar(data);
-        }).catch((error) => {
-          console.error("Error fetching user profile:", error);
-        });
-      }).catch((error: Error) => {
-        console.log("Failed to retrieve user avatar. Using default. Error text:\n", error);
-        setUserAvatar(process.env.REACT_APP_STATIC_URL + "/images/default_user_avatar.png");
-      });
+      fetch(`${api}/findUserAvatar/${username}`).then(
+        (response) => {
+          response.json().then((userAvatar) => {
+            setUserAvatar(userAvatar);
+          });
+        }
+      );
     }
   }, [username]);
 
@@ -98,9 +84,6 @@ export default function Header() {
             <Link className={Styles.links} to="/chat">
               <a>Messages</a>
             </Link>
-            <Link className={Styles.links} to="/create">
-              <a>Create Post</a>
-            </Link>
             <Link className={Styles.links} to="/about">
               <a>About us</a>
             </Link>
@@ -117,7 +100,7 @@ export default function Header() {
           <Link to={`/me`}>
             <a>{userInfo.username}</a>
           </Link>
-          <img src={userAvatar}></img>
+          <img src={`${upload}/${userAvatar}`}></img>
         </section>
 
         <Navbar
