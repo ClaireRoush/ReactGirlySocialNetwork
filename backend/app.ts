@@ -36,6 +36,7 @@ const API_URL = process.env.BASE_API_URL || "";
 const socket_args = process.env.RUNNING_LOCALY == "1" ? {} : {
   cors: {
     origin: process.env.CORS_ORIGINS.split(" ") || "http://localhost",
+    methods: ["GET", "POST", "OPTIONS"],
   },
 }
 
@@ -76,7 +77,7 @@ if (process.env.RUNNING_LOCALY == "1") // yep :)
     cors({
       credentials: true,
       origin: process.env.CORS_ORIGINS.split(" ") || "http://localhost",
-      methods: ["GET", "POST", "OPTIONS"],
+      methods: ["GET", "POST", "OPTIONS", "DELETE"],
       allowedHeaders: ["Authorization", "Content-Type"]
     })
   );
@@ -160,6 +161,19 @@ app.get(API_URL + "/post/:id", async (req: Request, res: Response) => {
   const postId = await Post.findById(id);
   res.json(postId);
 });
+
+app.delete(API_URL + "/post/:id", authenticateToken, async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
+  const postId = req.params.id;
+  const postDoc = await Post.findOneAndDelete({ _id: postId });
+  const authorCheck = postDoc.author._id.toString() === userId;
+
+  if (authorCheck) {
+    res.json(authorCheck);
+  } else {
+    res.status(404).json({ message: "You are so silly!!!!" });
+  }
+})
 
 app.get(API_URL + "/userProfile/:username", async (req: Request, res: Response) => {
   const user = await User.findOne({ username: req.params.username });
@@ -429,19 +443,6 @@ app.post(API_URL + "/settings", authenticateToken, async (req: Request, res: Res
     { new: true }
   );
   res.json(user);
-});
-
-app.post(API_URL + "/deletePost/:id", authenticateToken, async (req: Request, res: Response) => {
-  const userId = (req as any).user.id;
-  const postId = req.params.id;
-  const postDoc = await Post.findOneAndDelete({ _id: postId });
-  const authorCheck = postDoc.author._id.toString() === userId;
-
-  if (authorCheck) {
-    res.json(authorCheck);
-  } else {
-    res.status(404).json({ message: "You are so silly!!!!" });
-  }
 });
 
 app.get(API_URL + "/findUserAvatar/:User", async (req: Request, res: Response) => {

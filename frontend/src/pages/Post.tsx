@@ -140,9 +140,9 @@ export default function Post({ image, content, author, _id, color }: {
 
   const deletePost = async () => {
     const response = await fetch(
-      process.env.REACT_APP_API_URL + `/deletePost/${_id}`,
+      process.env.REACT_APP_API_URL + `/post/${_id}`,
       {
-        method: "POST",
+        method: "delete",
         headers: {
           Authorization: `Bearer ${token}`,
         },
