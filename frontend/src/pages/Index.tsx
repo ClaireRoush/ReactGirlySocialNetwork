@@ -8,10 +8,18 @@ const api = process.env.REACT_APP_API_URL;
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
+  const token = localStorage.getItem("token");
 
   async function FetchPosts() {
     try {
-      const response = await fetch(`${api}/post`);
+      const response = await fetch(
+        `${api}/post`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         if (JSON.stringify(data) !== JSON.stringify(posts)) {

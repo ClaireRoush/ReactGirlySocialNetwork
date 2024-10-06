@@ -8,12 +8,13 @@ const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
 
-export default function Post({ image, content, author, _id, color }: {
+export default function Post({ image, content, author, _id, color, isLiked }: {
   image: string;
   content: string;
   author: any;  // TODO: this is junky
   _id: string;
   color: string;
+  isLiked: boolean;
 }) {
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
@@ -27,29 +28,7 @@ export default function Post({ image, content, author, _id, color }: {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState("");
   const [existingLike, setExistingLike] = useState(null);
-
-  const checkLikes = async () => {
-    try {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + `/checkIfLiked/${_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setExistingLike(data);
-      }
-    } catch (error) {
-      console.log("Не мяу :<");
-    }
-  };
-
-  useEffect(() => {
-    checkLikes();
-  }, [_id, token]);
+  const [isLikedState, setIsLikedState] = useState(isLiked);
 
   useEffect(() => {
     const getLikes = async () => {
@@ -99,7 +78,7 @@ export default function Post({ image, content, author, _id, color }: {
     if (response.ok) {
       const likesData = await response.json();
       setLikes(likesData.likeCount);
-      checkLikes(); // Ensure the like status is updated after liking
+      setIsLikedState(!isLikedState);
     }
   }
 
@@ -202,7 +181,7 @@ export default function Post({ image, content, author, _id, color }: {
               <div className={Styles.likes}>
                 <div className={Styles.likes}>
                   <a>{likes}</a>
-                  {existingLike ? (
+                  {isLikedState ? (
                     <img src={frogLike} onClick={toggleLikes} />
                   ) : (
                     <img src={likeSvg} onClick={toggleLikes} />

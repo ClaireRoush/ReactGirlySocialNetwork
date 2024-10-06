@@ -109,6 +109,20 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
+const optionalAuthenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token != null)
+  {
+    jwt.verify(token, secret, (err, user) => {
+      if (err) return;
+      req.user = user as { id: string; username: string };
+    });
+  }
+  next();
+}
+
 app.get(API_URL + "/profile", authenticateToken, (req: Request, res: Response) => {
   res.json((req as any).user);
 });
@@ -147,12 +161,38 @@ app.post(
   }
 );
 
-app.get(API_URL + "/post", async (req: Request, res: Response) => {
-  res.json(
-    await Post.find()
+
+// i have no idea how junk it is, but it works. somehow
+app.get(API_URL + "/post", optionalAuthenticateToken, async (req: Request, res: Response) => {
+  if ((req as any).user != null) {
+    var userId: string | null = (req as any).user.id;
+  }
+  else {
+    var userId: string | null = null;
+  }
+
+  var posts: any = Array.from(await Post.find()
       .populate("author", ["username"])
       .sort({ createdAt: -1 })
-      .limit(30)
+      .limit(30))
+
+  var newPosts: any = [];
+
+  if (userId != null) {
+    for(let i = 0; i < posts.length; i++) {
+      var post = posts[i];
+      newPosts.push({
+        ...post.toJSON(),
+        isLiked: (await Likes.findOne({ user: userId, likedPost: post._id })) != null
+      })
+    }
+  }
+  else {
+    newPosts = posts
+  }
+
+  res.json(
+    newPosts
   );
 });
 
@@ -453,19 +493,6 @@ app.get(API_URL + "/findUserAvatar/:User", async (req: Request, res: Response) =
   } catch (error) {
     res.status(404).json({ message: "Avatar not find!!!" });
   }
-});
-
-app.get(API_URL + "/checkIfLiked/:Id", authenticateToken, async (req: Request, res: Response) => {
-  const postId = req.params.Id;
-  const userId = (req as any).user.id;
-  const existingLike = await Likes.findOne({
-    user: userId,
-    likedPost: postId,
-  });
-  if (existingLike) {
-    return res.json(true);
-  }
-  return res.json(false);
 });
 
 io.on;
