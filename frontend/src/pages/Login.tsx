@@ -1,10 +1,11 @@
 import { Link, Navigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import React, { useContext, useState , FormEvent} from "react";
 import { UserContext } from "../usercontext";
-import MadokaImg from "../images/MadokaRegister.jpg";
 import Styles from "../css/Login.module.css";
 const api = process.env.REACT_APP_API_URL;
 
+
+const MadokaImg = process.env.REACT_APP_STATIC_URL + "/images/MadokaRegister.jpg";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ export default function Login() {
   const [redirect, setRedirect] = useState(false);
   const { setUserInfo } = useContext(UserContext);
 
-  async function login(ev) {
+  async function login(ev: FormEvent) {
     ev.preventDefault();
     const response = await fetch(`${api}/login`, {
       method: "Post",
@@ -26,6 +27,8 @@ export default function Login() {
         localStorage.setItem("token", userInfo.token);
         setUserInfo(userInfo);
         setRedirect(true);
+      }).catch((error) => {
+        console.error("Error fetching user profile:", error);
       });
     } else {
       alert("You are too silly!!1!! Absolutly silly!11!1!");

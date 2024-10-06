@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../usercontext";
 import { io } from "socket.io-client";
 import Styles from "../css/Chat.module.css";
@@ -20,8 +20,10 @@ export default function Chat() {
   const upload = process.env.REACT_APP_UPLOAD;
   const messagesEndRef = useRef(null);
 
-  /*   useEffect(() => {
-    const newSocket = io(`http://localhost`);
+  useEffect(() => {
+    const newSocket = io(
+      process.env.REACT_APP_API_URL + ``
+    );
     setSocket(newSocket);
 
     newSocket.on("chat message", (msg) => {
@@ -31,7 +33,7 @@ export default function Chat() {
       newSocket.off("chat message");
       newSocket.disconnect();
     };
-  }, []); */
+  }, []);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -50,7 +52,7 @@ export default function Chat() {
     fetchContacts();
   }, [token]);
 
-  const handleContactClick = async (contact) => {
+  const handleContactClick = async (contact: any) => {
     setSelectedContact(contact);
     if (room && socket) {
       socket.emit("leave room", room);
@@ -74,14 +76,14 @@ export default function Chat() {
     }
   };
 
-  const sendMessage = (msg) => {
+  const sendMessage = (msg: any) => {
     if (socket && room) {
       socket.emit("chat message", { room, message: msg });
       setMessage("");
     }
   };
 
-  const postMessage = async (ev) => {
+  const postMessage = async (ev: FormEvent) => {
     ev.preventDefault();
 
     if (selectedContact && message.trim()) {

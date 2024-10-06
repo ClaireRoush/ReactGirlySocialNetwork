@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Frog from "../svg/svFROG.svg";
 import Notif from "./Notif";
 import Styles from "../css/Notifications.module.css";
+
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -19,6 +20,8 @@ function Notifications() {
     }).then((response) => {
       response.json().then((notifications) => {
         setNotifications(notifications);
+      }).catch((error) => {
+        console.error("Error fetching notifications:", error);
       });
     });
   }, [token]);

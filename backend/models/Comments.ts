@@ -1,13 +1,23 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import { Schema, model } from "mongoose";
 
-const CommentsSchema = new Schema({
+import { IUser } from "./User";
+
+
+export interface IComment {
+  user: IUser
+  text: String
+  userAvatar: IUser
+  commentedOn: String
+}
+
+
+const CommentsSchema = new Schema<IComment>({
   user: { type: Schema.Types.ObjectId, ref: "User" },
   text: { type: String, required: true },
   userAvatar: { type: Schema.Types.ObjectId, ref: "User" },
   commentedOn: { type: String, required: true },
 });
 
-const CommentsModel = model("Comments", CommentsSchema);
+const CommentsModel = model<IComment>("Comments", CommentsSchema);
 
 export default CommentsModel;

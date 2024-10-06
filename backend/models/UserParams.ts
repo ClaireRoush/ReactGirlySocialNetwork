@@ -1,12 +1,18 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import { Schema, model } from "mongoose";
 
-const UserParamsSchema = new Schema({
+export interface IUserParams {
+  username: string;
+  userAvatar: string;
+  userDesc: string;
+}
+
+
+const UserParamsSchema = new Schema<IUserParams>({
   username: { type: String, required: true },
   userAvatar: { type: String, required: false },
   userDesc: { type: String, required: false },
 });
 
-const UserParamsModel = model("UserParams", UserParamsSchema);
+const UserParamsModel = model<IUserParams>("UserParams", UserParamsSchema);
 
 module.exports = UserParamsModel;

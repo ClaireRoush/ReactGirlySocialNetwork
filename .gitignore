@@ -1,4 +1,8 @@
+# Ignore node_modules directory
 node_modules/
 uploads/
-.env
+# Ignore .env files
 .*.local
+
+# Ignore frontend build
+frontend/build

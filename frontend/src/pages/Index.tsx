@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import Styles from "../css/Index.module.css";
-import Header from "../pages/Header.jsx";
-import CreatePost from "../pages/CreatePost.jsx";
+import Header from "./Header.jsx";
+import CreatePost from "./CreatePost.jsx";
 const api = process.env.REACT_APP_API_URL;
 
 export default function IndexPage() {

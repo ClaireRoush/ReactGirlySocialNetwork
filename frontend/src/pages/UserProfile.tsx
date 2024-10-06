@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, MouseEvent } from "react";
 import Styles from "../css/UserProfile.module.css";
 import { UserContext } from "../usercontext";
 import Post from "./Post";
@@ -32,7 +32,7 @@ export default function UserProfile() {
       });
   }, [userId]);
 
-  async function AddToContacts(ev) {
+  async function AddToContacts(ev: MouseEvent) {
     ev.preventDefault();
     const token = localStorage.getItem("token");
     const response = await fetch(
@@ -45,6 +45,10 @@ export default function UserProfile() {
         credentials: "include",
       }
     );
+  }
+
+  function handleAddToContacts(ev: MouseEvent) {
+      AddToContacts(ev).then(() => {}).catch(() => {});
   }
 
   useEffect(() => {
@@ -79,7 +83,7 @@ export default function UserProfile() {
             <a>{pronouns}</a>
             <textarea placeholder={userDesc}></textarea>
           </div>
-          <div onClick={AddToContacts}>Add to contacts!</div>
+          <div onClick={handleAddToContacts}>Add to contacts!</div>
         </div>
       </div>
       <div className={Styles.profileInfo}>

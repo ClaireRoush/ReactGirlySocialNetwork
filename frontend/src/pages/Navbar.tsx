@@ -1,11 +1,11 @@
-import React, { useEffect, useState, forwardRef, useContext } from "react";
+import React, { useEffect, useState, forwardRef, useContext, Ref } from "react";
 import Styles from "../css/Navbar.module.css";
 import { UserContext } from "../usercontext";
 
 import { Link } from "react-router-dom";
 import Notifications from "./Notifications";
 
-const Navbar = forwardRef(({ navOpen, username, userAvatar }, ref) => {
+const Navbar = forwardRef(({ navOpen, username, userAvatar }: {navOpen: boolean, username: string, userAvatar: string}, ref: Ref<HTMLDivElement>) => {
   const [visible, setVisible] = useState(false);
   const [showNotifications, setShowNotifications] = useState("main");
   const { userInfo, setUserInfo } = useContext(UserContext);

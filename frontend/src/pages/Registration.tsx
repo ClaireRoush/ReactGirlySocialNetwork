@@ -1,14 +1,15 @@
+import React, { FormEvent } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { FormEncType, Link } from "react-router-dom";
 import Styles from "../css/Registration.module.css";
-import MadokaImg from "../images/MadokaRegister.jpg";
+
+const MadokaImg = process.env.REACT_APP_STATIC_URL + "/images/MadokaRegister.jpg";
+const api = process.env.REACT_APP_API_URL;
 
 export default function Registration() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const api = process.env.REACT_APP_API_URL;
-
-  async function register(ev) {
+  async function register(ev: FormEvent) {
     ev.preventDefault();
     const response = await fetch(`${api}/register`, {
       method: "Post",

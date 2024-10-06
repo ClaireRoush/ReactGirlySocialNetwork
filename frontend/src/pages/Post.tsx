@@ -1,16 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, MouseEvent, FormEvent } from "react";
 import Styles from "../css/meow.module.css";
 import { Link, Navigate, redirect } from "react-router-dom";
-import commentSvg from "../svg/comment.svg";
-import likeSvg from "../svg/like.svg";
-import chromiumSvg from "../svg/chromium.svg";
-import Frog from "../svg/svFROG.svg";
-import frogLike from "../svg/frogLike.svg";
-import Comments from "../pages/Comments";
+import Comments from "./Comments";
+const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
+const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
+const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
+const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
+const api = process.env.REACT_APP_API_URL;
+const upload = process.env.REACT_APP_UPLOAD;
 
-export default function Post({ image, content, author, _id, color }) {
-  const api = process.env.REACT_APP_API_URL;
-  const upload = process.env.REACT_APP_UPLOAD;
+export default function Post({ image, content, author, _id, color }: {
+  image: string;
+  content: string;
+  author: any;  // TODO: this is junky
+  _id: string;
+  color: string;
+}) {
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -46,7 +52,11 @@ export default function Post({ image, content, author, _id, color }) {
 
   useEffect(() => {
     const getLikes = async () => {
-      const response = await fetch(`${api}/post/likes/${_id}`);
+==== BASE ====
+      const response = await fetch(
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/likes/${_id}`
+      );
+==== BASE ====
       if (response.ok) {
         const likesData = await response.json();
         setLikes(likesData.likeCount);
@@ -57,13 +67,18 @@ export default function Post({ image, content, author, _id, color }) {
 
   useEffect(() => {
     const checkIsAuthor = async () => {
-      const response = await fetch(`${api}/isMyPost/${_id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      });
+==== BASE ====
+      const response = await fetch(
+        `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/isMyPost/${_id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        }
+      );
+==== BASE ====
       if (response.ok) {
         const data = await response.json();
         setIsAuthor(data);
@@ -73,7 +88,11 @@ export default function Post({ image, content, author, _id, color }) {
   }, [_id, token]);
 
   useEffect(() => {
-    fetch(`${api}/findUserAvatar/${author.username}`)
+==== BASE ====
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/findUserAvatar/${author.username}`
+    )
+==== BASE ====
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -84,14 +103,19 @@ export default function Post({ image, content, author, _id, color }) {
       });
   }, [author.username, setUserAvatar]);
 
-  async function postLike(ev) {
+  async function postLike(ev: MouseEvent) {
     ev.preventDefault();
-    const response = await fetch(`${api}/post/likes/${_id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+==== BASE ====
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/likes/${_id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+==== BASE ====
     if (response.ok) {
       const likesData = await response.json();
       setLikes(likesData.likeCount);
@@ -100,7 +124,11 @@ export default function Post({ image, content, author, _id, color }) {
   }
 
   useEffect(() => {
-    fetch(`${api}/post/comments/${_id}`)
+==== BASE ====
+    fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/comments/${_id}`
+    )
+==== BASE ====
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -113,16 +141,21 @@ export default function Post({ image, content, author, _id, color }) {
       });
   }, [_id, setComments]);
 
-  async function postComment(ev) {
+  async function postComment(ev: FormEvent) {
     ev.preventDefault();
-    const response = await fetch(`${api}/post/comments/${_id}`, {
-      method: "POST",
-      body: JSON.stringify({ text }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+==== BASE ====
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/post/comments/${_id}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ text }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+==== BASE ====
     if (response.ok) {
       const newComment = await response.json();
       setComments([...comments, newComment]);
@@ -130,13 +163,18 @@ export default function Post({ image, content, author, _id, color }) {
   }
 
   const deletePost = async () => {
-    const response = await fetch(`${api}/deletePost/${_id}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: "include",
-    });
+==== BASE ====
+    const response = await fetch(
+      `https://reactgirlysocialnetwork-backend-dzs8.onrender.com/deletePost/${_id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
+==== BASE ====
     if (response.ok) {
       setIsDeleted(true);
     }
@@ -150,7 +188,7 @@ export default function Post({ image, content, author, _id, color }) {
     setShowComments(!showComments);
   };
 
-  const toggleLikes = (ev) => {
+  const toggleLikes = (ev: MouseEvent) => {
     postLike(ev);
   };
 
@@ -158,7 +196,7 @@ export default function Post({ image, content, author, _id, color }) {
     return <Navigate to={"/meow"} />;
   }
 
-  const handleClick = (event) => {
+  const handleClick = (event: MouseEvent) => {
     if (event.currentTarget === event.target) {
       setRedirect(false);
     }

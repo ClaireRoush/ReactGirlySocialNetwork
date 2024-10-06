@@ -6,12 +6,11 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "jsx": "react",
     "lib": ["DOM", "es2017"],
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "target": "ES2022",
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": [
-    "./**/*"
+    "src/**/*"
   ]
 }

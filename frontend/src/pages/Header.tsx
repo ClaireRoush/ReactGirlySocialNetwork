@@ -2,22 +2,23 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import Styles from "../css/Header.module.css";
 import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
-import Frog from "../svg/svFROG.svg";
-import menuSvg from "../svg/menu.svg";
 import Navbar from "./Navbar";
 const api = process.env.REACT_APP_API_URL;
 const upload = process.env.REACT_APP_UPLOAD;
 
 
+const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
+const menuSvg = process.env.REACT_APP_STATIC_URL + "/images/menu.svg";
+
 export default function Header() {
   const { userInfo, setUserInfo } = useContext(UserContext);
-  const [userAvatar, setUserAvatar] = useState([]);
+  const [userAvatar, setUserAvatar] = useState<string>("");
   const [navOpen, setNavOpen] = useState(false);
 
-  let menuRef = useRef();
+  let menuRef: any = useRef(); // TODO: more junk
 
   useEffect(() => {
-    const handler = (e) => {
+    const handler = (e: any) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setNavOpen(false);
       }

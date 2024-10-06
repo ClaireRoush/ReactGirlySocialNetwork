@@ -1,11 +1,20 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import { Schema, model } from "mongoose";
 
-const LikesSchema = new Schema({
+import { IUser } from "./User";
+import { IPost } from "./Post";
+
+
+export interface ILike{
+    user: IUser
+    likedPost: IPost
+}
+
+
+const LikesSchema = new Schema<ILike>({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   likedPost: { type: Schema.Types.ObjectId, ref: "Post", required: true },
 });
 
-const LikesModel = model("Likes", LikesSchema);
+const LikesModel = model<ILike>("Likes", LikesSchema);
 
 export default LikesModel;

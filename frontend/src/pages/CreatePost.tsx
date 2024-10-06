@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "../css/Quill.css";
 import { Navigate } from "react-router-dom";
 import Styles from "../css/CreatePost.module.css";
-import Header from "../pages/Header.jsx";
+import Header from "./Header.jsx";
 const api = process.env.REACT_APP_API_URL;
 
 const modules = {

@@ -30,6 +30,8 @@ export default function Me() {
           setUserDesc(info.userDesc);
           setPronouns(info.pronouns);
           setprofileHashColor(info.profileHashColor);
+        }).catch((error) => {
+          console.error("Error fetching user profile:", error);
         });
       }
     });

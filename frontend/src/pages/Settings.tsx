@@ -1,9 +1,9 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Styles from "../css/Settings.module.css";
-import Header from "../pages/Header.jsx";
+import Header from "./Header.jsx";
 
 export default function Settings() {
   const token = localStorage.getItem("token");
@@ -14,14 +14,14 @@ export default function Settings() {
   const [profileHashColor, setProfileHashColor] = useState("");
   const api = process.env.REACT_APP_API_URL;
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const inputValue = e.target.value;
     if (/^#[0-9A-F]{6}$/i.test(inputValue)) {
       setProfileHashColor(inputValue);
     }
   };
 
-  async function changeInfo(ev) {
+  async function changeInfo(ev: FormEvent) {
     const data = new FormData();
     data.set('file', files[0]); 
     data.set("username", username);
