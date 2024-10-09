@@ -4,13 +4,10 @@ import React, {
   useRef,
   MouseEvent,
   FormEvent,
-  useContext,
 } from "react";
 import Styles from "../css/meow.module.css";
-import { Link, Navigate, redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Comments from "./Comments";
-import { UserContext } from "../usercontext";
-
 const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
 const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
@@ -23,12 +20,14 @@ export default function Post({
   author,
   _id,
   color,
+  isLiked,
 }: {
   image: string;
   content: string;
   author: any; // TODO: this is junky
   _id: string;
   color: string;
+  isLiked: boolean;
 }) {
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
@@ -42,30 +41,7 @@ export default function Post({
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState("");
   const [existingLike, setExistingLike] = useState(null);
-  const { userInfo, setUserInfo } = useContext(UserContext);
-
-  const checkLikes = async () => {
-    try {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + `/checkIfLiked/${_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setExistingLike(data);
-      }
-    } catch (error) {
-      console.log("Не мяу :<");
-    }
-  };
-
-  useEffect(() => {
-    checkLikes();
-  }, [_id, token]);
+  const [isLikedState, setIsLikedState] = useState(isLiked);
 
   useEffect(() => {
     const getLikes = async () => {
@@ -81,12 +57,16 @@ export default function Post({
   }, [_id]);
 
   useEffect(() => {
-    if (userInfo && userInfo.username === author.username) {
-      setIsAuthor(true);
-    } else {
-      setIsAuthor(false);
-    }
-  }, [userInfo, author.username]);
+    const checkIsAuthor = async () => {
+      setIsAuthor(
+        author.username ===
+          JSON.parse(localStorage.getItem("userInfo")).username
+      );
+      // TODO: maybe save username in localStorage?
+      // Isn't it be always in localStorage???
+    };
+    checkIsAuthor();
+  }, [_id, token]);
 
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL + `/findUserAvatar/${author.username}`)
@@ -114,7 +94,7 @@ export default function Post({
     if (response.ok) {
       const likesData = await response.json();
       setLikes(likesData.likeCount);
-      checkLikes(); // Ensure the like status is updated after liking
+      setIsLikedState(!isLikedState);
     }
   }
 
@@ -153,9 +133,9 @@ export default function Post({
 
   const deletePost = async () => {
     const response = await fetch(
-      process.env.REACT_APP_API_URL + `/deletePost/${_id}`,
+      process.env.REACT_APP_API_URL + `/post/${_id}`,
       {
-        method: "POST",
+        method: "delete",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -215,7 +195,7 @@ export default function Post({
               <div className={Styles.likes}>
                 <div className={Styles.likes}>
                   <a>{likes}</a>
-                  {existingLike ? (
+                  {isLikedState ? (
                     <img src={frogLike} onClick={toggleLikes} />
                   ) : (
                     <img src={likeSvg} onClick={toggleLikes} />

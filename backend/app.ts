@@ -143,8 +143,7 @@ app.post(API_URL + "/post/likes/:id", authenticateToken, postLikesById);
 app.get(API_URL + "/post/likes/:id", getPostLikesById);
 app.post(API_URL + "/post/comments/:id", authenticateToken, postCommentsById);
 app.get(API_URL + "/post/comments/:id", getCommentsById);
-app.post(API_URL + "/deletePost/:id", authenticateToken, deletePost);
-
+app.delete(API_URL + "/post/:id", authenticateToken, deletePost);
 app.post(API_URL + "/messages/:forWho", authenticateToken, postMessagesForWho);
 app.get(API_URL + "/messages/:user", authenticateToken, getMessagesByUser);
 app.post(
