@@ -5,7 +5,7 @@ import Header from "./Header";
 
 export default function Settings() {
   const token = localStorage.getItem("token");
-  const [files, setFiles] = useState<FileList>(new FileList());
+  const [files, setFiles] = useState<FileList | null>(null);
   const [username, setUsername] = useState<string>("");
   const [userDesc, setUserDesc] = useState<string>("");
   const [pronouns, setPronouns] = useState<string>("");
@@ -76,6 +76,7 @@ export default function Settings() {
             placeholder="User avatar"
             onChange={(ev) => setFiles(ev.target.files)}
           />
+
           <input
             type="text"
             placeholder="User desc."

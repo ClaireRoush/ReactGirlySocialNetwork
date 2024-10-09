@@ -7,6 +7,7 @@ import socketIo from "socket.io";
 import cookieParser from "cookie-parser";
 import multer from "multer";
 import "./types/types";
+import path from "path";
 
 import { register, login, logout } from "./controllers/AuthControllers";
 import {
@@ -40,7 +41,13 @@ dotenv.config();
 dotenv.config({ path: `.env.local`, override: true });
 const API_URL = process.env.BASE_API_URL || "";
 
-const uploadMiddleware = multer({ dest: "uploads/" });
+const uploadMiddleware = multer({
+  dest: path.join(__dirname, "../uploads/"),
+});
+const uploadAvatarMiddleware = multer({
+  dest: path.join(__dirname, "../uploads/userAvatars/"),
+});
+
 const secret = process.env.JWT_SECRET;
 const app = express();
 
@@ -126,7 +133,12 @@ app.post(API_URL + "/logout", logout);
 app.get(API_URL + "/profile", authenticateToken, profile);
 app.get(API_URL + "/me", authenticateToken, me);
 app.get(API_URL + "/changeInfo", authenticateToken, changeInfo);
-app.post(API_URL + "/settings", authenticateToken, settings);
+app.post(
+  API_URL + "/settings",
+  authenticateToken,
+  uploadAvatarMiddleware.single("file"),
+  settings
+);
 app.get(API_URL + "/findUserAvatar/:User", findUserAvatarByUser);
 
 app.post(

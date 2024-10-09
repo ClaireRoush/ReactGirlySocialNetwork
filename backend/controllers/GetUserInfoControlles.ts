@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import Post from "../models/Post";
 import Likes from "../models/Likes";
+import fs from "fs";
+import sharp from "sharp";
+import path from "path";
 
 export const profile = async (req: Request, res: Response) => {
   res.json(req.user);
@@ -51,30 +54,52 @@ export const changeInfo = async (req: Request, res: Response) => {
 };
 
 export const settings = async (req: Request, res: Response) => {
-  async (req: Request, res: Response) => {
-    const { userAvatar, userDesc, username, pronouns, profileHashColor } =
-      req.body;
-    const userId = req.user.id;
-
-    const updatedUserData = {
-      userAvatar,
-      userDesc,
-      username,
-      pronouns,
-      profileHashColor,
-    };
-
-    try {
-      const user = await User.findOneAndUpdate(
-        { _id: userId },
-        updatedUserData,
-        { new: true }
-      );
-      res.json(user);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to update user settings" });
-    }
+  const { originalname, path: tempPath } = req.file;
+  const parts = originalname.split(".");
+  const ext = parts[parts.length - 1];
+  const newPath = tempPath + "." + ext;
+  const formatMap: { [key: string]: keyof sharp.FormatEnum } = {
+    jpg: "jpeg",
+    jpeg: "jpeg",
+    png: "png",
+    webp: "webp",
   };
+
+  const format = formatMap[ext];
+
+  await sharp(tempPath)
+    .toFormat(format)
+    .resize({
+      width: 800,
+      height: 800,
+    })
+    .jpeg({ quality: 50 })
+    .toFile(newPath);
+
+  fs.unlink(tempPath, (err) => {
+    if (err) {
+      console.error("Error in fs:", err);
+    }
+  });
+
+  const relativePath = `uploads/userAvatars/${path.basename(newPath)}`;
+
+  const { userDesc, username, pronouns, profileHashColor } = req.body;
+
+  const userId = req.user.id;
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      userAvatar: relativePath,
+      userDesc: userDesc,
+      username: username,
+      pronouns: pronouns,
+      profileHashColor: profileHashColor,
+    },
+    { new: true }
+  );
+  res.json(updatedUser);
 };
 
 export const findUserAvatarByUser = async (req: Request, res: Response) => {
