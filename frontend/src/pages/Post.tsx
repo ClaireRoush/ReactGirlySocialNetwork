@@ -13,6 +13,7 @@ const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
+const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 
 export default function Post({
   image,
@@ -186,6 +187,7 @@ export default function Post({
       </div>
       <div className={Styles.image}>
         <img src={image} alt=""></img>
+        <img src={`${uploadURL}/${image}`} alt=""></img>
       </div>
 
       <section className={Styles.postActions}>

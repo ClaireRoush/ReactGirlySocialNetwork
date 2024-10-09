@@ -1,13 +1,11 @@
 import React, { FormEvent } from "react";
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../usercontext";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Styles from "../css/Settings.module.css";
 import Header from "./Header";
 
 export default function Settings() {
   const token = localStorage.getItem("token");
-  const [files, setFiles] = useState<FileList>(new FileList);
+  const [files, setFiles] = useState<FileList>(new FileList());
   const [username, setUsername] = useState<string>("");
   const [userDesc, setUserDesc] = useState<string>("");
   const [pronouns, setPronouns] = useState<string>("");
@@ -23,12 +21,12 @@ export default function Settings() {
 
   async function changeInfo(ev: FormEvent) {
     const data = new FormData();
-    data.set('file', files[0]); 
+    data.set("file", files[0]);
     data.set("username", username);
     data.set("userDesc", userDesc);
     data.set("pronouns", pronouns);
-    data.set("profileHashColor",profileHashColor);
-    
+    data.set("profileHashColor", profileHashColor);
+
     ev.preventDefault();
 
     const token = localStorage.getItem("token");
@@ -41,7 +39,7 @@ export default function Settings() {
       credentials: "include",
     });
     if (response.ok) {
-        alert("meow");
+      alert("meow");
     }
   }
 
@@ -76,8 +74,8 @@ export default function Settings() {
           <input
             type="file"
             placeholder="User avatar"
-            onChange={ev => setFiles(ev.target.files)}
-            />
+            onChange={(ev) => setFiles(ev.target.files)}
+          />
           <input
             type="text"
             placeholder="User desc."
