@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import Styles from "../css/Index.module.css";
 import Header from "./Header";
+
 import CreatePost from "./CreatePost";
 const api = process.env.REACT_APP_API_URL;
 

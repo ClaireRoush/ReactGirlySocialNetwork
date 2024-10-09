@@ -28,7 +28,7 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const userDoc = await User.findOne({ username });
-  const passOk = bcrypt.compareSync(password, userDoc.password);
+  const passOk = bcrypt.compareSync(password, String(userDoc.password));
   if (passOk) {
     jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
       if (err) throw err;
@@ -41,4 +41,8 @@ export const login = async (req: Request, res: Response) => {
   } else {
     res.status(400).json("Wrong!!!");
   }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  res.json("ok");
 };

@@ -1,17 +1,32 @@
-import React, { useEffect, useState, useRef, MouseEvent, FormEvent } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  MouseEvent,
+  FormEvent,
+  useContext,
+} from "react";
 import Styles from "../css/meow.module.css";
 import { Link, Navigate, redirect } from "react-router-dom";
 import Comments from "./Comments";
+import { UserContext } from "../usercontext";
+
 const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
 const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
 
-export default function Post({ image, content, author, _id, color }: {
+export default function Post({
+  image,
+  content,
+  author,
+  _id,
+  color,
+}: {
   image: string;
   content: string;
-  author: any;  // TODO: this is junky
+  author: any; // TODO: this is junky
   _id: string;
   color: string;
 }) {
@@ -27,6 +42,7 @@ export default function Post({ image, content, author, _id, color }: {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState("");
   const [existingLike, setExistingLike] = useState(null);
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const checkLikes = async () => {
     try {
@@ -65,29 +81,15 @@ export default function Post({ image, content, author, _id, color }: {
   }, [_id]);
 
   useEffect(() => {
-    const checkIsAuthor = async () => {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + `/isMyPost/${_id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setIsAuthor(data);
-      }
-    };
-    checkIsAuthor();
-  }, [_id, token]);
+    if (userInfo && userInfo.username === author.username) {
+      setIsAuthor(true);
+    } else {
+      setIsAuthor(false);
+    }
+  }, [userInfo, author.username]);
 
   useEffect(() => {
-    fetch(
-      process.env.REACT_APP_API_URL + `/findUserAvatar/${author.username}`
-    )
+    fetch(process.env.REACT_APP_API_URL + `/findUserAvatar/${author.username}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -117,9 +119,7 @@ export default function Post({ image, content, author, _id, color }: {
   }
 
   useEffect(() => {
-    fetch(
-      process.env.REACT_APP_API_URL + `/post/comments/${_id}`
-    )
+    fetch(process.env.REACT_APP_API_URL + `/post/comments/${_id}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
