@@ -22,6 +22,7 @@ export default function Post({
   _id,
   color,
   isLiked,
+  likeCount,
 }: {
   image: string;
   content: string;
@@ -29,6 +30,7 @@ export default function Post({
   _id: string;
   color: string;
   isLiked: boolean;
+  likeCount: number;
 }) {
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
@@ -40,22 +42,8 @@ export default function Post({
   const [showComments, setShowComments] = useState(false);
   const [text, setText] = useState("");
   const [comments, setComments] = useState([]);
-  const [likes, setLikes] = useState("");
-  const [existingLike, setExistingLike] = useState(null);
+  const [likes, setLikes] = useState(likeCount);
   const [isLikedState, setIsLikedState] = useState(isLiked);
-
-  useEffect(() => {
-    const getLikes = async () => {
-      const response = await fetch(
-        process.env.REACT_APP_API_URL + `/post/likes/${_id}`
-      );
-      if (response.ok) {
-        const likesData = await response.json();
-        setLikes(likesData.likeCount);
-      }
-    };
-    getLikes();
-  }, [_id]);
 
   useEffect(() => {
     const checkIsAuthor = async () => {
@@ -81,23 +69,24 @@ export default function Post({
       });
   }, [author.username, setUserAvatar]);
 
-  async function postLike(ev: MouseEvent) {
-    ev.preventDefault();
-    const response = await fetch(
-      process.env.REACT_APP_API_URL + `/post/likes/${_id}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  const postLike = async (ev: MouseEvent) => {
+    setIsLikedState((prevIsLiked) => {
+      if (prevIsLiked) {
+        setLikes((prevLikeCount) => prevLikeCount - 1);
+      } else {
+        setLikes((prevLikeCount) => prevLikeCount + 1);
       }
-    );
-    if (response.ok) {
-      const likesData = await response.json();
-      setLikes(likesData.likeCount);
-      setIsLikedState(!isLikedState);
-    }
-  }
+      return !prevIsLiked;
+    });
+
+    ev.preventDefault();
+    fetch(process.env.REACT_APP_API_URL + `/post/likes/${_id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
 
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL + `/post/comments/${_id}`)

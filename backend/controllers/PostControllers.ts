@@ -51,6 +51,7 @@ export const post = async (req: Request, res: Response) => {
   const postDoc = await Post.create(postData);
   res.json({ postDoc });
 };
+
 export const postGet = async (req: Request, res: Response) => {
   const userId = (req as any).user ? (req as any).user.id : null;
 
@@ -67,11 +68,16 @@ export const postGet = async (req: Request, res: Response) => {
         user: userId,
         likedPost: post._id,
       });
+
+      const likeCount = await Likes.countDocuments({ likedPost: post._id });
+
       return {
         ...post.toJSON(),
         isLiked: isLiked != null,
+        likeCount,
       };
     });
+
     newPosts = await Promise.all(likePromises);
   } else {
     newPosts = posts;
@@ -84,12 +90,6 @@ export const getPostId = async (req: Request, res: Response) => {
   let id = req.params.id;
   const postId = await Post.findById(id);
   res.json(postId);
-};
-
-export const getPostLikesById = async (req: Request, res: Response) => {
-  const likedPost = req.params.id;
-  const likeCount = await Likes.countDocuments({ likedPost: likedPost });
-  res.json({ likeCount });
 };
 
 export const postCommentsById = async (req: Request, res: Response) => {
