@@ -14,9 +14,7 @@ import {
   post,
   postGet,
   getPostId,
-  getPostLikesById,
   postCommentsById,
-  getCommentsById,
   postLikesById,
   deletePost,
 } from "./controllers/PostControllers";
@@ -139,7 +137,6 @@ app.post(
   uploadAvatarMiddleware.single("file"),
   settings
 );
-app.get(API_URL + "/findUserAvatar/:User", findUserAvatarByUser);
 
 app.post(
   API_URL + "/post",
@@ -152,9 +149,7 @@ app.get(API_URL + "/post/:id", getPostId);
 app.get(API_URL + "/userProfile/:username", userProfileByUsername);
 app.get(API_URL + "/userProfile/posts/:User", userProfilePostsByUser);
 app.post(API_URL + "/post/likes/:id", authenticateToken, postLikesById);
-app.get(API_URL + "/post/likes/:id", getPostLikesById);
 app.post(API_URL + "/post/comments/:id", authenticateToken, postCommentsById);
-app.get(API_URL + "/post/comments/:id", getCommentsById);
 app.delete(API_URL + "/post/:id", authenticateToken, deletePost);
 app.post(API_URL + "/messages/:forWho", authenticateToken, postMessagesForWho);
 app.get(API_URL + "/messages/:user", authenticateToken, getMessagesByUser);
@@ -163,6 +158,9 @@ app.post(
   authenticateToken,
   postContactsByUser
 );
+
+app.get(API_URL + "/findUserAvatar/:User", findUserAvatarByUser);
+
 app.get(API_URL + "/getContacts", authenticateToken, getContacts);
 
 app.get(API_URL + "/notifications", authenticateToken, getNotifications);

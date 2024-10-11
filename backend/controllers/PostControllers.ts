@@ -60,28 +60,31 @@ export const postGet = async (req: Request, res: Response) => {
     .sort({ createdAt: -1 })
     .limit(30);
 
-  let newPosts = [];
+  const postPromises = posts.map(async (post) => {
+    const userComments = await Comments.find({
+      commentedOn: post._id,
+    }).populate("user", "username userAvatar");
 
-  if (userId) {
-    const likePromises = posts.map(async (post) => {
+    const likeCount = await Likes.countDocuments({ likedPost: post._id });
+
+    const postData: any = {
+      ...post.toJSON(),
+      likeCount,
+      userComments,
+    };
+
+    if (userId) {
       const isLiked = await Likes.findOne({
         user: userId,
         likedPost: post._id,
       });
+      postData.isLiked = isLiked != null;
+    }
 
-      const likeCount = await Likes.countDocuments({ likedPost: post._id });
+    return postData;
+  });
 
-      return {
-        ...post.toJSON(),
-        isLiked: isLiked != null,
-        likeCount,
-      };
-    });
-
-    newPosts = await Promise.all(likePromises);
-  } else {
-    newPosts = posts;
-  }
+  const newPosts = await Promise.all(postPromises);
 
   res.json(newPosts);
 };
@@ -115,15 +118,6 @@ export const postCommentsById = async (req: Request, res: Response) => {
     userAvatar: user.userAvatar,
   });
   res.json(commentedOn);
-};
-
-export const getCommentsById = async (req: Request, res: Response) => {
-  const mainPostId = req.params.id;
-  let meowComments = await Comments.find({ commentedOn: mainPostId }).populate(
-    "user",
-    "username userAvatar"
-  );
-  res.json(meowComments);
 };
 
 export const postLikesById = async (req: Request, res: Response) => {

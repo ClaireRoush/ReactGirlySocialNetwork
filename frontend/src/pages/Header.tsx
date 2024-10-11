@@ -6,7 +6,6 @@ import Navbar from "./Navbar";
 const api = process.env.REACT_APP_API_URL;
 const upload = process.env.REACT_APP_UPLOAD;
 
-
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const menuSvg = process.env.REACT_APP_STATIC_URL + "/images/menu.svg";
 
@@ -60,13 +59,11 @@ export default function Header() {
   const username = userInfo?.username;
   useEffect(() => {
     if (username) {
-      fetch(`${api}/findUserAvatar/${username}`).then(
-        (response) => {
-          response.json().then((userAvatar) => {
-            setUserAvatar(userAvatar);
-          });
-        }
-      );
+      fetch(`${api}/findUserAvatar/${username}`).then((response) => {
+        response.json().then((userAvatar) => {
+          setUserAvatar(userAvatar);
+        });
+      });
     }
   }, [username]);
 
