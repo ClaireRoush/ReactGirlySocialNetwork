@@ -61,10 +61,14 @@ export const postGet = async (req: Request, res: Response) => {
 
   const postPromises = posts.map(async (post) => {
     const likeCount = await Likes.countDocuments({ likedPost: post._id });
+    const commentsCount = await Comments.countDocuments({
+      commentedOn: post._id,
+    });
 
     const postData: any = {
       ...post.toJSON(),
       likeCount,
+      commentsCount,
     };
 
     if (userId) {

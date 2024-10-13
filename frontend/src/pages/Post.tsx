@@ -23,6 +23,7 @@ export default function Post({
   color,
   isLiked,
   likeCount,
+  commentsCount,
 }: {
   image: string;
   content: string;
@@ -31,6 +32,7 @@ export default function Post({
   color: string;
   isLiked: boolean;
   likeCount: number;
+  commentsCount: number;
 }) {
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
@@ -44,6 +46,7 @@ export default function Post({
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState(likeCount);
   const [isLikedState, setIsLikedState] = useState(isLiked);
+  const [commentsCountState, setCommentsCountState] = useState(commentsCount);
 
   useEffect(() => {
     const checkIsAuthor = async () => {
@@ -92,6 +95,7 @@ export default function Post({
     if (response.ok) {
       const newComment = await response.json();
       setComments([...comments, newComment]);
+      setCommentsCountState((prevCount) => prevCount + 1);
     }
   }
 
@@ -177,8 +181,7 @@ export default function Post({
                 </div>
               </div>
               <div className={Styles.comment}>
-                {/*                 <a>{comments.length}</a>
-                 */}{" "}
+                <a>{commentsCountState}</a>
                 <img
                   src={commentSvg}
                   className={Styles.comment}
