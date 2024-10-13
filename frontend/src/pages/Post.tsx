@@ -23,7 +23,6 @@ export default function Post({
   color,
   isLiked,
   likeCount,
-  userComments,
 }: {
   image: string;
   content: string;
@@ -32,7 +31,6 @@ export default function Post({
   color: string;
   isLiked: boolean;
   likeCount: number;
-  userComments: any[];
 }) {
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
@@ -113,13 +111,26 @@ export default function Post({
     }
   };
 
+  async function getComments() {
+    try {
+      if (!showComments && comments.length === 0) {
+        const requestComments = await fetch(
+          process.env.REACT_APP_API_URL + `/post/comments/${_id}`
+        );
+        if (requestComments.ok) {
+          const data = await requestComments.json();
+          setComments(data);
+        }
+      }
+      setShowComments(!showComments);
+    } catch (error) {
+      console.error("So silly!!!! Very silly!!!");
+    }
+  }
+
   if (isDeleted) {
     return null;
   }
-
-  const toggleComments = () => {
-    setShowComments(!showComments);
-  };
 
   const toggleLikes = (ev: MouseEvent) => {
     postLike(ev);
@@ -129,13 +140,9 @@ export default function Post({
     return <Navigate to={"/meow"} />;
   }
 
-  useEffect(() => {
-    setComments(userComments);
-  }, [userComments]);
-
   const handleClick = (event: MouseEvent) => {
     if (event.currentTarget === event.target) {
-      setRedirect(true);
+      setRedirect(false);
     }
   };
 
@@ -175,7 +182,7 @@ export default function Post({
                 <img
                   src={commentSvg}
                   className={Styles.comment}
-                  onClick={toggleComments}
+                  onClick={getComments}
                   ref={commentsButtonRef}
                 />
               </div>
@@ -208,18 +215,18 @@ export default function Post({
             ></input>
             <button>Post!!!</button>
           </form>
-          {/*           {userComments.length > 0 ? (
-            userComments.map((comment) => (
+          {comments.length > 0 ? (
+            comments.map((comment) => (
               <Comments
                 key={comment._id}
                 user={comment.user.username}
                 text={comment.text}
-                userAvatar={comment.user.userAvatar || "/default-avatar.png"}
+                userAvatar={comment.user.userAvatar}
               />
             ))
           ) : (
             <p>No comments yet</p>
-          )} */}
+          )}
         </div>
       </section>
     </div>

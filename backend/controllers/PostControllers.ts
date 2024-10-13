@@ -60,16 +60,11 @@ export const postGet = async (req: Request, res: Response) => {
     .limit(30);
 
   const postPromises = posts.map(async (post) => {
-    const userComments = await Comments.find({
-      commentedOn: post._id,
-    }).populate("user", "username userAvatar");
-
     const likeCount = await Likes.countDocuments({ likedPost: post._id });
 
     const postData: any = {
       ...post.toJSON(),
       likeCount,
-      userComments,
     };
 
     if (userId) {
@@ -94,6 +89,14 @@ export const getPostByUser = async (req: Request, res: Response) => {
   const userId = findUserInfo._id;
   const getPosts = await Post.find({ author: userId }).sort({ createdAt: -1 });
   res.json(getPosts);
+};
+
+export const getCommentsByPostId = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const findComments = await Comments.find({
+    commentedOn: id,
+  }).populate("user", "username userAvatar");
+  res.json(findComments);
 };
 
 export const getPostId = async (req: Request, res: Response) => {
@@ -124,7 +127,7 @@ export const postCommentsById = async (req: Request, res: Response) => {
     userId: postAuthor._id,
     userAvatar: user.userAvatar,
   });
-  res.json(commentedOn);
+  res.json(postDoc);
 };
 
 export const postLikesById = async (req: Request, res: Response) => {
