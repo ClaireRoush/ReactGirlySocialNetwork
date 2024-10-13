@@ -1,11 +1,9 @@
-/* thx my gf for this styles */
 .headerContainer {
   top: 0;
-  background-color: #11111b;
-  border-bottom: #a6e3a1 2px solid;
   left: 0;
+  background-color: #11111b;
+  border-bottom: #a6e3a1 4px solid;
   z-index: 99999;
-  color: #cdd6f4;
   position: absolute;
   width: 100%;
   display: flex;
@@ -15,12 +13,14 @@
   box-sizing: border-box;
   align-items: center;
   padding-left: 20px;
+  white-space: nowrap;
 }
 
 .logo img {
   cursor: pointer;
+  display: flex;
+  align-items: center;
   width: 60px;
-  height: 60px;
 }
 
 .leftistElements {
@@ -29,42 +29,6 @@
   display: flex;
   align-items: center;
   margin-left: 10px;
-}
-
-.links {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  margin-bottom: 5px;
-  margin-left: 20px;
-  color: #cdd6f4;
-  box-sizing: border-box;
-  font-size: 32px;
-  padding: 2px; /* Я дизайнерша и я так решила!!! */
-}
-
-.links:hover {
-  border-bottom: 7px solid #cdd6f4;
-  transition: 0.2s;
-}
-
-.links:nth-child(1):hover {
-  border-bottom: 7px solid #a6e3a1;
-  transition: 0.2s;
-}
-
-.links:nth-child(2):hover {
-  border-bottom: 7px solid #74c7ec;
-  transition: 0.2s;
-}
-
-.leftistElements a:hover {
-  /*   border-radius: 7px;
-  background-color: #a6e3a1;
-  color: #11111b; */
-  transition: 0.5s;
 }
 
 .rightistElements {
@@ -77,13 +41,35 @@
 }
 .rightistElements a {
   margin: 5px;
-  text-decoration: none;
-  color: #cdd6f4;
 }
-
 .rightistElements img {
   height: 60px;
   width: 60px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.links {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-bottom: 5px;
+  margin-left: 20px;
+  color: #ffffff;
+  font-size: 32px;
+  transition: 0.5s;
+}
+.links:nth-child(1):hover {
+  color: #cdf4da;
+  transition: 0.5s;
+}
+.links:nth-child(2):hover {
+  color: #fabeff;
+  transition: 0.5s;
+}
+.links:nth-child(3):hover {
+  color: #f3f4ae;
+  transition: 0.5s;
 }

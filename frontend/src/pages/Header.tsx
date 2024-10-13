@@ -95,7 +95,6 @@ export default function Header() {
         <section className={Styles.rightistElements}>
           <img src={menuSvg} onClick={() => setNavOpen(!navOpen)}></img>
           <Link to={`/me`}>
-            <a>{userInfo.username}</a>
           </Link>
           <img src={`${upload}/${userAvatar}`}></img>
         </section>

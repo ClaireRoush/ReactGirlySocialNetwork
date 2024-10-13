@@ -142,7 +142,6 @@ export default function Post({
   return (
     <div
       className={Styles.post}
-      style={{ border: `4px solid ${color}` }}
       onClick={handleClick}
     >
       <div className={Styles.info} onClick={handleClick}>

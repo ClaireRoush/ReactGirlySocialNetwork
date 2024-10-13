@@ -1,17 +1,13 @@
-/* thx my gf for this styles ^^ */
 .post {
   display: flex;
   flex-direction: column;
   background-color: #181825;
   border-radius: 10px;
-  width: 900px;
+  width: 90vw;
   height: auto;
   z-index: 15;
   margin: 10px 10px 15px 10px;
   padding: 20px;
-}
-
-.post:first-child {
 }
 
 .image {
@@ -19,10 +15,10 @@
   flex-direction: column;
   align-items: center;
 }
-
 .image img {
   max-height: 600px;
   max-width: 900px;
+  border-radius: 15px;
 }
 
 .author {
@@ -36,23 +32,21 @@
   height: 60px;
 }
 .author a {
-  color: #cdd6f4;
+  color: #ffffff;
   font-size: 32px;
   text-decoration: none;
 }
 
 .actionsContainer {
   width: 100%;
-  height: 50px;
+  height: 60px;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
-
 .iHateMyselfContainer {
+  padding-top: 20px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   flex: 1;
 }
 
@@ -63,7 +57,6 @@
   display: flex;
   align-items: center;
 }
-
 .likes img,
 .comment img {
   width: 40px;
@@ -76,12 +69,10 @@
   height: 40px;
   cursor: pointer;
 }
-
 .chromiumContainer {
   margin-left: auto;
   display: flex;
 }
-
 .commentContainer {
   flex-direction: column;
 }
