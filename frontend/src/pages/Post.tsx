@@ -140,10 +140,7 @@ export default function Post({
   };
 
   return (
-    <div
-      className={Styles.post}
-      onClick={handleClick}
-    >
+    <div className={Styles.post} onClick={handleClick}>
       <div className={Styles.info} onClick={handleClick}>
         <div className={Styles.author} onClick={handleClick}>
           <img src={userAvatar} alt="User Avatar"></img>
@@ -173,7 +170,8 @@ export default function Post({
                 </div>
               </div>
               <div className={Styles.comment}>
-                <a>{comments.length}</a>
+                {/*                 <a>{comments.length}</a>
+                 */}{" "}
                 <img
                   src={commentSvg}
                   className={Styles.comment}
@@ -210,7 +208,7 @@ export default function Post({
             ></input>
             <button>Post!!!</button>
           </form>
-          {userComments.length > 0 ? (
+          {/*           {userComments.length > 0 ? (
             userComments.map((comment) => (
               <Comments
                 key={comment._id}
@@ -221,7 +219,7 @@ export default function Post({
             ))
           ) : (
             <p>No comments yet</p>
-          )}
+          )} */}
         </div>
       </section>
     </div>

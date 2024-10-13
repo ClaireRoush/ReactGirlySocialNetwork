@@ -37,7 +37,7 @@ export const userProfileByUsername = async (req: Request, res: Response) => {
   });
 };
 
-export const userProfilePostsByUser = async (req: Request, res: Response) => {
+export const userProfilePostsByUserId = async (req: Request, res: Response) => {
   const username = req.params.User;
   const user = await User.findOne({ username: username });
   res.json(

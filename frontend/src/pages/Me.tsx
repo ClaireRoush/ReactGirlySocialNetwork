@@ -14,7 +14,6 @@ export default function Me() {
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD;
 
-
   const userId = username;
 
   useEffect(() => {
@@ -24,27 +23,30 @@ export default function Me() {
       },
     }).then((response) => {
       if (response.ok) {
-        return response.json().then((info) => {
-          setUsername(info.username);
-          setUserAvatar(info.userAvatar);
-          setUserDesc(info.userDesc);
-          setPronouns(info.pronouns);
-          setprofileHashColor(info.profileHashColor);
-        }).catch((error) => {
-          console.error("Error fetching user profile:", error);
-        });
+        return response
+          .json()
+          .then((info) => {
+            setUsername(info.username);
+            setUserAvatar(info.userAvatar);
+            setUserDesc(info.userDesc);
+            setPronouns(info.pronouns);
+            setprofileHashColor(info.profileHashColor);
+          })
+          .catch((error) => {
+            console.error("Error fetching user profile:", error);
+          });
       }
     });
   }, [token]);
 
   useEffect(() => {
-    fetch(`${api}/userProfile/posts/${userId}`).then(
-      (response) => {
+    if (username) {
+      fetch(`${api}/post/${username}`).then((response) => {
         response.json().then((posts) => {
           setPosts(posts);
         });
-      }
-    );
+      });
+    }
   }, [username]);
 
   return (

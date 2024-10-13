@@ -54,7 +54,6 @@ export const post = async (req: Request, res: Response) => {
 
 export const postGet = async (req: Request, res: Response) => {
   const userId = (req as any).user ? (req as any).user.id : null;
-
   const posts = await Post.find()
     .populate("author", ["username"])
     .sort({ createdAt: -1 })
@@ -87,6 +86,14 @@ export const postGet = async (req: Request, res: Response) => {
   const newPosts = await Promise.all(postPromises);
 
   res.json(newPosts);
+};
+
+export const getPostByUser = async (req: Request, res: Response) => {
+  const user = req.params.user;
+  const findUserInfo = await User.findOne({ username: user });
+  const userId = findUserInfo._id;
+  const getPosts = await Post.find({ author: userId }).sort({ createdAt: -1 });
+  res.json(getPosts);
 };
 
 export const getPostId = async (req: Request, res: Response) => {

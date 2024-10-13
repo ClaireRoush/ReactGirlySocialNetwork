@@ -19,7 +19,6 @@ export default function UserProfile() {
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD;
 
-
   useEffect(() => {
     fetch(`${api}/userProfile/${userId}`)
       .then((response) => response.json())
@@ -35,31 +34,30 @@ export default function UserProfile() {
   async function AddToContacts(ev: MouseEvent) {
     ev.preventDefault();
     const token = localStorage.getItem("token");
-    const response = await fetch(
-      `${api}/addToContacts/${userId}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${api}/addToContacts/${userId}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
   }
 
   function handleAddToContacts(ev: MouseEvent) {
-      AddToContacts(ev).then(() => {}).catch(() => {});
+    AddToContacts(ev)
+      .then(() => {})
+      .catch(() => {});
   }
 
   useEffect(() => {
-    fetch(`${api}/userProfile/posts/${userId}`).then(
-      (response) => {
+    if (username) {
+      fetch(`${api}/post/${username}`).then((response) => {
         response.json().then((posts) => {
           setPosts(posts);
         });
-      }
-    );
-  }, [userId]);
+      });
+    }
+  }, [username]);
 
   useEffect(() => {
     if (username === userInfo?.username) {
@@ -89,7 +87,7 @@ export default function UserProfile() {
       <div className={Styles.profileInfo}>
         <div className={Styles.profilePosts}>
           {posts.length > 0 &&
-            posts.map((post) => <Post {...post} color={profileHashColor} />)}
+            posts.map((post) => <Post key={post.id} {...post} />)}
         </div>
       </div>
     </div>
