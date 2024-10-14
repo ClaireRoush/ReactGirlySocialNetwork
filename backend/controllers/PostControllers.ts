@@ -54,10 +54,16 @@ export const post = async (req: Request, res: Response) => {
 
 export const postGet = async (req: Request, res: Response) => {
   const userId = (req as any).user ? (req as any).user.id : null;
+
+  const limit = Number.parseInt(req.query.limit.toString());
+  const offset =  Number.parseInt(req.query.offset.toString());
+  const username = req.query.user.toString();
+
   const posts = await Post.find()
     .populate("author", ["username"])
     .sort({ createdAt: -1 })
-    .limit(30);
+    .skip(offset)
+    .limit(limit);
 
   const postPromises = posts.map(async (post) => {
     const likeCount = await Likes.countDocuments({ likedPost: post._id });
