@@ -64,22 +64,12 @@ export default function Me() {
     return () => window.removeEventListener("scroll", handleScroll);
   });
 
-  useEffect(() => {
-    if (username) {
-      fetch(`${api}/post?username=${username}`).then((response) => {
-        response.json().then((posts) => {
-          setPosts(posts);
-        });
-      });
-    }
-  }, [username]);
-
   async function FetchPosts() {
     if (noMorePosts) {
       return;
     }
     try {
-      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}`, {
+      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}&username=${username}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

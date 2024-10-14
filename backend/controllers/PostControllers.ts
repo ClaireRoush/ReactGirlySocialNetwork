@@ -57,15 +57,16 @@ export const postGet = async (req: Request, res: Response) => {
 
   const limit = Number.parseInt((req.query.limit || "5").toString()); // ye
   const offset =  Number.parseInt((req.query.offset || "0").toString()); // ye
-  const username = req.query.user ? req.query.user.toString() : null;
+  const username = req.query.username ? req.query.username.toString() : null;
 
   let posts;
 
   if (username) {
-    posts = await Post.find()
+    const userId = await User.findOne({ username: username }).select("_id");
+
+    posts = await Post.find({ author: userId })
       .populate("author", ["username"])
       .sort({ createdAt: -1 })
-      .where({ author: username })
       .skip(offset)
       .limit(limit);
   }

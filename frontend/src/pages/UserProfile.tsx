@@ -39,22 +39,12 @@ export default function UserProfile() {
 
   useEffect(() => {
     FetchPosts();
-  }, [visiblePosts]);
+  }, [visiblePosts, username]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   });
-
-  useEffect(() => {
-    if (username) {
-      fetch(`${api}/post?username=${username}`).then((response) => {
-        response.json().then((posts) => {
-          setPosts(posts);
-        });
-      });
-    }
-  }, [username]);
 
   useEffect(() => {
     if (username === userInfo?.username) {
@@ -68,7 +58,7 @@ export default function UserProfile() {
       return;
     }
     try {
-      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}`, {
+      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}&username=${username}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
