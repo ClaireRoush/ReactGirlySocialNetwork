@@ -6,6 +6,8 @@ import { useParams, Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import Header from "./Header";
 
+const POST_PER_REQUEST = 5;
+
 export default function UserProfile() {
   const { userId } = useParams();
   const [posts, setPosts] = useState([]);
@@ -18,6 +20,9 @@ export default function UserProfile() {
   const [redirect, setRedirect] = useState(false);
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD;
+  const token = localStorage.getItem("token");
+  const [visiblePosts, setVisiblePosts] = useState(5);
+  const [noMorePosts, setNoMorePosts] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(`${api}/userProfile/${userId}`)
@@ -30,6 +35,86 @@ export default function UserProfile() {
         setprofileHashColor(data.profileHashColor);
       });
   }, [userId]);
+
+
+  useEffect(() => {
+    FetchPosts();
+  }, [visiblePosts]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
+
+  useEffect(() => {
+    if (username) {
+      fetch(`${api}/post?username=${username}`).then((response) => {
+        response.json().then((posts) => {
+          setPosts(posts);
+        });
+      });
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (username === userInfo?.username) {
+      setRedirect(true);
+    }
+  }, [username, userInfo]);
+
+
+  async function FetchPosts() {
+    if (noMorePosts) {
+      return;
+    }
+    try {
+      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        mode: "cors",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length < POST_PER_REQUEST) {
+          setNoMorePosts(true);
+        }
+
+        if (data.length === 0) {
+          setNoMorePosts(true);
+          return
+        }
+
+        if (JSON.stringify(data) !== JSON.stringify(posts)) {
+          setPosts([...posts, ...data]);
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка при получении постов:", error);
+    }
+  }
+
+  const loadMorePosts = () => {
+    if (noMorePosts) {
+      return;
+    }
+    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 5);
+  };
+
+  const handleScroll = () => {
+    const { innerHeight, scrollY } = window;
+    const { scrollHeight } = document.documentElement;
+
+    console.log(noMorePosts);
+    console.log(Math.abs(scrollHeight - (scrollY + innerHeight)))
+
+    if (Math.abs(scrollHeight - (scrollY + innerHeight)) < 100) {
+      loadMorePosts();
+    }
+  };
 
   async function AddToContacts(ev: MouseEvent) {
     ev.preventDefault();
@@ -48,22 +133,6 @@ export default function UserProfile() {
       .then(() => {})
       .catch(() => {});
   }
-
-  useEffect(() => {
-    if (username) {
-      fetch(`${api}/post/${username}`).then((response) => {
-        response.json().then((posts) => {
-          setPosts(posts);
-        });
-      });
-    }
-  }, [username]);
-
-  useEffect(() => {
-    if (username === userInfo?.username) {
-      setRedirect(true);
-    }
-  }, [username, userInfo]);
 
   if (redirect) {
     return <Navigate to={"/me"} />;

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import sharp from "sharp";
 import dotenv from "dotenv";
-import Post from "../models/Post";
+import Post, { IPost } from "../models/Post";
 import User from "../models/User";
 import Likes from "../models/Likes";
 import Comments from "../models/Comments";
@@ -55,15 +55,27 @@ export const post = async (req: Request, res: Response) => {
 export const postGet = async (req: Request, res: Response) => {
   const userId = (req as any).user ? (req as any).user.id : null;
 
-  const limit = Number.parseInt(req.query.limit.toString());
-  const offset =  Number.parseInt(req.query.offset.toString());
-  const username = req.query.user.toString();
+  const limit = Number.parseInt((req.query.limit || "5").toString()); // ye
+  const offset =  Number.parseInt((req.query.offset || "0").toString()); // ye
+  const username = req.query.user ? req.query.user.toString() : null;
 
-  const posts = await Post.find()
-    .populate("author", ["username"])
-    .sort({ createdAt: -1 })
-    .skip(offset)
-    .limit(limit);
+  let posts;
+
+  if (username) {
+    posts = await Post.find()
+      .populate("author", ["username"])
+      .sort({ createdAt: -1 })
+      .where({ author: username })
+      .skip(offset)
+      .limit(limit);
+  }
+  else {
+    posts = await Post.find()
+      .populate("author", ["username"])
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit);
+  }
 
   const postPromises = posts.map(async (post) => {
     const likeCount = await Likes.countDocuments({ likedPost: post._id });
