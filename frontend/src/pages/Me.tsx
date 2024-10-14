@@ -58,7 +58,7 @@ export default function Me() {
           <img className={Styles.profileImg} src={`${upload}/${userAvatar}`} />
           <div className={Styles.desc}>
             <h1>{username}</h1>
-            <textarea placeholder={userDesc}></textarea>
+            <textarea readOnly value={userDesc}></textarea>
             <a>{pronouns}</a>
           </div>
         </div>
