@@ -92,7 +92,23 @@ export const getPostByUser = async (req: Request, res: Response) => {
   const findUserInfo = await User.findOne({ username: user });
   const userId = findUserInfo._id;
   const getPosts = await Post.find({ author: userId }).sort({ createdAt: -1 });
-  res.json(getPosts);
+
+  const commentsPromises = getPosts.map(async (post) => {
+    const likeCount = await Likes.countDocuments({ likedPost: post._id });
+    const commentsCount = await Comments.countDocuments({
+      commentedOn: post._id,
+    });
+
+    const postData: any = {
+      ...post.toJSON(),
+      likeCount,
+      commentsCount,
+    };
+    return postData;
+  });
+  const commentsDoc = await Promise.all(commentsPromises);
+
+  res.json(commentsDoc);
 };
 
 export const getCommentsByPostId = async (req: Request, res: Response) => {
