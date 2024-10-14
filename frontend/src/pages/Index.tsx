@@ -70,9 +70,6 @@ export default function IndexPage() {
     const { innerHeight, scrollY } = window;
     const { scrollHeight } = document.documentElement;
 
-    console.log(noMorePosts);
-    console.log(Math.abs(scrollHeight - (scrollY + innerHeight)))
-
     if (Math.abs(scrollHeight - (scrollY + innerHeight)) < 100) {
       loadMorePosts();
     }
