@@ -138,7 +138,7 @@ export default function UserProfile() {
           <div className={Styles.desc}>
             <h1>{username}</h1>
             <a>{pronouns}</a>
-            <textarea placeholder={userDesc}></textarea>
+            <textarea readOnly value={userDesc}></textarea>
           </div>
           <div onClick={handleAddToContacts}>Add to contacts!</div>
         </div>
