@@ -1,4 +1,6 @@
 .fullProfile {
+  top: 0;
+  left: 0;
   position: absolute;
   padding-top: 60px;
   width: 100%;

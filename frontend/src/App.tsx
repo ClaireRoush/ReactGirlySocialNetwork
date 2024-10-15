@@ -8,7 +8,6 @@ import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile";
 import ChangeLog from "./pages/ChangeLog";
 import FullPost from "./pages/FullPost";
-import AboutUs from "./pages/AboutUs";
 import Settings from "./pages/Settings";
 import Me from "./pages/Me";
 import Chat from "./pages/Chat";
@@ -53,7 +52,6 @@ function App() {
           <Route path={"changelog"} element={<ChangeLog />} />
           <Route path={"me"} element={<Me />} />
           <Route path={"/user/:userId"} element={<UserProfile />} />
-          <Route path={"about"} element={<AboutUs />} />
           <Route path={"chat"} element={<Chat />} />
         </Routes>
       </BrowserRouter>
