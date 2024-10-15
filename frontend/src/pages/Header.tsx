@@ -81,9 +81,6 @@ export default function Header() {
             <Link className={Styles.links} to="/chat">
               <a>Messages</a>
             </Link>
-            <Link className={Styles.links} to="/about">
-              <a>About us</a>
-            </Link>
           </>
           {!username && (
             <div className={Styles.headerContainer}>
@@ -93,10 +90,9 @@ export default function Header() {
           )}
         </div>
         <section className={Styles.rightistElements}>
-          <img src={menuSvg} onClick={() => setNavOpen(!navOpen)}></img>
           <Link to={`/me`}>
-          </Link>
           <img src={`${upload}/${userAvatar}`}></img>
+          </Link>
         </section>
 
         <Navbar
