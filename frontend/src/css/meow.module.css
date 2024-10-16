@@ -75,5 +75,10 @@
 }
 
 .commentContainer {
+  margin-top: 5px;
   flex-direction: column;
+}
+
+.commentContainer input {
+  margin-bottom: 10px;
 }

@@ -24,21 +24,21 @@ export default function Comments({
   }, [user]);
 
   return (
-    <div>
-      <section className={Styles.commentsContainer}>
-        <div className={Styles.allComment}>
-          <section className={Styles.userInfo}>
-            <img src={userAvatar}></img>
-            <div>
-              <div className={Styles.userPlusDelete}>
-                <section className={Styles.user}>{user}</section>
-                <section>Delete</section>
-              </div>
-              <div className={Styles.text}>{text}</div>
+    <>
+      <div className={Styles.commentWrapper}>
+        <section className={Styles.userInfo}>
+          <div className={Styles.avatarWrapper}>
+            <img className={Styles.avatar} src={userAvatar} />
+          </div>
+          <div className={Styles.mainWrapper}>
+            <div className={Styles.userWrapper}>
+              <div className={Styles.username}>{user}</div>
+              {isAuthor ? <div>X</div> : <div></div>}
             </div>
-          </section>
-        </div>
-      </section>
-    </div>
+            <a>{text}</a>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

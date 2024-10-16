@@ -1,42 +1,37 @@
-/* This css is REALLY terrible, dont look here please */
-
-.commentsContainer {
+.commentWrapper {
   width: 100%;
   height: auto;
-  box-sizing: border-box;
-  padding: 20px 0px 0px 0px;
+  margin-top: 10px;
 }
 
 .userInfo {
-  width: 100%;
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
 }
 
-.userInfo img {
+.avatar {
   width: 60px;
   height: 60px;
-  border-radius: 90000px;
+  border-radius: 9999px;
 }
 
-.text {
+.mainWrapper {
+  width: 100%;
+}
+
+.mainWrapper a {
+  display: flex;
   overflow-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
-  width: 100%;
-  height: auto;
   margin-left: 10px;
-  margin-top: 20px;
 }
 
-.userPlusDelete {
-  position: absolute;
-  width: 83%;
+.userWrapper {
   display: flex;
+  padding: 0px -10px 0px 5px;
+  width: 100%;
   justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.user {
   margin-left: 10px;
 }
