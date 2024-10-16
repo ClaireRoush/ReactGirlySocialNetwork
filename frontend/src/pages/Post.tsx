@@ -99,6 +99,10 @@ export default function Post({
     }
   }
 
+  const updateCommentCount = async () => {
+    setCommentsCountState((prevCount) => prevCount - 1);
+  };
+
   const deletePost = async () => {
     const response = await fetch(
       process.env.REACT_APP_API_URL + `/post/${_id}`,
@@ -221,10 +225,11 @@ export default function Post({
           {comments.length > 0 ? (
             comments.map((comment) => (
               <Comments
-                key={comment._id}
+                commentId={comment._id}
                 user={comment.user.username}
                 text={comment.text}
                 userAvatar={comment.user.userAvatar}
+                commentState={updateCommentCount}
               />
             ))
           ) : (

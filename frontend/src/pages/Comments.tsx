@@ -3,16 +3,24 @@ import Styles from "../css/Comments.module.css";
 import { Link } from "react-router-dom";
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 
+interface CommentsProps {
+  user: string;
+  text: string;
+  userAvatar: string;
+  commentId: string;
+  commentState: () => Promise<void>;
+}
+
 export default function Comments({
   user,
   text,
   userAvatar,
-}: {
-  user: any;
-  text: string;
-  userAvatar: string;
-}) {
+  commentId,
+  commentState,
+}: CommentsProps) {
+  const token = localStorage.getItem("token");
   const [isAuthor, setIsAuthor] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     const checkIsAuthor = async () => {
@@ -22,6 +30,27 @@ export default function Comments({
     };
     checkIsAuthor();
   }, [user]);
+
+  const deleteComment = async () => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URL + `/post/comments/${commentId}`,
+      {
+        method: "delete",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      }
+    );
+    if (response.ok) {
+      await commentState();
+      setIsDeleted(true);
+    }
+  };
+
+  if (isDeleted) {
+    return null;
+  }
 
   return (
     <>
@@ -33,7 +62,13 @@ export default function Comments({
           <div className={Styles.mainWrapper}>
             <div className={Styles.userWrapper}>
               <div className={Styles.username}>{user}</div>
-              {isAuthor ? <div>X</div> : <div></div>}
+              {isAuthor ? (
+                <div className={Styles.deleteBtn} onClick={deleteComment}>
+                  X
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
             <a>{text}</a>
           </div>

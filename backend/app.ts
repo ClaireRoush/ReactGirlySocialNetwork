@@ -18,6 +18,7 @@ import {
   postLikesById,
   deletePost,
   getPostByUser,
+  deleteComment,
   getCommentsByPostId,
 } from "./controllers/PostControllers";
 import {
@@ -156,6 +157,7 @@ app.get(API_URL + "/userProfile/posts/:User", userProfilePostsByUserId);
 app.post(API_URL + "/post/likes/:id", authenticateToken, postLikesById);
 app.post(API_URL + "/post/comments/:id", authenticateToken, postCommentsById);
 app.delete(API_URL + "/post/:id", authenticateToken, deletePost);
+app.delete(API_URL + "/post/comments/:id", authenticateToken, deleteComment);
 app.post(API_URL + "/messages/:forWho", authenticateToken, postMessagesForWho);
 app.get(API_URL + "/messages/:user", authenticateToken, getMessagesByUser);
 app.post(

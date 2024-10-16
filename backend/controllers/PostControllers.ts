@@ -56,7 +56,7 @@ export const postGet = async (req: Request, res: Response) => {
   const userId = (req as any).user ? (req as any).user.id : null;
 
   const limit = Number.parseInt((req.query.limit || "5").toString()); // ye
-  const offset =  Number.parseInt((req.query.offset || "0").toString()); // ye
+  const offset = Number.parseInt((req.query.offset || "0").toString()); // ye
   const username = req.query.username ? req.query.username.toString() : null;
 
   let posts;
@@ -69,8 +69,7 @@ export const postGet = async (req: Request, res: Response) => {
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit);
-  }
-  else {
+  } else {
     posts = await Post.find()
       .populate("author", ["username"])
       .sort({ createdAt: -1 })
@@ -220,4 +219,20 @@ export const deletePost = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ message: "Something went wrong", error });
   }
+};
+
+export const deleteComment = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
+  const commentId = req.params.id;
+
+  const findPost = await Comments.findById(commentId);
+
+  const authorCheck = findPost.user.toString() === userId;
+
+  if (authorCheck) {
+    await Comments.findByIdAndDelete(commentId);
+  } else {
+    res.json("404, Comment not found, silly!!11!!!");
+  }
+  res.json(authorCheck);
 };
