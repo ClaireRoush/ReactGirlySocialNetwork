@@ -90,9 +90,10 @@ export default function Header() {
           )}
         </div>
         <section className={Styles.rightistElements}>
-          <Link to={`/me`}>
-          <img src={`${upload}/${userAvatar}`}></img>
-          </Link>
+          <img
+            onClick={() => setNavOpen(!navOpen)}
+            src={`${upload}/${userAvatar}`}
+          ></img>
         </section>
 
         <Navbar
