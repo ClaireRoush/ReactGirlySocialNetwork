@@ -6,7 +6,6 @@ import CreatePost from "./CreatePost";
 const api = process.env.REACT_APP_API_URL;
 const POST_PER_REQUEST = 5;
 
-
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
@@ -19,15 +18,20 @@ export default function IndexPage() {
       return;
     }
     try {
-      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        mode: "cors",
-      });
+      const response = await fetch(
+        `${api}/post?limit=${POST_PER_REQUEST}&offset=${
+          visiblePosts - POST_PER_REQUEST
+        }`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          mode: "cors",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         if (data.length < POST_PER_REQUEST) {
@@ -36,7 +40,7 @@ export default function IndexPage() {
 
         if (data.length === 0) {
           setNoMorePosts(true);
-          return
+          return;
         }
 
         if (JSON.stringify(data) !== JSON.stringify(posts)) {
@@ -52,12 +56,10 @@ export default function IndexPage() {
     FetchPosts();
   }, [visiblePosts]);
 
-
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   });
-
 
   const loadMorePosts = () => {
     if (noMorePosts) {

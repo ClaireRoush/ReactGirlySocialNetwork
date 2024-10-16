@@ -73,6 +73,7 @@
   margin-left: auto;
   display: flex;
 }
+
 .commentContainer {
   flex-direction: column;
 }
