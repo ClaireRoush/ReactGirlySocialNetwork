@@ -1,11 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Style from "./index.module.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { UserContext, UserContextProvider } from "./usercontext";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import CreatePost from "./pages/CreatePost";
+import {UserContextProvider} from "./usercontext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
