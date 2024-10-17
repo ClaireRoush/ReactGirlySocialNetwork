@@ -22,7 +22,11 @@ const modules = {
   ],
 };
 
-export default function CreatePost({ updatePosts }: {updatePosts: () => void}) {
+export default function CreatePost({
+  updatePosts,
+}: {
+  updatePosts: () => void;
+}) {
   const [content, setContent] = useState<string>("");
   const [redirect, setRedirect] = useState<boolean>(false);
   const [files, setFiles] = useState<FileList | null>(null);
@@ -69,7 +73,9 @@ export default function CreatePost({ updatePosts }: {updatePosts: () => void}) {
             onChange={setContent}
             className={Styles.quill}
           />
-          <button className={Styles.postButton} type="submit">Post</button>
+          <button className={Styles.postButton} type="submit">
+            Post
+          </button>
         </form>
       </div>
     </div>

@@ -21,6 +21,13 @@
   border-radius: 15px;
 }
 
+.authorWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .author {
   display: flex;
   align-items: center;
@@ -35,6 +42,12 @@
   color: #ffffff;
   font-size: 32px;
   text-decoration: none;
+}
+
+.edit {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .actionsContainer {

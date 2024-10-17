@@ -11,7 +11,7 @@ import Comments from "./Comments";
 const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
 const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
-const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
+const edit = process.env.REACT_APP_STATIC_URL + "/images/edit.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 
@@ -145,7 +145,7 @@ export default function Post({
   };
 
   if (redirect) {
-    return <Navigate to={"/meow"} />;
+    return <Navigate to={`/edit/${_id}`} />;
   }
 
   const handleClick = (event: MouseEvent) => {
@@ -154,14 +154,23 @@ export default function Post({
     }
   };
 
+  async function redirectToEdit() {
+    setRedirect(true);
+  }
+
   return (
     <div className={Styles.post} onClick={handleClick}>
       <div className={Styles.info} onClick={handleClick}>
-        <div className={Styles.author} onClick={handleClick}>
-          <img src={userAvatar} alt="User Avatar"></img>
-          <Link to={`/user/${author.username}`}>
-            <a>{author.username}</a>
-          </Link>
+        <div className={Styles.authorWrapper} onClick={handleClick}>
+          <section className={Styles.author}>
+            <img src={userAvatar} alt="User Avatar"></img>
+            <Link to={`/user/${author.username}`}>
+              <a>{author.username}</a>
+            </Link>
+          </section>
+          <section onClick={redirectToEdit}>
+            {isAuthor && <img className={Styles.edit} src={edit}></img>}
+          </section>
         </div>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
       </div>

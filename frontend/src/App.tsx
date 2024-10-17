@@ -1,6 +1,6 @@
 import React from "react";
 import Styles from "./App.module.css";
-import { Routes, Route, BrowserRouter /* Link */ } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import IndexPage from "./pages/Index";
@@ -46,7 +46,10 @@ function App() {
           <Route path="/" element={<IndexPage />}></Route>
           <Route path={"login"} element={<Login />} />
           <Route path={"register"} element={<Registration />} />
-          <Route path={"create"} element={<CreatePost updatePosts={() => {}}/>} />
+          <Route
+            path={"create"}
+            element={<CreatePost updatePosts={() => {}} />}
+          />
           <Route path={"settings"} element={<Settings />} />
           <Route path={"post/:id"} element={<FullPost />} />
           <Route path={"changelog"} element={<ChangeLog />} />
