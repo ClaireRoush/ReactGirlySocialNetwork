@@ -50,11 +50,8 @@ export default function CreatePost({
     });
     if (response.ok) {
       setRedirect(true);
+      updatePosts();
     }
-  }
-
-  if (redirect) {
-    updatePosts();
   }
 
   return (

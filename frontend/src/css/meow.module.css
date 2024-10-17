@@ -50,6 +50,23 @@
   cursor: pointer;
 }
 
+.editWrapper {
+  box-sizing: border-box;
+}
+
+.editInputsWrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.editInputsWrapper button {
+  border-radius: 5px;
+  margin-top: 10px;
+  width: 100px;
+  height: 23px;
+}
+
 .actionsContainer {
   width: 100%;
   height: 60px;

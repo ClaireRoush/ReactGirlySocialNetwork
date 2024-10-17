@@ -11,9 +11,12 @@ import Comments from "./Comments";
 const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
 const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
-const edit = process.env.REACT_APP_STATIC_URL + "/images/edit.svg";
+const frogEdit = process.env.REACT_APP_STATIC_URL + "/images/edit.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../css/Quill.css";
 
 export default function Post({
   image,
@@ -47,6 +50,22 @@ export default function Post({
   const [likes, setLikes] = useState(likeCount);
   const [isLikedState, setIsLikedState] = useState(isLiked);
   const [commentsCountState, setCommentsCountState] = useState(commentsCount);
+  const [isEdited, setIsEdited] = useState(false);
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link"],
+      ["clean"],
+    ],
+  };
 
   useEffect(() => {
     const checkIsAuthor = async () => {
@@ -144,18 +163,17 @@ export default function Post({
     postLike(ev);
   };
 
-  if (redirect) {
-    return <Navigate to={`/edit/${_id}`} />;
-  }
-
   const handleClick = (event: MouseEvent) => {
     if (event.currentTarget === event.target) {
       setRedirect(false);
     }
   };
 
-  async function redirectToEdit() {
-    setRedirect(true);
+  async function edit() {
+    setIsEdited(true);
+    if (isEdited) {
+      setIsEdited(false);
+    }
   }
 
   return (
@@ -168,15 +186,32 @@ export default function Post({
               <a>{author.username}</a>
             </Link>
           </section>
-          <section onClick={redirectToEdit}>
-            {isAuthor && <img className={Styles.edit} src={edit}></img>}
+          <section onClick={edit}>
+            {isAuthor && <img className={Styles.edit} src={frogEdit}></img>}
           </section>
         </div>
-        <div dangerouslySetInnerHTML={{ __html: content }}></div>
-      </div>
-      <div className={Styles.image}>
-        <img src={image} alt=""></img>
-        <img src={`${uploadURL}/${image}`} alt=""></img>
+        {isEdited ? (
+          <div className={Styles.editWrapper}>
+            <ReactQuill
+              value={content}
+              modules={modules}
+              className={Styles.quill}
+            />
+            <section className={Styles.editInputsWrapper}>
+              <button className={Styles.postButton} type="submit">
+                Post
+              </button>
+            </section>
+          </div>
+        ) : (
+          <>
+            <section dangerouslySetInnerHTML={{ __html: content }}></section>
+            <section className={Styles.image}>
+              <img src={image} alt=""></img>
+              <img src={`${uploadURL}/${image}`} alt=""></img>
+            </section>
+          </>
+        )}
       </div>
 
       <section className={Styles.postActions}>

@@ -52,6 +52,40 @@ export default function IndexPage() {
     }
   }
 
+  const [loading, setLoading] = useState(false);
+
+  async function loadByForce() {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${api}/post?limit=1&offset=0`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        mode: "cors",
+      });
+
+      if (response.ok) {
+        const newPost = await response.json();
+        if (newPost.length > 0) {
+          setPosts((prevPosts) => [newPost[0], ...prevPosts]);
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке нового поста:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadByForce();
+  }, []);
+
   useEffect(() => {
     FetchPosts();
   }, [visiblePosts]);
@@ -83,7 +117,7 @@ export default function IndexPage() {
     <div className="">
       <Header />
       <div className={Styles.createPost}>
-        <CreatePost updatePosts={FetchPosts}></CreatePost>
+        <CreatePost updatePosts={loadByForce}></CreatePost>
       </div>
 
       <div className={Styles.UserProfile}>
