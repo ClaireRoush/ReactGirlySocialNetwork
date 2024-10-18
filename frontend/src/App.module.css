@@ -2,7 +2,7 @@ body {
   min-height: 100vh;
   background-color: #1e1e2e;
   color: aliceblue;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .UserProfile {
