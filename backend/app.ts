@@ -27,6 +27,7 @@ import {
   userProfileByUsername,
   userProfilePostsByUserId,
   changeInfo,
+  changePost,
   settings,
   findUserAvatarByUser,
 } from "./controllers/GetUserInfoControlles";
@@ -152,6 +153,7 @@ app.get(API_URL + "/post", optionalAuthenticateToken, postGet);
 app.get(API_URL + "/post/:user", optionalAuthenticateToken, getPostByUser);
 app.get(API_URL + "/post/:id", getPostId);
 app.get(API_URL + "/post/comments/:id", getCommentsByPostId);
+app.post(API_URL + "/post/edit/:id", changePost);
 app.get(API_URL + "/userProfile/:username", userProfileByUsername);
 app.get(API_URL + "/userProfile/posts/:User", userProfilePostsByUserId);
 app.post(API_URL + "/post/likes/:id", authenticateToken, postLikesById);

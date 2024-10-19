@@ -114,49 +114,26 @@ export const findUserAvatarByUser = async (req: Request, res: Response) => {
 
 export const changePost = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const { title, summary, content } = req.body;
-  const postFind = await Post.findById(id);
+  const { content } = req.body;
 
-  if (!postFind) {
-    return res.status(404).json({ message: "Post not found" });
-  }
   console.log(req.body);
 
-  postFind.title = title || postFind.title;
-  postFind.summary = summary || postFind.summary;
-  postFind.content = content || postFind.content;
-
-  if (req.file) {
-    const { originalname, path: tempPath } = req.file;
-    const parts = originalname.split(".");
-    const ext = parts[parts.length - 1];
-    const newPath = tempPath + "." + ext;
-    const formatMap: { [key: string]: keyof sharp.FormatEnum } = {
-      jpg: "jpeg",
-      jpeg: "jpeg",
-      png: "png",
-      webp: "webp",
-    };
-
-    const format = formatMap[ext];
-
-    await sharp(tempPath)
-      .toFormat(format)
-      .jpeg({ quality: 30 })
-      .toFile(newPath);
-
-    fs.unlink(tempPath, (err) => {
-      if (err) {
-        console.error("Error is", err);
-      }
-    });
-    const relativePath = `uploads/${path.basename(newPath)}`;
-    postFind.image = relativePath;
-  }
-
   try {
+    const postFind = await Post.findById(id);
+
+    if (!postFind) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    postFind.content = content || postFind.content;
+
     await postFind.save();
+
+    return res
+      .status(200)
+      .json({ message: "Post updated successfully", post: postFind });
   } catch (err) {
+    console.error("Error updating post:", err); // For debugging purposes
     return res.status(500).json({ message: "Error updating post", error: err });
   }
 };

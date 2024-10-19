@@ -6,6 +6,9 @@ import React, {
   FormEvent,
 } from "react";
 import Styles from "../css/meow.module.css";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "../css/Quill.css";
 import { Link, Navigate } from "react-router-dom";
 import Comments from "./Comments";
 const commentSvg = process.env.REACT_APP_STATIC_URL + "/images/comment.svg";
@@ -14,13 +17,11 @@ const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const frogEdit = process.env.REACT_APP_STATIC_URL + "/images/edit.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import "../css/Quill.css";
+const api = process.env.REACT_APP_API_URL;
 
 export default function Post({
   image,
-  content,
+  content: forUpdated,
   author,
   _id,
   color,
@@ -51,6 +52,10 @@ export default function Post({
   const [isLikedState, setIsLikedState] = useState(isLiked);
   const [commentsCountState, setCommentsCountState] = useState(commentsCount);
   const [isEdited, setIsEdited] = useState(false);
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [content, setContent] = useState(forUpdated);
+
+  const [updatedContent, setUpdatedContent] = useState<string>("");
 
   const modules = {
     toolbar: [
@@ -138,6 +143,30 @@ export default function Post({
     }
   };
 
+  async function updatePost(ev: FormEvent) {
+    ev.preventDefault();
+
+    const data = {
+      content: updatedContent,
+    };
+
+    const response = await fetch(`${api}/post/edit/${_id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      setContent(updatedContent);
+    } else {
+      console.error("Error during post update:", response.statusText);
+    }
+  }
+
   async function getComments() {
     try {
       if (!showComments && comments.length === 0) {
@@ -192,16 +221,22 @@ export default function Post({
         </div>
         {isEdited ? (
           <div className={Styles.editWrapper}>
-            <ReactQuill
-              value={content}
-              modules={modules}
-              className={Styles.quill}
-            />
-            <section className={Styles.editInputsWrapper}>
-              <button className={Styles.postButton} type="submit">
-                Post
-              </button>
-            </section>
+            <form onSubmit={updatePost}>
+              <ReactQuill
+                value={updatedContent}
+                onChange={(value) => {
+                  console.log("Updated content: ", value);
+                  setUpdatedContent(value);
+                }}
+                modules={modules}
+                className={Styles.quill}
+              />
+              <section className={Styles.editInputsWrapper}>
+                <button className={Styles.postButton} type="submit">
+                  Post
+                </button>
+              </section>
+            </form>
           </div>
         ) : (
           <>
