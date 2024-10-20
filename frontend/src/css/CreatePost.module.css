@@ -24,7 +24,7 @@
   justify-content: space-between;
   align-items: center;
   width: 90%;
-  height: 40px;
+  margin-top: -15px;
 }
 .header a {
   font-size: 35px;
@@ -32,6 +32,7 @@
 }
 
 .attachWrapper {
+  margin-top: -13px;
   width: 10%;
   display: flex;
   align-self: flex-end;
