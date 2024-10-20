@@ -116,9 +116,13 @@ export default function IndexPage() {
   return (
     <div className="">
       <Header />
-      <div className={Styles.createPost}>
-        <CreatePost updatePosts={loadByForce}></CreatePost>
-      </div>
+      {
+        token ?
+          <div className={Styles.createPost}>
+            <CreatePost updatePosts={loadByForce}></CreatePost>
+          </div>
+          : null
+      }
 
       <div className={Styles.UserProfile}>
         <div className={Styles.postContainer}>
