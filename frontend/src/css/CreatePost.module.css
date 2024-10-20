@@ -36,14 +36,11 @@
   width: 10%;
   display: flex;
   align-self: flex-end;
-  justify-content: center;
+  justify-content: right;
   position: absolute;
-  margin-right: -3vw;
 }
 .attach_img {
   width: 50px;
-  display: flex;
-  justify-self: flex-end;
 }
 .attach_button {
   position: absolute;
@@ -60,6 +57,7 @@
   align-self: flex-end;
   margin-top: 50px;
   justify-content: right;
+  margin-right: 5px;
 }
 .post_img {
   height: 50px;
