@@ -48,7 +48,7 @@ export const post = async (req: Request, res: Response) => {
     const relativePath = `uploads/${path.basename(newPath)}`;
     postData.image = relativePath;
   }
-  const postDoc = await Post.create(postData);
+  const postDoc = await (await Post.create(postData)).populate("author", "username");
   res.json({ postDoc });
 };
 
