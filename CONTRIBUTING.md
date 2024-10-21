@@ -63,4 +63,4 @@ It's useless. At least for now
 
 If your PR is related to an issue, push your changes to the branch corresponding to the milestone of that issue (e.g., if the issue is for the 1.9 milestone, push to the `1.9` branch).
 
-If your PR is unrelated to any issue, consider what the changes entail. If it’s a fix (such as a style change or bug fix), then push to the current working branch. However, if it’s a completely new feature, create and push to a new branch.
+If your PR is unrelated to any issue, consider what the changes entail. If it’s a fix (such as a style change or bug fix), then push to the current working branch.
