@@ -29,7 +29,6 @@ export default function Post({
   isLiked,
   likeCount,
   commentsCount,
-  onDelete = () => {},
 }: {
   image: string;
   content: string;
@@ -39,12 +38,11 @@ export default function Post({
   isLiked: boolean;
   likeCount: number;
   commentsCount: number;
-  onDelete?: (postId: string) => void;
 }) {
-  const id = _id;
   const [isAuthor, setIsAuthor] = useState(false);
   const [userAvatar, setUserAvatar] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const token = localStorage.getItem("token");
   const commentsContainerRef = useRef(null);
   const commentsButtonRef = useRef(null);
@@ -143,7 +141,7 @@ export default function Post({
       }
     );
     if (response.ok) {
-      onDelete(_id);
+      setIsDeleted(true);
     }
   };
 
@@ -186,6 +184,10 @@ export default function Post({
     } catch (error) {
       console.error("So silly!!!! Very silly!!!");
     }
+  }
+
+  if (isDeleted) {
+    return null;
   }
 
   const toggleLikes = (ev: MouseEvent) => {

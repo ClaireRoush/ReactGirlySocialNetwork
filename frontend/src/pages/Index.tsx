@@ -12,19 +12,15 @@ export default function IndexPage() {
   const token = localStorage.getItem("token");
   const [visiblePosts, setVisiblePosts] = useState(5);
   const [noMorePosts, setNoMorePosts] = useState<boolean>(false);
-  const [loadingPosts, setLoadingPosts] = useState(false);
-
-  const [postsOffset, setPostsOffset] = useState(0);
 
   async function FetchPosts() {
-    if (noMorePosts || loadingPosts) {
+    if (noMorePosts) {
       return;
     }
-    setLoadingPosts(true);
     try {
       const response = await fetch(
         `${api}/post?limit=${POST_PER_REQUEST}&offset=${
-          visiblePosts - POST_PER_REQUEST + postsOffset
+          visiblePosts - POST_PER_REQUEST
         }`,
         {
           method: "GET",
@@ -38,30 +34,57 @@ export default function IndexPage() {
       );
       if (response.ok) {
         const data = await response.json();
+        if (data.length < POST_PER_REQUEST) {
+          setNoMorePosts(true);
+        }
 
         if (data.length === 0) {
           setNoMorePosts(true);
-          setLoadingPosts(false);
           return;
         }
-        
+
         if (JSON.stringify(data) !== JSON.stringify(posts)) {
           setPosts([...posts, ...data]);
-          setLoadingPosts(false);
         }
       }
     } catch (error) {
       console.error("Ошибка при получении постов:", error);
-    } finally {
-      setLoadingPosts(false);
     }
   }
 
-  async function addUserPostFromData(data: any) {
-    let newData = { ...data, isLiked: false, likeCount: 0, commentsCount: 0 };
-    setPosts((prevPosts) => [newData, ...prevPosts]);
-    setPostsOffset((prevPostsOffset) => prevPostsOffset + 1);
+  const [loading, setLoading] = useState(false);
+
+  async function loadByForce() {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${api}/post?limit=1&offset=0`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        mode: "cors",
+      });
+
+      if (response.ok) {
+        const newPost = await response.json();
+        if (newPost.length > 0) {
+          setPosts((prevPosts) => [newPost[0], ...prevPosts]);
+        }
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке нового поста:", error);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  useEffect(() => {
+    loadByForce();
+  }, []);
 
   useEffect(() => {
     FetchPosts();
@@ -76,10 +99,10 @@ export default function IndexPage() {
     if (noMorePosts) {
       return;
     }
-    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + POST_PER_REQUEST);
+    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 5);
   };
 
-  const handleScroll = (e: Event) => {
+  const handleScroll = () => {
     const { innerHeight, scrollY } = window;
     const { scrollHeight } = document.documentElement;
 
@@ -88,17 +111,13 @@ export default function IndexPage() {
     }
   };
 
-  const handlePostDelete = async (postId: string) => {
-    setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
-  }
-
   const mainColor = "#a6e3a1";
 
   return (
     <div className="">
       <Header />
       <div className={Styles.createPost}>
-        <CreatePost updatePosts={addUserPostFromData}></CreatePost>
+        <CreatePost updatePosts={loadByForce}></CreatePost>
       </div>
 
       <div className={Styles.UserProfile}>
@@ -106,8 +125,9 @@ export default function IndexPage() {
           <div className={Styles.post}>
             {posts.length > 0 &&
               posts
+                .slice(0, visiblePosts)
                 .map((post) => (
-                  <Post key={post._id} {...post} onDelete={handlePostDelete} color={mainColor} />
+                  <Post key={post.id} {...post} color={mainColor} />
                 ))}
           </div>
         </div>
