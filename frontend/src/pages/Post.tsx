@@ -215,8 +215,11 @@ export default function Post({
               <a>{author.username}</a>
             </Link>
           </section>
-          <section onClick={edit}>
+          {/*           <section onClick={edit}>
             {isAuthor && <img className={Styles.edit} src={frogEdit}></img>}
+          </section> */}
+          <section className={Styles.contextMenu}>
+            <div className={Styles.openMenu}></div>
           </section>
         </div>
         {isEdited ? (
