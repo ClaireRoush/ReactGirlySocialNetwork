@@ -27,7 +27,7 @@ const modules = {
 export default function CreatePost({
   updatePosts,
 }: {
-  updatePosts: () => void;
+  updatePosts: (post_data: any) => void;
 }) {
   const [content, setContent] = useState<string>("");
   const [redirect, setRedirect] = useState<boolean>(false);
@@ -52,7 +52,7 @@ export default function CreatePost({
     });
     if (response.ok) {
       setRedirect(true);
-      updatePosts();
+      updatePosts((await response.json()).postDoc);
     }
   }
 
