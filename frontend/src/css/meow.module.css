@@ -49,17 +49,14 @@
   height: 30px;
   cursor: pointer;
 }
-
 .editWrapper {
   box-sizing: border-box;
 }
-
 .editInputsWrapper {
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
-
 .editInputsWrapper button {
   border-radius: 5px;
   margin-top: 10px;
@@ -89,21 +86,23 @@
 }
 .likes img,
 .comment img {
-  height: 40px;
+  height: 35px;
   cursor: pointer;
 }
 
 .chromium {
   height: 35px;
   cursor: pointer;
+  position: absolute;
+  align-items: right;
   margin-top: 20px;
+  margin-left: -40px;
 }
 
 .commentContainer {
   margin-top: 5px;
   flex-direction: column;
 }
-
 .commentContainer input {
   margin-bottom: 10px;
 }
