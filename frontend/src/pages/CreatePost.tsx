@@ -5,7 +5,7 @@ import "../css/Quill.css";
 import { Navigate } from "react-router-dom";
 import Styles from "../css/CreatePost.module.css";
 import Header from "./Header";
-const attach = process.env.REACT_APP_STATIC_URL + "/images/attach_button.svg";
+const attach = process.env.REACT_APP_STATIC_URL + "/images/attach_icon.svg";
 const api = process.env.REACT_APP_API_URL;
 const post = process.env.REACT_APP_STATIC_URL + "/images/post_button.svg";
 
