@@ -140,11 +140,7 @@ export default function UserProfile() {
             <a>{pronouns}</a>
             <textarea readOnly value={userDesc}></textarea>
           </div>
-          {
-            token ?
-              <div onClick={handleAddToContacts}>Add to contacts!</div>
-              : null
-          }
+          <div onClick={handleAddToContacts}>Add to contacts!</div>
         </div>
       </div>
       <div className={Styles.profileInfo}>
