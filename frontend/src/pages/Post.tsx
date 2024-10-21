@@ -188,9 +188,13 @@ export default function Post({
     }
   }
 
-  const toggleLikes = (ev: MouseEvent) => {
+  if (isDeleted) {
+    return null;
+  }
+
+  const toggleLikes = token ? (ev: MouseEvent) => {
     postLike(ev);
-  };
+  } : () => {};  // i fucking hate that
 
   const handleClick = (event: MouseEvent) => {
     if (event.currentTarget === event.target) {
@@ -297,16 +301,20 @@ export default function Post({
           ref={commentsContainerRef}
           style={{ display: showComments ? "flex" : "none" }}
         >
-          <form onSubmit={postComment}>
-            <input
-              className={Styles.postInput}
-              type="text"
-              placeholder="Your comment"
-              value={text}
-              onChange={(ev) => setText(ev.target.value)}
-            ></input>
-            <button>Post!!!</button>
-          </form>
+          {
+            token ?
+            <form onSubmit={postComment}>
+              <input
+                className={Styles.postInput}
+                type="text"
+                placeholder="Your comment"
+                value={text}
+                onChange={(ev) => setText(ev.target.value)}
+              ></input>
+              <button>Post!!!</button>
+            </form>
+            : null
+          }
           {comments.length > 0 ? (
             comments.map((comment) => (
               <Comments
