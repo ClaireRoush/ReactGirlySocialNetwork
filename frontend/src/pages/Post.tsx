@@ -16,7 +16,6 @@ const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const frogEdit = process.env.REACT_APP_STATIC_URL + "/images/edit.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
-const defaultImage = process.env.REACT_APP_STATIC_URL + "/images/image_no_load_small.gif";
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 const api = process.env.REACT_APP_API_URL;
 
@@ -57,7 +56,6 @@ export default function Post({
   const [isEdited, setIsEdited] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
   const [content, setContent] = useState(forUpdated);
-  const [postImage, setImage] = useState(`${uploadURL}/${image}`);
 
   const [updatedContent, setUpdatedContent] = useState<string>("");
 
@@ -188,13 +186,11 @@ export default function Post({
     }
   }
 
-  if (isDeleted) {
-    return null;
-  }
-
-  const toggleLikes = token ? (ev: MouseEvent) => {
-    postLike(ev);
-  } : () => {};  // i fucking hate that
+  const toggleLikes = token
+    ? (ev: MouseEvent) => {
+        postLike(ev);
+      }
+    : () => {}; // i fucking hate that
 
   const handleClick = (event: MouseEvent) => {
     if (event.currentTarget === event.target) {
@@ -245,16 +241,10 @@ export default function Post({
         ) : (
           <>
             <section dangerouslySetInnerHTML={{ __html: content }}></section>
-            {
-              image ?
-                <section className={Styles.image}>
-                  <img
-                  src={`${postImage}`}
-                  onError={() => postImage != defaultImage ? setImage(defaultImage) : null}
-                  alt="No image :(  (error getting image) ((yes, even error image)) (((someone fucked up)))"></img>
-                </section>
-                : null
-            }
+            <section className={Styles.image}>
+              <img src={image} alt=""></img>
+              <img src={`${uploadURL}/${image}`} alt=""></img>
+            </section>
           </>
         )}
       </div>
@@ -301,8 +291,7 @@ export default function Post({
           ref={commentsContainerRef}
           style={{ display: showComments ? "flex" : "none" }}
         >
-          {
-            token ?
+          {token ? (
             <form onSubmit={postComment}>
               <input
                 className={Styles.postInput}
@@ -313,8 +302,7 @@ export default function Post({
               ></input>
               <button>Post!!!</button>
             </form>
-            : null
-          }
+          ) : null}
           {comments.length > 0 ? (
             comments.map((comment) => (
               <Comments

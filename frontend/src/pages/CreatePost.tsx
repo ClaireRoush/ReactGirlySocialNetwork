@@ -5,9 +5,8 @@ import "../css/Quill.css";
 import { Navigate } from "react-router-dom";
 import Styles from "../css/CreatePost.module.css";
 import Header from "./Header";
-const attach = process.env.REACT_APP_STATIC_URL + "/images/attach_button.svg"
+const attach = process.env.REACT_APP_STATIC_URL + "/images/attach_icon.svg";
 const api = process.env.REACT_APP_API_URL;
-const post= process.env.REACT_APP_STATIC_URL + "/images/post_button.svg"
 
 const modules = {
   toolbar: [
@@ -66,7 +65,11 @@ export default function CreatePost({
           </section>
           <section className={Styles.attachWrapper}>
             <img src={attach} className={Styles.attach_img}></img>
-            <input type="file" onChange={(ev) => setFiles(ev.target.files)} className={Styles.attach_button}></input>
+            <input
+              type="file"
+              onChange={(ev) => setFiles(ev.target.files)}
+              className={Styles.attach_button}
+            ></input>
           </section>
           <ReactQuill
             value={content}
@@ -74,12 +77,9 @@ export default function CreatePost({
             onChange={setContent}
             className={Styles.quill}
           />
-          <section className={Styles.postWrapper}>
-            <img src={post} className={Styles.post_img}></img>
-            <button className={Styles.post_button} type="submit">
-              Post
-            </button>
-          </section>
+          <button className={Styles.postButton} type="submit">
+            Post
+          </button>
         </form>
       </div>
     </div>

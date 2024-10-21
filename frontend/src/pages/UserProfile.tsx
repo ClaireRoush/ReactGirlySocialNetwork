@@ -36,7 +36,6 @@ export default function UserProfile() {
       });
   }, [userId]);
 
-
   useEffect(() => {
     FetchPosts();
   }, [visiblePosts, username]);
@@ -52,21 +51,25 @@ export default function UserProfile() {
     }
   }, [username, userInfo]);
 
-
   async function FetchPosts() {
     if (noMorePosts) {
       return;
     }
     try {
-      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}&username=${username}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        mode: "cors",
-      });
+      const response = await fetch(
+        `${api}/post?limit=${POST_PER_REQUEST}&offset=${
+          visiblePosts - POST_PER_REQUEST
+        }&username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          mode: "cors",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         if (data.length < POST_PER_REQUEST) {
@@ -75,7 +78,7 @@ export default function UserProfile() {
 
         if (data.length === 0) {
           setNoMorePosts(true);
-          return
+          return;
         }
 
         if (JSON.stringify(data) !== JSON.stringify(posts)) {
@@ -99,7 +102,7 @@ export default function UserProfile() {
     const { scrollHeight } = document.documentElement;
 
     console.log(noMorePosts);
-    console.log(Math.abs(scrollHeight - (scrollY + innerHeight)))
+    console.log(Math.abs(scrollHeight - (scrollY + innerHeight)));
 
     if (Math.abs(scrollHeight - (scrollY + innerHeight)) < 100) {
       loadMorePosts();
@@ -140,11 +143,9 @@ export default function UserProfile() {
             <a>{pronouns}</a>
             <textarea readOnly value={userDesc}></textarea>
           </div>
-          {
-            token ?
-              <div onClick={handleAddToContacts}>Add to contacts!</div>
-              : null
-          }
+          {token ? (
+            <div onClick={handleAddToContacts}>Add to contacts!</div>
+          ) : null}
         </div>
       </div>
       <div className={Styles.profileInfo}>

@@ -38,7 +38,6 @@ import {
   getContacts,
 } from "./controllers/ChatControllers";
 import { getNotifications } from "./controllers/NotificationControllers";
-import exp from "constants";
 
 dotenv.config();
 dotenv.config({ path: `.env.local`, override: true });
@@ -180,7 +179,6 @@ io.on;
 if (process.env.RUNNING_LOCALLY === "1") {
   app.use("/uploads", express.static(path.join("../uploads")));
 }
-
 
 server.listen(process.env.PORT, () => {
   console.log("Meeeeow");

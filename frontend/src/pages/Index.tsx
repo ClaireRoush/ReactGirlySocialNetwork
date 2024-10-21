@@ -44,7 +44,7 @@ export default function IndexPage() {
           setLoadingPosts(false);
           return;
         }
-        
+
         if (JSON.stringify(data) !== JSON.stringify(posts)) {
           setPosts([...posts, ...data]);
           setLoadingPosts(false);
@@ -90,29 +90,31 @@ export default function IndexPage() {
 
   const handlePostDelete = async (postId: string) => {
     setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
-  }
+  };
 
   const mainColor = "#a6e3a1";
 
   return (
     <div className="">
       <Header />
-      {
-        token ?
-          <div className={Styles.createPost}>
-            <CreatePost updatePosts={loadByForce}></CreatePost>
-          </div>
-          : null
-      }
+      {token ? (
+        <div className={Styles.createPost}>
+          <CreatePost updatePosts={addUserPostFromData}></CreatePost>
+        </div>
+      ) : null}
 
       <div className={Styles.UserProfile}>
         <div className={Styles.postContainer}>
           <div className={Styles.post}>
             {posts.length > 0 &&
-              posts
-                .map((post) => (
-                  <Post key={post._id} {...post} onDelete={handlePostDelete} color={mainColor} />
-                ))}
+              posts.map((post) => (
+                <Post
+                  key={post._id}
+                  {...post}
+                  onDelete={handlePostDelete}
+                  color={mainColor}
+                />
+              ))}
           </div>
         </div>
       </div>
