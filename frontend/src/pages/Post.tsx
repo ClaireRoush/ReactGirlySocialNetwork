@@ -16,6 +16,10 @@ const likeSvg = process.env.REACT_APP_STATIC_URL + "/images/like.svg";
 const chromiumSvg = process.env.REACT_APP_STATIC_URL + "/images/chromium.svg";
 const frogEdit = process.env.REACT_APP_STATIC_URL + "/images/edit.svg";
 const frogLike = process.env.REACT_APP_STATIC_URL + "/images/frogLike.svg";
+const contextDots =
+  process.env.REACT_APP_STATIC_URL + "/images/contextDots.svg";
+const copySvg = process.env.REACT_APP_STATIC_URL + "/images/copy.svg";
+
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 const api = process.env.REACT_APP_API_URL;
 
@@ -56,8 +60,9 @@ export default function Post({
   const [isEdited, setIsEdited] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
   const [content, setContent] = useState(forUpdated);
-
   const [updatedContent, setUpdatedContent] = useState<string>("");
+  const [contextOpen, setContextOpen] = useState(false);
+  const [marginRight, setMarginRight] = useState(140);
 
   const modules = {
     toolbar: [
@@ -127,6 +132,14 @@ export default function Post({
 
   const updateCommentCount = async () => {
     setCommentsCountState((prevCount) => prevCount - 1);
+  };
+
+  const contextMenuOpen = async () => {
+    setContextOpen(true);
+    setMarginRight(marginRight === 140 ? 500 : 140);
+    if (contextOpen) {
+      setContextOpen(false);
+    }
   };
 
   const deletePost = async () => {
@@ -215,11 +228,23 @@ export default function Post({
               <a>{author.username}</a>
             </Link>
           </section>
-          {/*           <section onClick={edit}>
-            {isAuthor && <img className={Styles.edit} src={frogEdit}></img>}
-          </section> */}
           <section className={Styles.contextMenu}>
-            <div className={Styles.openMenu}></div>
+            <div
+              className={Styles.closedMenu}
+              style={{ marginRight: `${marginRight}px` }}
+            ></div>
+            <div className={Styles.contextItem}>
+              <img src={copySvg} />
+            </div>
+            <div className={Styles.openMenu}>
+              <div className={Styles.contextItem} onClick={edit}>
+                {isAuthor && <img className={Styles.edit} src={frogEdit} />}
+              </div>
+              <div className={Styles.contextItem} onClick={deletePost}>
+                {isAuthor && <img src={chromiumSvg} />}
+              </div>
+            </div>
+            <img src={contextDots} onClick={contextMenuOpen}></img>
           </section>
         </div>
         {isEdited ? (
@@ -275,17 +300,6 @@ export default function Post({
                   ref={commentsButtonRef}
                 />
               </div>
-            </div>
-            <div className={Styles.chromiumContainer}>
-              {isAuthor && (
-                <>
-                  <img
-                    className={Styles.chromium}
-                    src={chromiumSvg}
-                    onClick={deletePost}
-                  />
-                </>
-              )}
             </div>
           </div>
         </section>

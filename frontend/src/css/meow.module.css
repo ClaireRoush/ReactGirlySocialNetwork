@@ -106,3 +106,37 @@
 .commentContainer input {
   margin-bottom: 10px;
 }
+
+.contextMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contextMenu img {
+  z-index: 99;
+  cursor: pointer;
+  width: 46px; /* Я дизайнерша и я так решила!!! */
+}
+
+.openMenu {
+  font-size: 20px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.closedMenu {
+  width: 250px;
+  margin-right: 120px;
+  height: 40px;
+  position: absolute;
+  transition: margin-right 0.4s ease-in-out;
+  background-color: #181825;
+}
+
+.contextItem img {
+  width: 30px;
+  height: 30px;
+}
