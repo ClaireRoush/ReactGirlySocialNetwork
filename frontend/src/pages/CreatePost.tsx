@@ -58,7 +58,7 @@ export default function CreatePost({
 
   return (
     <div>
-      <Header />
+      <Header color={"#a6e3a1"} />
       <div className={Styles.wrapper}>
         <form onSubmit={createNewPost} className={Styles.quillContainer}>
           <section className={Styles.header}>

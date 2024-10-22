@@ -1,4 +1,10 @@
-import React, { FormEvent, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { UserContext } from "../usercontext";
 import { io } from "socket.io-client";
 import Styles from "../css/Chat.module.css";
@@ -21,9 +27,7 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io(
-      process.env.REACT_APP_API_URL + ``
-    );
+    const newSocket = io(process.env.REACT_APP_API_URL + ``);
     setSocket(newSocket);
 
     newSocket.on("chat message", (msg) => {
@@ -129,7 +133,7 @@ export default function Chat() {
 
   return (
     <div>
-      <Header></Header>
+      <Header color={"#FFFFFF"} />
 
       <div className={Styles.wrapperForAll}>
         <section className={Styles.header}>

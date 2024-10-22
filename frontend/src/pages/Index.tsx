@@ -96,7 +96,7 @@ export default function IndexPage() {
 
   return (
     <div className="">
-      <Header />
+      <Header color={"#a6e3a1"} />
       {token ? (
         <div className={Styles.createPost}>
           <CreatePost updatePosts={addUserPostFromData}></CreatePost>

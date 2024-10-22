@@ -69,15 +69,20 @@ export default function Me() {
       return;
     }
     try {
-      const response = await fetch(`${api}/post?limit=${POST_PER_REQUEST}&offset=${visiblePosts - POST_PER_REQUEST}&username=${username}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        mode: "cors",
-      });
+      const response = await fetch(
+        `${api}/post?limit=${POST_PER_REQUEST}&offset=${
+          visiblePosts - POST_PER_REQUEST
+        }&username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          mode: "cors",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         if (data.length < POST_PER_REQUEST) {
@@ -86,7 +91,7 @@ export default function Me() {
 
         if (data.length === 0) {
           setNoMorePosts(true);
-          return
+          return;
         }
 
         if (JSON.stringify(data) !== JSON.stringify(posts)) {
@@ -110,17 +115,16 @@ export default function Me() {
     const { scrollHeight } = document.documentElement;
 
     console.log(noMorePosts);
-    console.log(Math.abs(scrollHeight - (scrollY + innerHeight)))
+    console.log(Math.abs(scrollHeight - (scrollY + innerHeight)));
 
     if (Math.abs(scrollHeight - (scrollY + innerHeight)) < 100) {
       loadMorePosts();
     }
   };
 
-
   return (
     <div className={Styles.fullProfile}>
-      <Header></Header>
+      <Header color={"#a6e3a1"} />
 
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>

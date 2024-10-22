@@ -9,7 +9,7 @@ const upload = process.env.REACT_APP_UPLOAD;
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const menuSvg = process.env.REACT_APP_STATIC_URL + "/images/menu.svg";
 
-export default function Header() {
+export default function Header({ color }: { color: string }) {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [userAvatar, setUserAvatar] = useState<string>("");
   const [navOpen, setNavOpen] = useState(false);
@@ -69,7 +69,10 @@ export default function Header() {
 
   return (
     <div className={Styles.header}>
-      <div className={Styles.headerContainer}>
+      <div
+        className={Styles.headerContainer}
+        style={{ borderBottom: `${color} 4px solid` }}
+      >
         <div className={Styles.logo}>
           <img src={Frog} alt="RGSN"></img>
         </div>

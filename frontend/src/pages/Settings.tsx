@@ -62,7 +62,7 @@ export default function Settings() {
 
   return (
     <div className={Styles.wrapper}>
-      <Header />
+      <Header color={"#a6e3a1"} />
       <div className={Styles.textAreas}>
         <form onSubmit={changeInfo}>
           <input

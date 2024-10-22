@@ -134,7 +134,7 @@ export default function UserProfile() {
   return (
     /* НАСРАНО */
     <div className={Styles.fullProfile}>
-      <Header></Header>
+      <Header color={"#a6e3a1"} />
       <div className={Styles.upperProfileContainer}>
         <div className={Styles.upperProfile}>
           <img className={Styles.profileImg} src={`${upload}/${userAvatar}`} />
