@@ -43,9 +43,11 @@ export default function () {
 
   return (
     <div>
-      <Header color={"#FFFFFF"} />
+      <Header color={"#a6e3a1"} />
       <section className={Styles.postWrapper}>
-        {post ? <Post {...post} /> : <p>Loading post...</p>}
+        <div className={Styles.post}>
+          {post ? <Post {...post} /> : <p>Loading post...</p>}
+        </div>
       </section>
     </div>
   );
