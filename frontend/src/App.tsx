@@ -51,7 +51,7 @@ function App() {
             element={<CreatePost updatePosts={() => {}} />}
           />
           <Route path={"settings"} element={<Settings />} />
-          <Route path={"post/:id"} element={<FullPost />} />
+          <Route path={"/post/:id"} element={<FullPost />} />
           <Route path={"changelog"} element={<ChangeLog />} />
           <Route path={"me"} element={<Me />} />
           <Route path={"/user/:userId"} element={<UserProfile />} />

@@ -13,7 +13,7 @@ import { register, login, logout } from "./controllers/AuthControllers";
 import {
   post,
   postGet,
-  getPostId,
+  getPostById,
   postCommentsById,
   postLikesById,
   deletePost,
@@ -151,7 +151,7 @@ app.post(
 
 app.get(API_URL + "/post", optionalAuthenticateToken, postGet);
 app.get(API_URL + "/post/:user", optionalAuthenticateToken, getPostByUser);
-app.get(API_URL + "/post/:id", getPostId);
+app.get(API_URL + "/post/find/:id", getPostById);
 app.get(API_URL + "/post/comments/:id", getCommentsByPostId);
 app.post(API_URL + "/post/edit/:id", changePost);
 app.get(API_URL + "/userProfile/:username", userProfileByUsername);

@@ -48,7 +48,9 @@ export const post = async (req: Request, res: Response) => {
     const relativePath = `uploads/${path.basename(newPath)}`;
     postData.image = relativePath;
   }
-  const postDoc = await (await Post.create(postData)).populate("author", "username");
+  const postDoc = await (
+    await Post.create(postData)
+  ).populate("author", "username");
   res.json({ postDoc });
 };
 
@@ -105,6 +107,30 @@ export const postGet = async (req: Request, res: Response) => {
   res.json(newPosts);
 };
 
+export const getPostById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const post = await Post.findById(id).populate("author", ["username"]);
+
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  const likeCount = await Likes.countDocuments({ likedPost: post._id });
+  const commentsCount = await Comments.countDocuments({
+    commentedOn: post._id,
+  });
+
+  // Собираем данные для ответа
+  const postData = {
+    ...post.toJSON(),
+    likeCount,
+    commentsCount,
+  };
+
+  res.json(postData);
+};
+
 export const getPostByUser = async (req: Request, res: Response) => {
   const user = req.params.user;
   const findUserInfo = await User.findOne({ username: user });
@@ -135,12 +161,6 @@ export const getCommentsByPostId = async (req: Request, res: Response) => {
     commentedOn: id,
   }).populate("user", "username userAvatar");
   res.json(findComments);
-};
-
-export const getPostId = async (req: Request, res: Response) => {
-  let id = req.params.id;
-  const postId = await Post.findById(id);
-  res.json(postId);
 };
 
 export const postCommentsById = async (req: Request, res: Response) => {
