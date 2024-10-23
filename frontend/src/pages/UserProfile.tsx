@@ -37,7 +37,9 @@ export default function UserProfile() {
   }, [userId]);
 
   useEffect(() => {
-    FetchPosts();
+    if (username) {
+      FetchPosts();
+    }
   }, [visiblePosts, username]);
 
   useEffect(() => {

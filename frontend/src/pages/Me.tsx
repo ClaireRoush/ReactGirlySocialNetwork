@@ -56,8 +56,10 @@ export default function Me() {
   }, [username]);
 
   useEffect(() => {
-    FetchPosts();
-  }, [visiblePosts]);
+    if (username) {
+      FetchPosts();
+    }
+  }, [visiblePosts, username]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
