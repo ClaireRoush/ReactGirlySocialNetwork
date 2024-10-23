@@ -114,6 +114,8 @@ export const findUserAvatarByUser = async (req: Request, res: Response) => {
 
 export const changePost = async (req: Request, res: Response) => {
   const id = req.params.id;
+  const userId = req.user.id;
+
   const { content } = req.body;
 
   console.log(req.body);
@@ -123,6 +125,10 @@ export const changePost = async (req: Request, res: Response) => {
 
     if (!postFind) {
       return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (postFind.author.toString() !== userId) {
+      return res.status(403).json({ message: "You are not an author1!!!" });
     }
 
     postFind.content = content || postFind.content;
