@@ -22,6 +22,7 @@ const copySvg = process.env.REACT_APP_STATIC_URL + "/images/copy.svg";
 
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 const api = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_URL;
 
 export default function Post({
   image,
@@ -233,7 +234,14 @@ export default function Post({
               className={Styles.closedMenu}
               style={{ marginRight: `${marginRight}px` }}
             ></div>
-            <div className={Styles.contextItem}>
+            <div
+              className={Styles.contextItem}
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `${url}/${author.username}/${_id}`
+                );
+              }}
+            >
               <img src={copySvg} />
             </div>
             <div className={Styles.openMenu}>
