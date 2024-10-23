@@ -104,7 +104,10 @@ export default function IndexPage() {
       ) : null}
 
       <div className={Styles.UserProfile}>
-        <div className={Styles.postContainer}>
+        <div
+          className={Styles.postContainer}
+          style={!token ? { marginTop: "90px" } : null}
+        >
           <div className={Styles.post}>
             {posts.length > 0 &&
               posts.map((post) => (
