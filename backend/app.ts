@@ -44,10 +44,10 @@ dotenv.config({ path: `.env.local`, override: true });
 const API_URL = process.env.BASE_API_URL || "";
 
 const uploadMiddleware = multer({
-  dest: path.join(__dirname, "../uploads/"),
+  dest: path.join(__dirname, "/uploads/"),
 });
 const uploadAvatarMiddleware = multer({
-  dest: path.join(__dirname, "../uploads/userAvatars/"),
+  dest: path.join(__dirname, "/uploads/userAvatars/"),
 });
 
 const secret = process.env.JWT_SECRET;
@@ -96,7 +96,6 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-app.use("/uploads", express.static(__dirname + "/uploads"));
 
 mongoose.connect(process.env.MONGO_URL);
 
@@ -177,7 +176,7 @@ app.get(API_URL + "/notifications", authenticateToken, getNotifications);
 io.on;
 
 if ((process.env.RUNNING_LOCALLY = "1")) {
-  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+  app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 }
 
 server.listen(process.env.PORT, () => {
