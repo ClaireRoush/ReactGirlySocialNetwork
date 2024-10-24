@@ -19,6 +19,7 @@
 .navBar {
   grid-area: navbar;
   border-right: #a6e3a1 2px solid;
+  width: 20vw;
   background-color: #181825;
   padding: 3px;
 }
@@ -33,26 +34,17 @@
   display: flex;
   align-items: center;
 }
-
-.contactItem {
-  cursor: pointer;
-}
-
-.contactItem:hover {
-  color: #a6e3a1;
-}
-
 .header img {
   border-radius: 10px;
   width: 60px;
   height: 60px;
 }
 
-.messages {
-  grid-area: messages;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
+.contactItem {
+  cursor: pointer;
+}
+.contactItem:hover {
+  color: #a6e3a1;
 }
 
 .inputWrapper {
@@ -63,7 +55,6 @@
   align-items: center;
   margin-top: auto;
 }
-
 .inputWrapper input {
   color: #a6e3a1;
   background-color: #181825;
@@ -76,11 +67,9 @@
   box-shadow: none;
   padding: 10px;
 }
-
 .inputWrapper input:focus {
   outline: 4px solid #a6e3a1;
 }
-
 .inputWrapper input:not(:focus) {
   outline: none;
 }
@@ -92,12 +81,10 @@
   font-size: 45px;
   cursor: pointer;
 }
-
 .user:hover {
   transition: 0.1s;
   color: #a6e3a1;
 }
-
 .user img {
   border-radius: 5px;
   width: 40px;
@@ -108,8 +95,11 @@
   overflow-y: scroll;
   padding-bottom: 20px;
 }
-
 .messages {
+  grid-area: messages;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   padding: 0px 10px 10px 10px;
 }
@@ -117,7 +107,6 @@
 .message:first-child {
   margin-top: 0px;
 }
-
 .message {
   height: auto;
   padding: 0;
@@ -125,11 +114,15 @@
   margin-top: 20px;
   display: flex;
 }
-
 .messageContent {
   font-size: 20px;
   display: flex;
   flex-direction: column;
+}
+.message img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
 }
 
 .senderInfo {
@@ -146,10 +139,4 @@
   overflow-wrap: break-word;
   height: auto;
   margin-bottom: 10px;
-}
-
-.message img {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
 }
