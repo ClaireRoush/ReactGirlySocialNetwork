@@ -4,7 +4,7 @@ import { UserContext } from "../usercontext";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 const api = process.env.REACT_APP_API_URL;
-const upload = process.env.REACT_APP_UPLOAD;
+const upload = process.env.REACT_APP_UPLOAD_URL;
 
 const Frog = process.env.REACT_APP_STATIC_URL + "/images/svFROG.svg";
 const menuSvg = process.env.REACT_APP_STATIC_URL + "/images/menu.svg";

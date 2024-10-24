@@ -67,13 +67,13 @@ export const postGet = async (req: Request, res: Response) => {
     const userId = await User.findOne({ username: username }).select("_id");
 
     posts = await Post.find({ author: userId })
-      .populate("author", ["username"])
+      .populate("author", ["username", "userAvatar"])
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit);
   } else {
     posts = await Post.find()
-      .populate("author", ["username"])
+      .populate("author", ["username", "userAvatar"])
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit);

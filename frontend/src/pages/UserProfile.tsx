@@ -19,7 +19,7 @@ export default function UserProfile() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [redirect, setRedirect] = useState(false);
   const api = process.env.REACT_APP_API_URL;
-  const upload = process.env.REACT_APP_UPLOAD;
+  const upload = process.env.REACT_APP_UPLOAD_URL;
   const token = localStorage.getItem("token");
   const [visiblePosts, setVisiblePosts] = useState(5);
   const [noMorePosts, setNoMorePosts] = useState<boolean>(false);

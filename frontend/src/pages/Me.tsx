@@ -15,7 +15,7 @@ export default function Me() {
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const token = localStorage.getItem("token");
   const api = process.env.REACT_APP_API_URL;
-  const upload = process.env.REACT_APP_UPLOAD;
+  const upload = process.env.REACT_APP_UPLOAD_URL;
   const [visiblePosts, setVisiblePosts] = useState(5);
   const [noMorePosts, setNoMorePosts] = useState<boolean>(false);
   const { userInfo, setUserInfo } = useContext(UserContext);

@@ -17,7 +17,7 @@ const Navbar = forwardRef(
     const [visible, setVisible] = useState(false);
     const [showNotifications, setShowNotifications] = useState("main");
     const { userInfo, setUserInfo } = useContext<UserContextType>(UserContext);
-    const upload = process.env.REACT_APP_UPLOAD;
+    const upload = process.env.REACT_APP_UPLOAD_URL;
 
     useEffect(() => {
       if (navOpen) {

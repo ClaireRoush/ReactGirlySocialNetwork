@@ -176,8 +176,8 @@ app.get(API_URL + "/notifications", authenticateToken, getNotifications);
 
 io.on;
 
-if (process.env.RUNNING_LOCALLY === "1") {
-  app.use("/uploads", express.static(path.join("../uploads")));
+if ((process.env.RUNNING_LOCALLY = "1")) {
+  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 }
 
 server.listen(process.env.PORT, () => {

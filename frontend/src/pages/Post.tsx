@@ -226,7 +226,10 @@ export default function Post({
       <div className={Styles.info} onClick={handleClick}>
         <div className={Styles.authorWrapper} onClick={handleClick}>
           <section className={Styles.author}>
-            <img src={userAvatar} alt="User Avatar"></img>
+            <img
+              src={`${uploadURL}/${author.userAvatar}`}
+              alt="User Avatar"
+            ></img>
             <Link to={`/user/${author.username}`}>
               <a>{author.username}</a>
             </Link>

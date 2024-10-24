@@ -1,16 +1,15 @@
 services:
-
   mongo:
     image: mongo
     restart: always
     # environment:
-      # MONGO_INITDB_ROOT_USERNAME: root
-      # MONGO_INITDB_ROOT_PASSWORD: example
+    # MONGO_INITDB_ROOT_USERNAME: root
+    # MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - 27017:27017
-    
+
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile.prod
 
@@ -35,12 +34,11 @@ services:
       - frontend_static:/usr/share/nginx/html
 
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile.prod
     depends_on:
       - mongo
-
 
 volumes:
   frontend_static:
