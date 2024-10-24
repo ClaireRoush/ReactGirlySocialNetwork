@@ -73,3 +73,15 @@
   color: #f3f4ae;
   transition: 0.5s;
 }
+
+.ifNotLoggedIn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ifNotLoggedInText {
+  margin-right: 10px;
+  color: #cdf4da;
+  text-decoration: none;
+}

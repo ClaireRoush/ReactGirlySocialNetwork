@@ -75,36 +75,42 @@ export default function Header({ color }: { color: string }) {
         <div className={Styles.logo}>
           <img src={Frog} alt="RGSN"></img>
         </div>
-        <div className={Styles.leftistElements}>
-          <Link className={Styles.links} to="/">
-            <a>Home</a>
-          </Link>
+        {username ? (
           <>
-            <Link className={Styles.links} to="/chat">
-              <a>Messages</a>
-            </Link>
-          </>
-          {!username && (
-            <div className={Styles.headerContainer}>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+            <div className={Styles.leftistElements}>
+              <Link className={Styles.links} to="/">
+                <a>Home</a>
+              </Link>
+              <>
+                <Link className={Styles.links} to="/chat">
+                  <a>Messages</a>
+                </Link>
+              </>
             </div>
-          )}
-        </div>
-        <section className={Styles.rightistElements}>
-          <img
-            onClick={() => setNavOpen(!navOpen)}
-            src={`${upload}/${userAvatar}`}
-          ></img>
-        </section>
+            <section className={Styles.rightistElements}>
+              <img
+                onClick={() => setNavOpen(!navOpen)}
+                src={`${upload}/${userAvatar}`}
+              ></img>
+            </section>
 
-        {userInfo && (
-          <Navbar
-            ref={menuRef}
-            navOpen={navOpen}
-            username={userInfo.username}
-            userAvatar={userAvatar}
-          />
+            {userInfo && (
+              <Navbar
+                ref={menuRef}
+                navOpen={navOpen}
+                username={userInfo.username}
+                userAvatar={userAvatar}
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <section className={Styles.ifNotLoggedIn}>
+              <Link to={"/login"} className={Styles.ifNotLoggedInText}>
+                Login
+              </Link>
+            </section>
+          </>
         )}
       </div>
     </div>
