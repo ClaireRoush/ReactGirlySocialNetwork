@@ -1,8 +1,16 @@
 .postWrapper {
+  top: 0;
+  left: 0;
   position: absolute;
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+}
+
+.post {
+  margin-top: 100px;
+  z-index: 30;
 }

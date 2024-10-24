@@ -13,8 +13,7 @@ export default function Header({ color }: { color: string }) {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [userAvatar, setUserAvatar] = useState<string>("");
   const [navOpen, setNavOpen] = useState(false);
-
-  let menuRef: any = useRef(); // TODO: more junk
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -99,12 +98,14 @@ export default function Header({ color }: { color: string }) {
           ></img>
         </section>
 
-        <Navbar
-          ref={menuRef}
-          navOpen={navOpen}
-          username={userInfo.username}
-          userAvatar={userAvatar}
-        />
+        {userInfo && (
+          <Navbar
+            ref={menuRef}
+            navOpen={navOpen}
+            username={userInfo.username}
+            userAvatar={userAvatar}
+          />
+        )}
       </div>
     </div>
   );
