@@ -17,6 +17,7 @@ These labels can be specified when creating an issue. The only required label is
 - ✨ **enhancement**: Requests for new features or improvements.
 - 🔄 **refactoring**: For programmers: rewriting code for better performance or readability.
 - ❓ **question**: Literally any question.
+- 🖥️ **dev**: For programmers: change something in development workflow. Config file for development tools, documentation etc.
   
 #### Priority Labels
 
