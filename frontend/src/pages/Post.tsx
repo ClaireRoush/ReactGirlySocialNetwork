@@ -81,15 +81,17 @@ export default function Post({
   };
 
   useEffect(() => {
-    const checkIsAuthor = async () => {
-      setIsAuthor(
-        author.username ===
-          JSON.parse(localStorage.getItem("userInfo")).username
-      );
+    if (token) {
+      const checkIsAuthor = async () => {
+        setIsAuthor(
+          author.username ===
+            JSON.parse(localStorage.getItem("userInfo")).username
+        );
+      };
       // TODO: maybe save username in localStorage?
       // Isn't it be always in localStorage???
-    };
-    checkIsAuthor();
+      checkIsAuthor();
+    }
   }, [_id, token]);
 
   const postLike = async (ev: MouseEvent) => {
