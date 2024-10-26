@@ -28,8 +28,8 @@ function Notifications() {
   return (
     <div className={Styles.notificationsContainer}>
       <div className={Styles.header}>
-        <a>Notifications</a>
-        <a>Mark as read</a>
+        <a>notifications</a>
+        <a>mark as read</a>
       </div>
       <div className={Styles.main}>
         {notifications.map((notifications) => (

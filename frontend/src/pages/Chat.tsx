@@ -143,7 +143,7 @@ export default function Chat() {
               <div>{selectedContact.username}</div>
             </>
           ) : (
-            <div>Select a contact to start chatting</div>
+            <div></div>
           )}
         </section>
 
@@ -160,7 +160,7 @@ export default function Chat() {
               </div>
             ))
           ) : (
-            <p>No contacts found.</p>
+            <p>you dont have any contacts :(</p>
           )}
         </section>
 
@@ -190,7 +190,7 @@ export default function Chat() {
                 </div>
               ))
             ) : (
-              <p>No messages to display.</p>
+              <p></p>
             )}
           </div>
 

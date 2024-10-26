@@ -33,12 +33,13 @@
 }
 
 .userInfo {
+  color: #181825;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: rgb(166, 227, 161);
   border-radius: 20px;
-  padding-bottom: 20px;
+  padding: 10px;
 }
 .userInfo img {
   border-radius: 10px;

@@ -62,7 +62,7 @@ export default function CreatePost({
       <div className={Styles.wrapper}>
         <form onSubmit={createNewPost} className={Styles.quillContainer}>
           <section className={Styles.header}>
-            <a>Wanna post something? :3</a>
+            <a>wanna post something? :3</a>
           </section>
           <section className={Styles.attachWrapper}>
             <img src={attach} className={Styles.attach_img}></img>

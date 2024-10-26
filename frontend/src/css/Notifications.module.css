@@ -5,13 +5,13 @@
 
 .header {
   display: flex;
-  font-size: 25px;
+  font-size: 20px;
   justify-content: space-between;
   align-items: end;
 }
 
 .header a:nth-child(2) {
-  font-size: 15px;
+  font-size: 20px;
   cursor: pointer;
   text-decoration: underline;
 }

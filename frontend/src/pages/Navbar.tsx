@@ -53,20 +53,20 @@ const Navbar = forwardRef(
           return (
             <>
               <div className={Styles.navItem}>
-                <Link to="/me">My profile</Link>
+                <Link to="/me">profile</Link>
               </div>
               <div
                 className={Styles.navItem}
                 onClick={() => setShowNotifications("notifications")}
               >
-                <div>Notifications</div>
+                <div>notifications</div>
               </div>
               <div className={Styles.navItem}>
-                <Link to="/settings">Settings</Link>
+                <Link to="/settings">settings</Link>
               </div>
               <div className={Styles.navItem}>
                 <Link to="/" onClick={logout}>
-                  Logout
+                  logout
                 </Link>
               </div>
             </>

@@ -19,8 +19,8 @@ function Notif({ userAvatar, postUser, likedOn, commentedOn }:
       </section>
 
       <section className={Styles.postInfo}>
-        {likedOn && <>Liked your cutest post!!</>}
-        {commentedOn && <>Commented your cutest post!!</>}
+        {likedOn && <>liked your cutest post!!</>}
+        {commentedOn && <>commented your cutest post!!</>}
       </section>
     </div>
   );

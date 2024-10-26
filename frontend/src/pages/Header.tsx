@@ -79,11 +79,11 @@ export default function Header({ color }: { color: string }) {
           <>
             <div className={Styles.leftistElements}>
               <Link className={Styles.links} to="/">
-                <a>Home</a>
+                <a>home</a>
               </Link>
               <>
                 <Link className={Styles.links} to="/chat">
-                  <a>Messages</a>
+                  <a>messages</a>
                 </Link>
               </>
             </div>
