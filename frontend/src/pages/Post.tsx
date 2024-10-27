@@ -284,6 +284,7 @@ export default function Post({
             <section dangerouslySetInnerHTML={{ __html: content }}></section>
             <section className={Styles.image}>
               <img src={image} alt=""></img>
+              <img src={`${uploadURL}/${image}`} alt=""></img>
             </section>
           </>
         )}

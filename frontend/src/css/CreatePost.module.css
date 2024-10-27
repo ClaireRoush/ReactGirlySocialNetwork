@@ -50,6 +50,10 @@
   height: 50px;
   cursor: pointer;
 }
+.fileName {
+  display: flex;
+  margin-top: 10px;
+}
 
 .postWrapper {
   width: 100%;
@@ -71,29 +75,3 @@
   height: 50px;
   cursor: pointer;
 }
-
-/* 
-
-
-
-
-.header input {
-  padding: 3px;
-  box-sizing: border-box;
-  height: 25px;
-  border-radius: 5px;
-  align-self: flex-end;
-  border: 2px solid rgb(166, 227, 161);
-  width: 100px;
-  color: rgb(166, 227, 161);
-  background-color: #11111b;
-  position: relative;
-  right: auto;
-}
-
-.quillContainer input:focus {
-  outline: none;
-  border: 2px solid rgb(166, 227, 161);
-}
-
- */
