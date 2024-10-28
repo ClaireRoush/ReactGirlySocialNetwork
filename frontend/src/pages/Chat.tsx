@@ -133,8 +133,6 @@ export default function Chat() {
 
   return (
     <div>
-      <Header color={"#FFFFFF"} />
-
       <div className={Styles.wrapperForAll}>
         <section className={Styles.header}>
           {selectedContact ? (

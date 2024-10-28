@@ -1,11 +1,12 @@
 .wrapperForAll {
-  left: 0;
-  top: 0;
+  padding: 0;
+  margin: 0;
+  left: 0px;
+  top: 0px;
   width: 100%;
   height: 100%;
   position: absolute;
   box-sizing: border-box;
-  padding-top: 80px;
   z-index: 9999;
   display: grid;
   grid-template-areas:
@@ -19,7 +20,6 @@
 .navBar {
   grid-area: navbar;
   border-right: #a6e3a1 2px solid;
-  width: 20vw;
   background-color: #181825;
   padding: 3px;
 }
