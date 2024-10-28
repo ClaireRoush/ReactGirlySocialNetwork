@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import Messages from "../models/Messages";
+import mongoose from "mongoose";
 
 export const postMessagesForWho = async (req: Request, res: Response) => {
   const username = req.user.username;
@@ -80,32 +81,22 @@ export const postContactsByUser = async (req: Request, res: Response) => {
 };
 
 export const getContacts = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user.id;
-    const userInfo = await User.findById(userId);
+  const userId = req.user.id;
+  const userInfo = await User.findById(userId);
 
-    if (!userInfo) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    console.log("User contacts (raw ObjectId):", userInfo.contacts);
-
-    if (!userInfo.contacts || userInfo.contacts.length === 0) {
-      return res.json([]);
-    }
-
-    const contactsInfo = await Promise.all(
-      userInfo.contacts.map(async (contactId: any) => {
-        const contact = await User.findById(contactId, "username userAvatar");
-        return contact
-          ? { username: contact.username, userAvatar: contact.userAvatar }
-          : { username: "Unknown", userAvatar: null };
-      })
-    );
-
-    res.json(contactsInfo);
-  } catch (error) {
-    console.error("Error fetching contacts:", error);
-    res.status(500).json({ message: "Server error", error });
+  if (!userInfo) {
+    return res.status(404).json({ message: "User not found" });
   }
+
+  const contacts = await User.find(
+    { _id: { $in: userInfo.contacts } },
+    "username userAvatar"
+  );
+
+  const contactsInfo = contacts.map((contact) => ({
+    username: contact.username,
+    userAvatar: contact.userAvatar,
+  }));
+
+  res.json(contactsInfo);
 };

@@ -29,6 +29,7 @@ export const userProfileByUsername = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Ты дурашка та ещё!!!" });
   }
   res.json({
+    _id: user._id,
     username: user.username,
     userAvatar: user.userAvatar,
     userDesc: user.userDesc,

@@ -14,6 +14,7 @@ export default function UserProfile() {
   const [username, setUsername] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
   const [pronouns, setPronouns] = useState("");
+  const [id, setId] = useState("");
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const [userDesc, setUserDesc] = useState("");
   const { userInfo, setUserInfo } = useContext(UserContext);
@@ -28,6 +29,7 @@ export default function UserProfile() {
     fetch(`${api}/userProfile/${userId}`)
       .then((response) => response.json())
       .then((data) => {
+        setId(data._id);
         setUsername(data.username);
         setUserAvatar(data.userAvatar);
         setUserDesc(data.userDesc);
@@ -114,7 +116,7 @@ export default function UserProfile() {
   async function AddToContacts(ev: MouseEvent) {
     ev.preventDefault();
     const token = localStorage.getItem("token");
-    const response = await fetch(`${api}/addToContacts/${userId}`, {
+    const response = await fetch(`${api}/addToContacts/${id}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
