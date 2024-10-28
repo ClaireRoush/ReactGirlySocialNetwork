@@ -39,6 +39,11 @@ import {
 } from "./controllers/ChatControllers";
 import { getNotifications } from "./controllers/NotificationControllers";
 
+import {
+  checkRecoveryCode,
+  getUpdateRecoveryCodes
+} from "./controllers/RecoveryControllers";
+
 dotenv.config();
 dotenv.config({ path: `.env.local`, override: true });
 const API_URL = process.env.BASE_API_URL || "";
@@ -172,6 +177,9 @@ app.get(API_URL + "/findUserAvatar/:User", findUserAvatarByUser);
 app.get(API_URL + "/getContacts", authenticateToken, getContacts);
 
 app.get(API_URL + "/notifications", authenticateToken, getNotifications);
+
+app.get(API_URL + "/updateRecoveryCodes", authenticateToken, getUpdateRecoveryCodes);
+app.post(API_URL + "/checkRecoveryCode", checkRecoveryCode);
 
 io.on;
 

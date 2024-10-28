@@ -9,6 +9,8 @@ export interface IUser {
   pronouns: string,
   profileHashColor: string,
   contacts: Array<string>,
+  lastCodeUpdate?: Date
+  usedCodesIndexes: Array<number>
 }
 
 const UserSchema = new Schema<IUser>(
@@ -26,6 +28,8 @@ const UserSchema = new Schema<IUser>(
       max: 7,
     },
     contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    lastCodeUpdate: { type: Date, default: new Date(-8640000000000000) }, // yep. thanks javascript :S
+    usedCodesIndexes: [{ type: Number, default: [] }],
   },
   {
     timestamps: true,
