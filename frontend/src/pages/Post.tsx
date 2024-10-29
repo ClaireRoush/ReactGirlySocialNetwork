@@ -23,6 +23,8 @@ const copySvg = process.env.REACT_APP_STATIC_URL + "/images/copy.svg";
 const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 const api = process.env.REACT_APP_API_URL;
 const url = process.env.REACT_APP_URL;
+const staticUrl = process.env.REACT_APP_STATIC_URL;
+const onImageErrorImage = staticUrl + "/images/image_no_load_small.gif";
 
 const insertLinksToText = (text: string) => {
   const regex = RegExp("https?:\\/\\/.*\.[a-zA-Z]*", "g")
@@ -299,7 +301,12 @@ export default function Post({
           <>
             <section dangerouslySetInnerHTML={{ __html: content }}></section>
             <section className={Styles.image}>
-              <img src={image} alt=""></img>
+              {
+                image &&
+                <img src={`${uploadURL}/${image}`} onError={(ev) => {
+                  ev.currentTarget.src = onImageErrorImage
+                }}/>
+              }
             </section>
           </>
         )}
