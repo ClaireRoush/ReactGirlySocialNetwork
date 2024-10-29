@@ -24,6 +24,22 @@ const uploadURL = process.env.REACT_APP_UPLOAD_URL;
 const api = process.env.REACT_APP_API_URL;
 const url = process.env.REACT_APP_URL;
 
+const insertLinksToText = (text: string) => {
+  const regex = RegExp("https?:\\/\\/.*\.[a-zA-Z]*", "g")
+  const urls = regex.exec(text)
+
+  if (!urls) {
+    return text
+  }
+
+  let newText = text
+  urls.forEach((url) => {
+    newText = text.replace(url, `<a href="${url}">${url}</a>`)
+  })
+  
+  return newText  
+}
+
 export default function Post({
   image,
   content: forUpdated,
@@ -60,7 +76,7 @@ export default function Post({
   const [commentsCountState, setCommentsCountState] = useState(commentsCount);
   const [isEdited, setIsEdited] = useState(false);
   const [files, setFiles] = useState<FileList | null>(null);
-  const [content, setContent] = useState(forUpdated);
+  const [content, setContent] = useState(insertLinksToText(forUpdated));
   const [updatedContent, setUpdatedContent] = useState<string>("");
   const [contextOpen, setContextOpen] = useState(false);
   const [marginRight, setMarginRight] = useState(140);
