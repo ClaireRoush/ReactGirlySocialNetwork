@@ -20,7 +20,7 @@ const contextDots =
   process.env.REACT_APP_STATIC_URL + "/images/contextDots.svg";
 const copySvg = process.env.REACT_APP_STATIC_URL + "/images/copy.svg";
 
-const uploadURL = process.env.REACT_APP_UPLOAD_URL;
+const uploadURL = process.env.REACT_APP_UPLOAD_URL + "uploads";
 const api = process.env.REACT_APP_API_URL;
 const url = process.env.REACT_APP_URL;
 
@@ -283,7 +283,7 @@ export default function Post({
           <>
             <section dangerouslySetInnerHTML={{ __html: content }}></section>
             <section className={Styles.image}>
-              <img src={image} alt=""></img>
+              <img src={`${uploadURL}/${image}`} alt=""></img>
             </section>
           </>
         )}
