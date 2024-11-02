@@ -7,6 +7,8 @@ import { Navigate } from "react-router-dom";
 import Header from "./Header";
 
 const POST_PER_REQUEST = 5;
+const addFriend = process.env.REACT_APP_STATIC_URL + "/images/add_friend.svg";
+const friendStatus = process.env.REACT_APP_STATIC_URL + "/images/friend_status.svg";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -23,6 +25,7 @@ export default function UserProfile() {
   const token = localStorage.getItem("token");
   const [visiblePosts, setVisiblePosts] = useState(5);
   const [noMorePosts, setNoMorePosts] = useState<boolean>(false);
+  const [friendsCheck, setFriendsCheck] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(`${api}/userProfile/${userId}`)
@@ -91,7 +94,7 @@ export default function UserProfile() {
       console.error("Ошибка при получении постов:", error);
     }
   }
-
+  
   const loadMorePosts = () => {
     if (noMorePosts) {
       return;
@@ -111,7 +114,8 @@ export default function UserProfile() {
     }
   };
 
-  async function AddToContacts(ev: MouseEvent) {
+  async function addToContacts(ev: MouseEvent) {
+    setFriendsCheck(true)
     ev.preventDefault();
     const token = localStorage.getItem("token");
     const response = await fetch(`${api}/addToContacts/${userId}`, {
@@ -124,7 +128,7 @@ export default function UserProfile() {
   }
 
   function handleAddToContacts(ev: MouseEvent) {
-    AddToContacts(ev)
+    addToContacts(ev)
       .then(() => {})
       .catch(() => {});
   }
@@ -134,7 +138,6 @@ export default function UserProfile() {
   }
 
   return (
-    /* НАСРАНО */
     <div className={Styles.fullProfile}>
       <Header color={"#a6e3a1"} />
       <div className={Styles.upperProfileContainer}>
@@ -146,7 +149,11 @@ export default function UserProfile() {
             <textarea readOnly value={userDesc}></textarea>
           </div>
           {token ? (
-            <div onClick={handleAddToContacts}>Add to contacts!</div>
+            <section onClick={addToContacts} className={Styles.actionsWrapper}>
+              {friendsCheck ? (<img src={friendStatus} className={Styles.addFriend}/>) : (
+                <img src={addFriend} className={Styles.addFriend}/>
+                )}
+            </section>
           ) : null}
         </div>
       </div>

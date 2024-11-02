@@ -44,6 +44,10 @@
   text-decoration: none;
 }
 
+.content::link, ::visited {
+  color: bisque;
+}
+
 .edit {
   width: 30px;
   height: 30px;
