@@ -5,7 +5,7 @@ import React, {
   MouseEvent,
   FormEvent,
 } from "react";
-import Styles from "../css/meow.module.css";
+import Styles from "../css/Post.module.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "../css/Quill.css";
@@ -299,7 +299,7 @@ export default function Post({
           </div>
         ) : (
           <>
-            <section dangerouslySetInnerHTML={{ __html: content }}></section>
+            <section className={Styles.content} dangerouslySetInnerHTML={{ __html: content }}></section>
             <section className={Styles.image}>
               {
                 image &&
@@ -348,7 +348,7 @@ export default function Post({
               <input
                 className={Styles.postInput}
                 type="text"
-                placeholder="Your comment"
+                placeholder="your comment"
                 value={text}
                 onChange={(ev) => setText(ev.target.value)}
               ></input>
@@ -366,7 +366,7 @@ export default function Post({
               />
             ))
           ) : (
-            <p>No comments yet</p>
+            <p>no comments yet</p>
           )}
         </div>
       </section>
