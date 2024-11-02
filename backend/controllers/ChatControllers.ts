@@ -94,6 +94,8 @@ export const getContacts = async (req: Request, res: Response) => {
   );
 
   const contactsInfo = contacts.map((contact) => ({
+    me: userInfo.username,
+    myAvatar: userInfo.userAvatar,
     username: contact.username,
     userAvatar: contact.userAvatar,
   }));

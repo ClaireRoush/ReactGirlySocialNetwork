@@ -6,35 +6,39 @@ import React, {
   useState,
 } from "react";
 import { UserContext } from "../usercontext";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import Styles from "../css/Chat.module.css";
 import Header from "./Header";
 import hash from "hash.js";
 
 export default function Chat() {
-  const { userInfo } = useContext(UserContext);
   const token = localStorage.getItem("token");
-  const [room, setRoom] = useState("");
   const [message, setMessage] = useState("");
-  const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [selectedContact, setSelectedContact] = useState(null);
-  const username = userInfo?.username;
+  const [hasJoinedRooms, setHasJoinedRooms] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<any>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD;
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const newSocket = io(process.env.REACT_APP_API_URL + ``);
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:6969");
     setSocket(newSocket);
 
-    newSocket.on("chat message", (msg) => {
+    newSocket.on("receiveMessage", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
+
     return () => {
-      newSocket.off("chat message");
       newSocket.disconnect();
     };
   }, []);
@@ -51,46 +55,35 @@ export default function Chat() {
       const data = await response.json();
       if (Array.isArray(data)) {
         setContacts(data);
+        if (!hasJoinedRooms && socket) {
+          socket.emit("joinRooms", data);
+          setHasJoinedRooms(true);
+        }
       }
     };
+
     fetchContacts();
-  }, [token]);
+  }, [token, socket, hasJoinedRooms]);
 
   const handleContactClick = async (contact: any) => {
     setSelectedContact(contact);
-    if (room && socket) {
-      socket.emit("leave room", room);
-    }
     const fetchMessages = await fetch(`${api}/messages/${contact.username}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    const roomName = hash
-      .sha256()
-      .update([contact.username, username, SECRET_KEY].sort().join("_"))
-      .digest("hex");
-
     const data = await fetchMessages.json();
     setMessages(data);
-    setRoom(roomName);
-    if (socket) {
-      socket.emit("join room", roomName);
-    }
-  };
-
-  const sendMessage = (msg: any) => {
-    if (socket && room) {
-      socket.emit("chat message", { room, message: msg });
-      setMessage("");
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const postMessage = async (ev: FormEvent) => {
     ev.preventDefault();
 
-    if (selectedContact && message.trim()) {
+    if (selectedContact && message.trim() && socket) {
       const response = await fetch(
         `${api}/messages/${selectedContact.username}`,
         {
@@ -114,25 +107,18 @@ export default function Chat() {
           },
           message: data.message,
           timestamp: new Date(),
+          forWho: selectedContact,
         };
 
+        socket.emit("sendMessage", msg);
         setMessages((prevMessages) => [...prevMessages, msg]);
-
-        sendMessage(msg);
-
-        setMessage("");
       }
     }
   };
 
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
-    }
-  }, [messages]);
-
   return (
     <div>
+      <Header color={"#FFFFFF"} />
       <div className={Styles.wrapperForAll}>
         <section className={Styles.header}>
           {selectedContact ? (
@@ -163,23 +149,12 @@ export default function Chat() {
         </section>
 
         <section className={Styles.messages}>
-          <div className={Styles.messagesWrapper} ref={messagesEndRef}>
+          <div className={Styles.messagesWrapper}>
             {messages.length > 0 ? (
               messages.map((msg) => (
                 <div key={msg._id} className={Styles.message}>
                   <div className={Styles.senderInfo}>
-                    <img
-                      src={
-                        msg.user?.userAvatar
-                          ? msg.user.userAvatar.startsWith("http")
-                            ? msg.user.userAvatar
-                            : `${upload}/${msg.user.userAvatar}`
-                          : msg.userAvatar.startsWith("http")
-                          ? msg.userAvatar
-                          : `${upload}/${msg.userAvatar}`
-                      }
-                      alt={msg.user?.username || "avatar"}
-                    />
+                    <img alt={msg.user?.username || "avatar"} />
                   </div>
                   <div className={Styles.messageContent}>
                     <a>{msg.user?.username}</a>

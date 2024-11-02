@@ -18,6 +18,8 @@
 }
 
 .navBar {
+  margin-top: 80px;
+  box-sizing: border-box;
   grid-area: navbar;
   border-right: #a6e3a1 2px solid;
   background-color: #181825;

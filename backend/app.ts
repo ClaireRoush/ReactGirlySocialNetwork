@@ -63,11 +63,24 @@ const io = new socketIo.Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  const userRooms = [];
 
-  socket.on("join room", (room) => {
-    socket.join(room);
-    console.log(`User joined room: ${room}`);
+  const getRoomName = (username1: string, username2: string): string => {
+    return [username1, username2].sort().join("");
+  };
+
+  socket.on("joinRooms", (rooms) => {
+    rooms.forEach((room: any) => {
+      const roomName = getRoomName(room.username, room.me);
+      socket.join(roomName);
+      userRooms.push(roomName);
+    });
+  });
+
+  socket.on("sendMessage", (msg) => {
+    const roomName = getRoomName(msg.user.username, msg.forWho.username);
+
+    io.to(roomName).emit("receiveMessage", msg);
   });
 
   socket.on("leave room", (room) => {
@@ -77,11 +90,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
-  });
-
-  socket.on("chat message", (msg) => {
-    const { room, message } = msg;
-    socket.to(room).emit("chat message", message);
   });
 });
 
