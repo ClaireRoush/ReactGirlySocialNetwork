@@ -98,6 +98,22 @@ const peerServer = ExpressPeerServer(server, {
   path: "/peerjs",
 });
 
+peerServer.on("connection", (client: any) => {
+  console.log(`Client connected: ${client.id}`);
+});
+
+peerServer.on("disconnect", (client: any) => {
+  console.log(`Client disconnected: ${client.id}`);
+});
+
+peerServer.on("call", (call: any) => {
+  console.log(`Call from ${call.peer}`);
+});
+
+peerServer.on("error", (error) => {
+  console.error("Peer server error:", error);
+});
+
 app.use("/peerjs", peerServer);
 
 app.use(

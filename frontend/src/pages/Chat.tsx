@@ -10,12 +10,14 @@ import { io, Socket } from "socket.io-client";
 import Styles from "../css/Chat.module.css";
 import Header from "./Header";
 import hash from "hash.js";
+import VoiceCall from "./VoiceCall";
 
 export default function Chat() {
   const token = localStorage.getItem("token");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [me, setMe] = useState("");
   const [hasJoinedRooms, setHasJoinedRooms] = useState(false);
   const [selectedContact, setSelectedContact] = useState<any>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -23,6 +25,7 @@ export default function Chat() {
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [videoCall, setVideoCall] = useState(false);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -55,6 +58,8 @@ export default function Chat() {
       const data = await response.json();
       if (Array.isArray(data)) {
         setContacts(data);
+        const currentUser = data[0];
+        setMe(currentUser.me);
         if (!hasJoinedRooms && socket) {
           socket.emit("joinRooms", data);
           setHasJoinedRooms(true);
@@ -116,15 +121,25 @@ export default function Chat() {
     }
   };
 
+  async function callStart() {
+    setVideoCall(true);
+  }
+
   return (
     <div>
       <Header color={"#FFFFFF"} />
       <div className={Styles.wrapperForAll}>
+        {videoCall ? (
+          <VoiceCall me={me} anotherUsername={selectedContact.username} />
+        ) : (
+          <></>
+        )}
         <section className={Styles.header}>
           {selectedContact ? (
             <>
               <img src={`${upload}/${selectedContact.userAvatar}`} alt="" />
               <div>{selectedContact.username}</div>
+              <div onClick={callStart}>Start call</div>
             </>
           ) : (
             <div></div>
