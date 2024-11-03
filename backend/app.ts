@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import multer from "multer";
 import "./types/types";
 import path from "path";
+import { ExpressPeerServer } from "peer";
 
 import { register, login, logout } from "./controllers/AuthControllers";
 import {
@@ -92,6 +93,12 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 });
+
+const peerServer = ExpressPeerServer(server, {
+  path: "/peerjs",
+});
+
+app.use("/peerjs", peerServer);
 
 app.use(
   cors({

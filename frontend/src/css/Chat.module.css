@@ -1,10 +1,11 @@
 .wrapperForAll {
   padding: 0;
   margin: 0;
+  margin-top: 80px;
   left: 0px;
   top: 0px;
+  height: calc(100% - 80px);
   width: 100%;
-  height: 100%;
   position: absolute;
   box-sizing: border-box;
   z-index: 9999;
@@ -18,7 +19,6 @@
 }
 
 .navBar {
-  margin-top: 80px;
   box-sizing: border-box;
   grid-area: navbar;
   border-right: #a6e3a1 2px solid;
