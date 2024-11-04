@@ -27,7 +27,7 @@ const staticUrl = process.env.REACT_APP_STATIC_URL;
 const onImageErrorImage = staticUrl + "/images/image_no_load_small.gif";
 
 const insertLinksToText = (text: string) => {
-  const regex = RegExp("https?:\\/\\/.*\.[a-zA-Z]*", "g")
+  const regex = RegExp("https?:\\/\\/[a-zA-Z]*\.[a-zA-Z]{0,6}[a-zA-Z0-9\./]*", "g")
   const urls = regex.exec(text)
 
   if (!urls) {
