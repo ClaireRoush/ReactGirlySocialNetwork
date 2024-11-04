@@ -151,7 +151,7 @@ export default function UserProfile() {
           {token ? (
             <section onClick={addToContacts} className={Styles.actionsWrapper}>
               {friendsCheck ? (<img src={friendStatus} className={Styles.addFriend}/>) : (
-                <img src={addFriend} className={Styles.addFriend}/>
+                <img src={addFriend} className={Styles.addFriend} title="Add to friends" />
                 )}
             </section>
           ) : null}

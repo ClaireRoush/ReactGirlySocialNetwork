@@ -264,14 +264,15 @@ export default function Post({
                   `${url}/${author.username}/${_id}`
                 );
               }}
+              title="Copy link"
             >
               <img src={copySvg} />
             </div>
             <div className={Styles.openMenu}>
-              <div className={Styles.contextItem} onClick={edit}>
+              <div className={Styles.contextItem} onClick={edit} title="Edit">
                 {isAuthor && <img className={Styles.edit} src={frogEdit} />}
               </div>
-              <div className={Styles.contextItem} onClick={deletePost}>
+              <div className={Styles.contextItem} onClick={deletePost} title="Delete">
                 {isAuthor && <img src={chromiumSvg} />}
               </div>
             </div>
@@ -320,9 +321,9 @@ export default function Post({
                 <div className={Styles.likes}>
                   <a>{likes}</a>
                   {isLikedState ? (
-                    <img src={frogLike} onClick={toggleLikes} />
+                    <img src={frogLike} onClick={toggleLikes} title="Unlike"/>
                   ) : (
-                    <img src={likeSvg} onClick={toggleLikes} />
+                    <img src={likeSvg} onClick={toggleLikes} title="Like" />
                   )}
                 </div>
               </div>
@@ -333,6 +334,7 @@ export default function Post({
                   className={Styles.comment}
                   onClick={getComments}
                   ref={commentsButtonRef}
+                  title="Open comments"
                 />
               </div>
             </div>
