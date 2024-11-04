@@ -53,7 +53,6 @@ function App() {
           <Route path={"settings"} element={<Settings />} />
           <Route path={"/:author/:id"} element={<FullPost />} />
           <Route path={"changelog"} element={<ChangeLog />} />
-          <Route path={"me"} element={<Me />} />
           <Route path={"/user/:userId"} element={<UserProfile />} />
           <Route path={"chat"} element={<Chat />} />
         </Routes>
