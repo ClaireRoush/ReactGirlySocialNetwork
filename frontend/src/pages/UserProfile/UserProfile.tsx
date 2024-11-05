@@ -149,9 +149,9 @@ export function UserProfile() {
             <textarea readOnly value={userDesc}></textarea>
           </div>
           {token ? (
-            <section onClick={addToContacts} className={Styles.actionsWrapper}>
+            <section className={Styles.actionsWrapper}>
               {friendsCheck ? (<img src={friendStatus} className={Styles.addFriend}/>) : (
-                <img src={addFriend} className={Styles.addFriend}/>
+                <img src={addFriend} onClick={addToContacts} className={Styles.addFriend}/>
                 )}
             </section>
           ) : null}
