@@ -60,6 +60,25 @@ export default function Settings() {
     });
   }, [token]);
 
+  const downloadRecoveryCodes = async () => {
+    const response = await fetch(`${api}/updateRecoveryCodes`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
+    const data: string[] = await response.json();
+
+    // thanks js for this junk
+    const element = document.createElement("a");
+    const file = new Blob(["Those codes are used to reset your passwords:\n" + data.join("\n")], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = "rgsn.live-recovery-codes.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  }
+
   return (
     <div className={Styles.wrapper}>
       <Header color={"#a6e3a1"} />
@@ -92,6 +111,9 @@ export default function Settings() {
 
           <button>Save</button>
         </form>
+        <div className={Styles.recoveryCodes}>
+          <button onClick={downloadRecoveryCodes}>Download recovery codes</button>  {/* //TODO it sucks and should be ONLY in dev. For prod add password request */}
+        </div>
       </div>
 
       <div className={Styles.colorPicker}>
