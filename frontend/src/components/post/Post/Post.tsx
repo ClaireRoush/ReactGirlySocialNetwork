@@ -27,20 +27,23 @@ const staticUrl = process.env.REACT_APP_STATIC_URL;
 const onImageErrorImage = staticUrl + "/images/image_no_load_small.gif";
 
 const insertLinksToText = (text: string) => {
-  const regex = RegExp("https?:\\/\\/.*\.[a-zA-Z]*", "g")
-  const urls = regex.exec(text)
+  const regex = RegExp(
+    "https?:\\/\\/[a-zA-Z]*.[a-zA-Z]{0,6}[a-zA-Z0-9./]*",
+    "g"
+  );
+  const urls = regex.exec(text);
 
   if (!urls) {
-    return text
+    return text;
   }
 
-  let newText = text
+  let newText = text;
   urls.forEach((url) => {
-    newText = text.replace(url, `<a href="${url}">${url}</a>`)
-  })
-  
-  return newText  
-}
+    newText = text.replace(url, `<a href="${url}">${url}</a>`);
+  });
+
+  return newText;
+};
 
 export function Post({
   image,
@@ -299,14 +302,19 @@ export function Post({
           </div>
         ) : (
           <>
-            <section className={Styles.content} dangerouslySetInnerHTML={{ __html: content }}></section>
+            <section
+              className={Styles.content}
+              dangerouslySetInnerHTML={{ __html: content }}
+            ></section>
             <section className={Styles.image}>
-              {
-                image &&
-                <img src={`${uploadURL}/${image}`} onError={(ev) => {
-                  ev.currentTarget.src = onImageErrorImage
-                }}/>
-              }
+              {image && (
+                <img
+                  src={`${uploadURL}/${image}`}
+                  onError={(ev) => {
+                    ev.currentTarget.src = onImageErrorImage;
+                  }}
+                />
+              )}
             </section>
           </>
         )}
