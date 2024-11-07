@@ -3,8 +3,8 @@ import Styles from "./App.module.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
-import IndexPage from "./pages/Index";
-import CreatePost from "./pages/CreatePost";
+import Home from "./pages/Home";
+import CreatePost from "./components/post/CreatePost";  // pls don't forget to replace it
 import UserProfile from "./pages/UserProfile";
 import ChangeLog from "./pages/ChangeLog";
 import FullPost from "./pages/FullPost";
@@ -43,7 +43,7 @@ function App() {
           </div>
         </div>
         <Routes>
-          <Route path="/" element={<IndexPage />}></Route>
+          <Route path="/" element={<Home />}></Route>
           <Route path={"login"} element={<Login />} />
           <Route path={"register"} element={<Registration />} />
           <Route

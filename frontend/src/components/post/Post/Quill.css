@@ -1,0 +1,16 @@
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-toolbar{
+    show: none
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+}
+
+.ql-editor {
+  background-color: #181825;
+  border-radius: 10px;
+}
