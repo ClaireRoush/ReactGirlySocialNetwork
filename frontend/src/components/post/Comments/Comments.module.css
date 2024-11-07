@@ -1,41 +1,45 @@
 .commentWrapper {
   width: 100%;
-  height: auto;
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-left: -10px;
+  background-color: #181825;
+  padding: 10px;
+  border-radius: 20px;
 }
 
 .userInfo {
+  margin-top: 5px;
+  margin-left: 5px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
-
 .avatar {
   width: 60px;
   height: 60px;
-  border-radius: 9999px;
+  border-radius: 15px;
+}
+.userWrapper {
+  font-size: 18px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-left: 15px;
 }
 
 .mainWrapper {
   width: 100%;
 }
-
 .mainWrapper a {
   display: flex;
   overflow-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
-  margin-left: 10px;
-}
-
-.userWrapper {
-  display: flex;
-  padding: 0px -10px 0px 5px;
-  width: 100%;
-  justify-content: space-between;
-  margin-left: 10px;
+  margin-left: 15px;
+  margin-top: 5px;
 }
 
 .deleteBtn {
   cursor: pointer;
+  margin-right: 20px;
 }

@@ -64,7 +64,7 @@ export function Comments({
               <div className={Styles.username}>{user}</div>
               {isAuthor ? (
                 <div className={Styles.deleteBtn} onClick={deleteComment}>
-                  X
+                  x
                 </div>
               ) : (
                 <div></div>
