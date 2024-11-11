@@ -30,14 +30,20 @@ export const post = async (req: Request, res: Response) => {
       jpeg: "jpeg",
       png: "png",
       webp: "webp",
+      gif: "gif",
     };
 
     const format = formatMap[ext];
 
-    await sharp(tempPath)
-      .toFormat(format)
-      .jpeg({ quality: 30 })
-      .toFile(newPath);
+    if (format === "gif") {
+      fs.writeFileSync(newPath, fs.readFileSync(tempPath));
+    }
+    else {
+      await sharp(tempPath)
+        .toFormat(format)
+        .jpeg({ quality: 30 })
+        .toFile(newPath);
+    }
 
     fs.unlink(tempPath, (err) => {
       if (err) {
