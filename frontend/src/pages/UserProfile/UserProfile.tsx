@@ -19,7 +19,6 @@ export function UserProfile() {
   const [profileHashColor, setprofileHashColor] = useState("#a6e3a1");
   const [userDesc, setUserDesc] = useState("");
   const { userInfo, setUserInfo } = useContext(UserContext);
-  const [redirect, setRedirect] = useState(false);
   const api = process.env.REACT_APP_API_URL;
   const upload = process.env.REACT_APP_UPLOAD_URL;
   const token = localStorage.getItem("token");
@@ -49,12 +48,6 @@ export function UserProfile() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   });
-
-  useEffect(() => {
-    if (username === userInfo?.username) {
-      setRedirect(true);
-    }
-  }, [username, userInfo]);
 
   async function FetchPosts() {
     if (noMorePosts) {
@@ -133,10 +126,6 @@ export function UserProfile() {
       .catch(() => {});
   }
 
-  if (redirect) {
-    return <Navigate to={"/me"} />;
-  }
-
   return (
     <div className={Styles.fullProfile}>
       <Header color={"#a6e3a1"} />
@@ -148,13 +137,13 @@ export function UserProfile() {
             <a>{pronouns}</a>
             <textarea readOnly value={userDesc}></textarea>
           </div>
-          {token ? (
-            <section className={Styles.actionsWrapper}>
+          {userId !== userInfo.username && token && (
+            <section onClick={addToContacts} className={Styles.actionsWrapper}>
               {friendsCheck ? (<img src={friendStatus} className={Styles.addFriend}/>) : (
                 <img src={addFriend} onClick={addToContacts} className={Styles.addFriend}/>
                 )}
             </section>
-          ) : null}
+          )}
         </div>
       </div>
       <div className={Styles.profileInfo}>

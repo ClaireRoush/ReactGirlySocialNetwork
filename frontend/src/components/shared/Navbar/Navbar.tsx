@@ -53,7 +53,7 @@ export const Navbar = forwardRef(
           return (
             <>
               <div className={Styles.navItem}>
-                <Link to="/me">profile</Link>
+                <Link to={`/user/${userInfo.username}`}>profile</Link>
               </div>
               <div
                 className={Styles.navItem}
